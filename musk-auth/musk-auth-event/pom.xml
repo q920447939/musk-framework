@@ -25,11 +25,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.example</groupId>
-            <artifactId>auth-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-core</artifactId>
         </dependency>
@@ -52,9 +47,7 @@
         </dependency>
         <dependency>
             <groupId>org.example</groupId>
-            <artifactId>musk-auth-service</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
+            <artifactId>musk-auth-service-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.example</groupId>

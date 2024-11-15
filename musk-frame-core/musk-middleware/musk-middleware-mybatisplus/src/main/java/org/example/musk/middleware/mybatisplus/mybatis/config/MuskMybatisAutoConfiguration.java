@@ -31,7 +31,7 @@ import org.springframework.core.env.Environment;
 /**
  * MyBaits 配置类
  *
- * @author 芋道源码
+ * @author
  */
 @AutoConfiguration
 @MuskMapperScan(value = {"org.example.musk","${musk.frame.middleware.mybatis.plus.scan-package}"}, annotationClass = Mapper.class,

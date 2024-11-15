@@ -77,15 +77,7 @@ mybatis-plus-join:
   logic-del-type: on # 副表逻辑删除条件的位置，支持 WHERE、ON，默认 ON
 
 
---- #################### 马斯克相关配置 ####################
 
-yudao:
-  tenant:
-    enable: true
-    #读取配置的默认租户ID
-    config-default-tenant-id: 1
-    ignore-tables:
-        - system_tenant #租户表
 logging:
   config: classpath:log4j2/log4j2-spring-${log4j-env:prod}.xml
 

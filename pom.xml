@@ -15,6 +15,7 @@
         <module>musk-common</module>
         <module>musk-frame-core</module>
         <module>musk-constant</module>
+        <module>musk-utils</module>
     </modules>
 
 

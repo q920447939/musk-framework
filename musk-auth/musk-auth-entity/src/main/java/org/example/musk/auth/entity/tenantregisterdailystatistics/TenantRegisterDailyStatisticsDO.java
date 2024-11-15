@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.example.entity.db.TenantBaseDO;
+import org.example.musk.common.pojo.db.TenantBaseDO;
 
 import java.time.LocalDate;
 
