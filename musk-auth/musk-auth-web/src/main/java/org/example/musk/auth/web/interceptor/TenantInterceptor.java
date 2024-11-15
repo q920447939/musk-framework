@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.musk.auth.web.config.exception.IllegalityTenantException;
 import org.example.musk.auth.web.config.exception.NotTenantException;
 import org.example.musk.common.context.ThreadLocalTenantContext;
-import org.example.musk.framework.tenant.TenantConfig;
+import org.example.musk.framework.tenant.config.TenantConfig;
 import org.example.musk.utils.aes.AESKeyEnum;
 import org.example.musk.utils.aes.AESUtils;
 import org.springframework.core.annotation.Order;

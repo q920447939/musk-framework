@@ -59,6 +59,11 @@
             <groupId>org.example</groupId>
             <artifactId>musk-framework-tenant</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>musk-framework-tenant-config</artifactId>
+            <scope>compile</scope>
+        </dependency>
 
     </dependencies>
 </project>

@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
 import org.example.musk.common.context.ThreadLocalTenantContext;
-import org.example.musk.framework.tenant.TenantConfig;
+import org.example.musk.framework.tenant.config.TenantConfig;
 
 import java.util.HashSet;
 import java.util.Set;

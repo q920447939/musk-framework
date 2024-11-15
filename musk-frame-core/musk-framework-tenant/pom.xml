@@ -8,11 +8,17 @@
     </parent>
 
     <artifactId>musk-framework-tenant</artifactId>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
+    <modules>
+        <module>musk-framework-tenant-config</module>
+        <module>musk-framework-tenant-dao</module>
+        <module>musk-framework-tenant-service</module>
+    </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
 
     <dependencies>
         <dependency>
@@ -29,5 +35,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
         </dependency>
+
+
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>musk-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-extension</artifactId>
+        </dependency>
+
     </dependencies>
 </project>

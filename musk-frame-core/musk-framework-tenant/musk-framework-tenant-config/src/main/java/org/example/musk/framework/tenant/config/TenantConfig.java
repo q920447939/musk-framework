@@ -1,4 +1,4 @@
-package org.example.musk.framework.tenant;
+package org.example.musk.framework.tenant.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

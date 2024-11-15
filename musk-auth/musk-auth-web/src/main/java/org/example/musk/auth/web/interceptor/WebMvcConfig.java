@@ -1,7 +1,7 @@
 package org.example.musk.auth.web.interceptor;
 
 import jakarta.annotation.Resource;
-import org.example.musk.framework.tenant.TenantConfig;
+import org.example.musk.framework.tenant.config.TenantConfig;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

@@ -14,6 +14,7 @@
         <module>musk-middleware-tlog</module>
         <module>musk-middleware-mybatisplus</module>
         <module>musk-middleware-redis</module>
+        <module>musk-middleware-threads</module>
     </modules>
 
     <properties>
