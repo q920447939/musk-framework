@@ -1,0 +1,2 @@
+org.example.musk.middleware.redis.config.MuskCacheAutoConfiguration
+org.example.musk.middleware.redis.config.MuskRedisAutoConfiguration

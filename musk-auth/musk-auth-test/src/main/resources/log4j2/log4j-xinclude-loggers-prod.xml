@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<loggers>
+    <Root level="INFO" includeLocation="true" additivity="false">
+        <AppenderRef ref="obfuscateSensitiveData-FILE-INFO"/>
+        <appender-ref ref="obfuscateSensitiveData-FILE-WARN"/>
+        <appender-ref ref="obfuscateSensitiveData-FILE-ERROR"/>
+    </Root>
+    <logger name="com.yomahub.tlog.core.rpc.TLogRPCHandler" level="INFO"/>
+
+    <!-- 过滤框架的一大堆debug日志-->
+<!--    <logger name="org" level="INFO"/>
+    <logger name="_org" level="INFO"/>
+    <logger name="com.baomidou" level="INFO"/>-->
+</loggers>

@@ -1,0 +1,2 @@
+org.example.musk.middleware.mybatisplus.datasource.config.MuskDataSourceAutoConfiguration
+org.example.musk.middleware.mybatisplus.mybatis.config.MuskMybatisAutoConfiguration

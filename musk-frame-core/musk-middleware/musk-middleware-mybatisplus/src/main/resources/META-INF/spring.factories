@@ -1,0 +1,2 @@
+org.springframework.boot.env.EnvironmentPostProcessor=\
+  org.example.musk.middleware.mybatisplus.mybatis.config.IdTypeEnvironmentPostProcessor

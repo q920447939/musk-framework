@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<appenders>
+    <Console name="CONSOLE" target="SYSTEM_OUT">
+        <PatternLayout pattern="${PATTERN}" charset="${CHARSET}"/>
+    </Console>
+
+    <Rewrite name="obfuscateSensitiveData-CONSOLE">
+        <AppenderRef ref="CONSOLE"/>
+    </Rewrite>
+
+    <RollingRandomAccessFile name="FILE-DEBUG"
+                             fileName="${BASE_LOG_PATH}/${SERVER_NAME}/${SERVER_NAME}-debug.log"
+                             filePattern="${BASE_LOG_PATH}/${SERVER_NAME}/bak/${SERVER_NAME}-debug.%d{yyyy-MM-dd}-%i.log.gz">
+        <!--
+            minLevel：最小日志级别
+            maxLevel：最大日志级别
+            onMatch：匹配成功接收
+            onMismatch：匹配失败丢弃
+
+            onMatch="ACCEPT"匹配该级别及以上级别;
+            onMatch="DENY"不匹配该级别及以上级别;
+            onMismatch="ACCEPT" 表示匹配该级别以下的级别;
+            onMismatch="DENY" 表示不匹配该级别以下的级别;
+        -->
+        <Filters>
+            <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL"/>
+            <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
+            <ThresholdFilter level="INFO" onMatch="DENY" onMismatch="NEUTRAL"/>
+            <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+        </Filters>
+
+        <!--
+            pattern：日志格式
+            charset：日志字符编码
+        -->
+        <PatternLayout pattern="${PATTERN}" charset="${CHARSET}"/>
+        <Policies>
+            <!--每天滚动一次-->
+            <TimeBasedTriggeringPolicy interval="1"/>
+            <!--或者日志达到10KB 滚动一次-->
+            <SizeBasedTriggeringPolicy size="${MAX_FILE_SIZE}"/>
+
+        </Policies>
+        <!--日志删除策略-->
+        <DefaultRolloverStrategy fileIndex="nomax" max="${DEFAULT_ROLLOVER_STRATEGY}">
+            <Delete basePath="${BASE_LOG_PATH}/${SERVER_NAME}/bak" maxDepth="3">
+                <IfFileName glob="*-debug.*.log.gz"/>
+                <IfLastModified age="P10D"/>
+            </Delete>
+        </DefaultRolloverStrategy>
+    </RollingRandomAccessFile>
+
+    <Rewrite name="obfuscateSensitiveData-FILE-DEBUG">
+        <AppenderRef ref="CONSOLE"/>
+    </Rewrite>
+    <!--
+    name：FILE-INFO  appender 名字可以自定义，logger引用使用
+    fileName：当前日志名称，如果是多级目录，则会自动创建
+    filePattern：归档日志格式
+    -->
+    <RollingRandomAccessFile name="FILE-INFO"
+                             fileName="${BASE_LOG_PATH}/${SERVER_NAME}/${SERVER_NAME}-info.log"
+                             filePattern="${BASE_LOG_PATH}/${SERVER_NAME}/bak/${SERVER_NAME}-info.%d{yyyy-MM-dd}-%i.log.gz">
+        <!--
+            minLevel：最小日志级别
+            maxLevel：最大日志级别
+            onMatch：匹配成功接收
+            onMismatch：匹配失败丢弃
+        -->
+        <Filters>
+            <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL"/>
+            <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+        </Filters>
+
+        <!--
+            pattern：日志格式
+            charset：日志字符编码
+        -->
+        <PatternLayout pattern="${PATTERN}" charset="${CHARSET}"/>
+        <Policies>
+            <!--每天滚动一次-->
+            <TimeBasedTriggeringPolicy interval="1"/>
+            <!--或者日志达到10KB 滚动一次-->
+            <SizeBasedTriggeringPolicy size="${MAX_FILE_SIZE}"/>
+
+        </Policies>
+        <!--日志删除策略-->
+        <DefaultRolloverStrategy fileIndex="nomax" max="${DEFAULT_ROLLOVER_STRATEGY}">
+            <Delete basePath="${BASE_LOG_PATH}/${SERVER_NAME}/bak" maxDepth="3">
+                <IfFileName glob="*-info.*.log.gz"/>
+                <IfLastModified age="P10D"/>
+            </Delete>
+        </DefaultRolloverStrategy>
+    </RollingRandomAccessFile>
+
+    <Rewrite name="obfuscateSensitiveData-FILE-INFO">
+        <AppenderRef ref="FILE-INFO"/>
+    </Rewrite>
+
+    <RollingRandomAccessFile name="FILE-WARN"
+                             fileName="${BASE_LOG_PATH}/${SERVER_NAME}/${SERVER_NAME}-warn.log"
+                             filePattern="${BASE_LOG_PATH}/${SERVER_NAME}/bak/${SERVER_NAME}-warn.%d{yyyy-MM-dd}-%i.log.gz">
+        <!--
+            minLevel：最小日志级别
+            maxLevel：最大日志级别
+            onMatch：匹配成功接收
+            onMismatch：匹配失败丢弃
+        -->
+        <Filters>
+            <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL"/>
+            <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
+        </Filters>
+
+        <!--
+            pattern：日志格式
+            charset：日志字符编码
+        -->
+        <PatternLayout pattern="${PATTERN}" charset="${CHARSET}"/>
+        <Policies>
+            <!--每天滚动一次-->
+            <TimeBasedTriggeringPolicy interval="1"/>
+            <!--或者日志达到10KB 滚动一次-->
+            <SizeBasedTriggeringPolicy size="${MAX_FILE_SIZE}"/>
+        </Policies>
+        <!--日志删除策略-->
+        <DefaultRolloverStrategy fileIndex="nomax" max="${DEFAULT_ROLLOVER_STRATEGY}">
+            <Delete basePath="${BASE_LOG_PATH}/${SERVER_NAME}/bak" maxDepth="3">
+                <IfFileName glob="*-warn.*.log.gz"/>
+                <IfLastModified age="P10D"/>
+            </Delete>
+        </DefaultRolloverStrategy>
+    </RollingRandomAccessFile>
+
+    <Rewrite name="obfuscateSensitiveData-FILE-WARN">
+        <AppenderRef ref="FILE-WARN"/>
+    </Rewrite>
+
+    <RollingRandomAccessFile name="FILE-ERROR"
+                             fileName="${BASE_LOG_PATH}/${SERVER_NAME}/${SERVER_NAME}-error.log"
+                             filePattern="${BASE_LOG_PATH}/${SERVER_NAME}/bak/${SERVER_NAME}-error.%d{yyyy-MM-dd}-%i.log.gz">
+        <Filters>
+            <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+        </Filters>
+        <PatternLayout pattern="${PATTERN}" charset="${CHARSET}"/>
+        <Policies>
+            <!--每天滚动一次-->
+            <TimeBasedTriggeringPolicy interval="1"/>
+            <!--或者日志达到10KB 滚动一次-->
+            <SizeBasedTriggeringPolicy size="${MAX_FILE_SIZE}"/>
+        </Policies>
+        <!--日志删除策略-->
+        <!--DefaultRolloverStrategy 默认的max=7 代表的是dd（天）最多产生7个文件，多余自动删除，但是我们会自己定义删除策略所以要屏蔽这个配置，如果不屏蔽这个配置，则当天日志最多只有7个 -->
+        <!--源码：org.apache.logging.log4j.core.appender.rolling.DefaultRolloverStrategy.Builder.build ，当fileIndex=nomax，不在使用max变量 -->
+        <DefaultRolloverStrategy fileIndex="nomax" max="${DEFAULT_ROLLOVER_STRATEGY}">
+            <!--basePath：从此处扫描需要删除的日志基本路径，maxDepth:要访问的日志目录最大级别数，默认是1  -->
+            <!--例如我们的日志是/data/logs/app/app-info.log，basePath=/data/logs,maxDepth=2 恰好能访问到app-info.log -->
+            <Delete basePath="${BASE_LOG_PATH}/${SERVER_NAME}/bak" maxDepth="3">
+                <!--删除，正则匹配到文件名-->
+                <IfFileName glob="*-error.*.log.gz"/>
+                <!--删除，日志距离现在多长事件，P1D代表是1天-->
+                <!--http://logging.apache.org/log4j/2.x/log4j-core/apidocs/org/apache/logging/log4j/core/appender/rolling/action/Duration.html-->
+                <IfLastModified age="P10D"/>
+            </Delete>
+        </DefaultRolloverStrategy>
+    </RollingRandomAccessFile>
+
+    <Rewrite name="obfuscateSensitiveData-FILE-ERROR">
+        <AppenderRef ref="FILE-ERROR"/>
+    </Rewrite>
+
+    <RollingRandomAccessFile name="FILE-ALL"
+                             fileName="${BASE_LOG_PATH}/${SERVER_NAME}/${SERVER_NAME}-all.log"
+                             filePattern="${BASE_LOG_PATH}/${SERVER_NAME}/bak/${SERVER_NAME}-all.%d{yyyy-MM-dd}-%i.log.gz">
+        <Filters>
+            <ThresholdFilter level="ALL" onMatch="ACCEPT" onMismatch="ACCEPT"/>
+        </Filters>
+
+        <PatternLayout pattern="${PATTERN}" charset="${CHARSET}"/>
+        <Policies>
+            <!--每天滚动一次-->
+            <TimeBasedTriggeringPolicy interval="1"/>
+            <!--或者日志达到10KB 滚动一次-->
+            <SizeBasedTriggeringPolicy size="${MAX_FILE_SIZE}"/>
+        </Policies>
+        <!--日志删除策略-->
+        <!--DefaultRolloverStrategy 默认的max=7 代表的是dd（天）最多产生7个文件，多余自动删除，但是我们会自己定义删除策略所以要屏蔽这个配置，如果不屏蔽这个配置，则当天日志最多只有7个 -->
+        <!--源码：org.apache.logging.log4j.core.appender.rolling.DefaultRolloverStrategy.Builder.build ，当fileIndex=nomax，不在使用max变量 -->
+        <DefaultRolloverStrategy fileIndex="nomax" max="${DEFAULT_ROLLOVER_STRATEGY}">
+            <!--basePath：从此处扫描需要删除的日志基本路径，maxDepth:要访问的日志目录最大级别数，默认是1  -->
+            <!--例如我们的日志是/data/logs/app/app-info.log，basePath=/data/logs,maxDepth=2 恰好能访问到app-info.log -->
+            <Delete basePath="${BASE_LOG_PATH}/${SERVER_NAME}/bak" maxDepth="3">
+                <!--删除，正则匹配到文件名-->
+                <IfFileName glob="*-all.*.log.gz"/>
+                <!--删除，日志距离现在多长事件，P1D代表是1天-->
+                <!--http://logging.apache.org/log4j/2.x/log4j-core/apidocs/org/apache/logging/log4j/core/appender/rolling/action/Duration.html-->
+                <IfLastModified age="P3D"/>
+            </Delete>
+        </DefaultRolloverStrategy>
+    </RollingRandomAccessFile>
+    <Rewrite name="obfuscateSensitiveData-FILE-ALL">
+        <AppenderRef ref="FILE-ALL"/>
+    </Rewrite>
+
+</appenders>
