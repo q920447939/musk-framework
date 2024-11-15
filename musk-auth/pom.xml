@@ -20,7 +20,6 @@
         <module>musk-auth-enums</module>
         <module>musk-auth-event</module>
         <module>musk-auth-constant</module>
-        <module>musk-auth-service</module>
     </modules>
 
 
