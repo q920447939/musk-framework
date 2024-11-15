@@ -14,7 +14,6 @@
     <url>http://maven.apache.org</url>
     <modules>
         <module>musk-middleware</module>
-        <module>musk-middleware/musk-middleware-mybatisplus</module>
         <module>musk-framework-tenant</module>
     </modules>
 

@@ -10,6 +10,9 @@
     <artifactId>musk-middleware</artifactId>
     <packaging>pom</packaging>
     <modules>
+        <module>musk-middleware-log</module>
+        <module>musk-middleware-tlog</module>
+        <module>musk-middleware-mybatisplus</module>
         <module>musk-middleware-redis</module>
     </modules>
 
