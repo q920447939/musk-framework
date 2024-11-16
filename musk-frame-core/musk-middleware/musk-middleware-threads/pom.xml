@@ -9,10 +9,6 @@
 
     <artifactId>musk-middleware-threads</artifactId>
     <packaging>jar</packaging>
-
-    <name>threads</name>
-    <url>http://maven.apache.org</url>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>

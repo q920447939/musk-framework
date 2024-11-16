@@ -7,10 +7,6 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <artifactId>musk-auth-dao</artifactId>
-    <name>Archetype - auth-dao</name>
-    <url>http://maven.apache.org</url>
-
-
 
     <dependencies>
         <dependency>
@@ -38,7 +34,6 @@
         <dependency>
             <groupId>org.example</groupId>
             <artifactId>musk-auth-entity</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>

@@ -8,8 +8,6 @@
     </parent>
     <artifactId>musk-auth-test</artifactId>
     <packaging>jar</packaging>
-    <name>auth-test Maven Webapp</name>
-    <url>http://maven.apache.org</url>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -20,20 +18,6 @@
         <dependency>
             <groupId>org.example</groupId>
             <artifactId>musk-auth-web</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.validation</groupId>
-            <artifactId>jakarta.validation-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.example</groupId>
-            <artifactId>musk-auth-service-dynamic-source</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
-    <build>
-        <finalName>auth-test</finalName>
-    </build>
 </project>

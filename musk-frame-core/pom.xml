@@ -10,8 +10,6 @@
     <artifactId>musk-frame-core</artifactId>
     <packaging>pom</packaging>
 
-    <name>musk-frame-core</name>
-    <url>http://maven.apache.org</url>
     <modules>
         <module>musk-middleware</module>
         <module>musk-framework-tenant</module>

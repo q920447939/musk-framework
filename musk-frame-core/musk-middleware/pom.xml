@@ -15,6 +15,7 @@
         <module>musk-middleware-mybatisplus</module>
         <module>musk-middleware-redis</module>
         <module>musk-middleware-threads</module>
+        <module>musk-middleware-generator-uid</module>
     </modules>
 
     <properties>
