@@ -7,7 +7,7 @@ import org.example.musk.auth.entity.tenantregisterdailystatistics.TenantRegister
 /**
  * 租户注册按日期统计 Mapper
  *
- * @author 马斯克源码
+ * @author
  */
 @Mapper
 public interface TenantRegisterDailyStatisticsMapper extends BaseMapper<TenantRegisterDailyStatisticsDO> {

@@ -16,7 +16,7 @@ import java.time.LocalDate;
 /**
  * 会员登录次数按天统计 DO
  *
- * @author 马斯克源码
+ * @author
  */
 @TableName("member_login_time_by_day_statistics")
 @KeySequence("member_login_time_by_day_statistics_seq") // 用于 Oracle、PostgreSQL、Kingbase、DB2、H2 数据库的主键自增。如果是 MySQL 等数据库，可不写。

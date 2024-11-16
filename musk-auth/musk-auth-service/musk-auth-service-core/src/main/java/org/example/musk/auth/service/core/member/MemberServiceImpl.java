@@ -1,6 +1,7 @@
 package org.example.musk.auth.service.core.member;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -10,6 +11,7 @@ import org.example.musk.auth.constants.system.system.SystemConstant;
 import org.example.musk.auth.dao.member.MemberMapper;
 import org.example.musk.auth.entity.member.MemberDO;
 import org.example.musk.auth.entity.member.vo.MemberSaveReqVO;
+import org.example.musk.auth.enums.MemberStatusEnums;
 import org.example.musk.auth.enums.member.RegisterChannelEnums;
 import org.example.musk.common.exception.BusinessException;
 import org.example.musk.utils.aes.AESKeyEnum;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.example.musk.common.exception.BusinessPageExceptionEnum;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -78,7 +81,14 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, MemberDO> imple
 
     @Override
     public MemberDO getMemberInfoByMemberId(Integer memberId) {
-        return null;
+        MemberDO memberDO = memberMapper.selectById(memberId);
+        if (null == memberDO) {
+            throw  new BusinessException(BusinessPageExceptionEnum.USER_IS_NOT_EXISTS);
+        }
+        if (MemberStatusEnums.DISABLE.getStatus().equals(memberDO.getStatus())) {
+            throw  new BusinessException(BusinessPageExceptionEnum.USER_IS_FORBIDDEN_ERROR);
+        }
+        return memberDO;
     }
 
 
@@ -94,17 +104,34 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, MemberDO> imple
 
     @Override
     public MemberDO getMemberInfoByMemberCode(String memberCode) {
-        return null;
+        MemberDO memberDO = memberMapper.selectOne(new LambdaQueryWrapper<MemberDO>()
+                .eq(MemberDO::getMemberCode,memberCode));
+        if (null == memberDO) {
+            throw  new BusinessException(BusinessPageExceptionEnum.USER_IS_NOT_EXISTS);
+        }
+        if (MemberStatusEnums.DISABLE.getStatus().equals(memberDO.getStatus())) {
+            throw  new BusinessException(BusinessPageExceptionEnum.USER_IS_FORBIDDEN_ERROR);
+        }
+        return memberDO;
     }
 
     @Override
     public MemberDO getMemberInfoByInvestSimpleIdExcludeSystemId(Integer inviteMemberSimpleId) {
-        return null;
+        if (inviteMemberSimpleId <= SystemConstant.SYSTEM_MEMBER_ID) {
+            return null;
+        }
+        return memberMapper.selectOne(new LambdaQueryWrapper<MemberDO>()
+                .eq(MemberDO::getMemberSimpleId, inviteMemberSimpleId));
     }
 
     @Override
     public List<MemberDO> getMemberInfoByMemberIds(List<Integer> memberIds) {
-        return List.of();
+        List<MemberDO> memberDOList = memberMapper.selectList(new LambdaQueryWrapper<MemberDO>()
+                .in(MemberDO::getId,memberIds));
+        if (CollUtil.isEmpty(memberDOList)) {
+            return Collections.emptyList();
+        }
+        return memberDOList.stream().filter(k->!MemberStatusEnums.DISABLE.getStatus().equals(k.getStatus())).toList();
     }
 
     @Override

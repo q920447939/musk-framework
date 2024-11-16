@@ -30,6 +30,6 @@ public class RecordLoginLog implements LoginSuccEventIntl {
         //info.setTraceId();
         info.setRequestIp(JakartaServletUtil.getClientIP(loginSuccEventInfo.getRequest()));
         info.setUserAgent(JakartaServletUtil.getHeaderIgnoreCase(loginSuccEventInfo.getRequest(), "User-Agent"));
-        memberLoginLogService.save(info);
+        memberLoginLogService.saveMember(info);
     }
 }

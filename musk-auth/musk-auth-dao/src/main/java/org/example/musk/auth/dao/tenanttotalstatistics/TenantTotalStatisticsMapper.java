@@ -7,7 +7,7 @@ import org.example.musk.auth.entity.tenanttotalstatistics.TenantTotalStatisticsD
 /**
  * 租户统计 Mapper
  *
- * @author 马斯克源码
+ * @author
  */
 @Mapper
 public interface TenantTotalStatisticsMapper extends BaseMapper<TenantTotalStatisticsDO> {

@@ -7,7 +7,7 @@ import org.example.musk.auth.entity.logintimebydaystatistics.LoginTimeByDayStati
 /**
  * 会员登录次数按天统计 Mapper
  *
- * @author 马斯克源码
+ * @author
  */
 @Mapper
 public interface LoginTimeByDayStatisticsMapper extends BaseMapper<LoginTimeByDayStatisticsDO> {

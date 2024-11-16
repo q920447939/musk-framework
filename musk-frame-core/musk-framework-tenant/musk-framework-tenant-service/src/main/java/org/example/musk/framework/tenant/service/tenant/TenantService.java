@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 租户 Service 接口
  *
- * @author 芋道源码
+ * @author
  */
 public interface TenantService {
 

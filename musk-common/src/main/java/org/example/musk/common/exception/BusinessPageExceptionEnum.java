@@ -1,6 +1,6 @@
 package org.example.musk.common.exception;/**
  * @Project:
- * @Author: leegoo
+ * @Author:
  * @Date: 2021年09月14日
  */
 
@@ -13,7 +13,7 @@ import java.util.Optional;
 /**
  * ClassName: BusinessPageExceptionEnum
  *
- * @author leegoo
+ * @author
  * @Description:  页面业务异常，可在页面上展示的异常
  * 开始编码 4100000
  * 结束编码 4200000
@@ -38,6 +38,8 @@ public enum BusinessPageExceptionEnum implements IBaseErrorInfo{
     GENERATOR_VERIFICATION_CODE_IS_NULL("41200013", "未生成验证码"),
     API_INVALID_USERNAME_CODE("41200014", "登录失败, 用户名或密码错误"),
 
+    USER_IS_FORBIDDEN_ERROR("4210100", "用户已被禁用"),
+    USER_IS_NOT_EXISTS("4210101", "用户不存在"),
 
 
 

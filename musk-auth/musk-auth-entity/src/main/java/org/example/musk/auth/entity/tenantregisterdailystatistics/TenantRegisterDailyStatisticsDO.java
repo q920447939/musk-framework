@@ -16,7 +16,7 @@ import java.time.LocalDate;
 /**
  * 租户注册按日期统计 DO
  *
- * @author 马斯克源码
+ * @author
  */
 @TableName("member_tenant_register_daily_statistics")
 @KeySequence("member_tenant_register_daily_statistics_seq") // 用于 Oracle、PostgreSQL、Kingbase、DB2、H2 数据库的主键自增。如果是 MySQL 等数据库，可不写。

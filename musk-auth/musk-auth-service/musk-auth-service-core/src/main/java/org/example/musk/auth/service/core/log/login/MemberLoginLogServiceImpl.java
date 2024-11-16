@@ -12,15 +12,15 @@ import org.springframework.validation.annotation.Validated;
 /**
  * 会员登录记录 Service 实现类
  *
- * @author 马斯克源码
+ * @author
  */
 @Service
 @Validated
 @Slf4j
 public class MemberLoginLogServiceImpl extends ServiceImpl<MemberLoginLogMapper, MemberLoginLogDO> implements MemberLoginLogService {
 
-    @Resource
-    private MemberLoginLogMapper loginLogMapper;
-
-
+    @Override
+    public int saveMember(MemberLoginLogDO info) {
+        return this.baseMapper.insert(info);
+    }
 }

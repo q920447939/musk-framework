@@ -7,7 +7,7 @@ import org.example.musk.auth.entity.tenanttotalstatistics.TenantTotalStatisticsD
 /**
  * 租户统计 Service 接口
  *
- * @author 马斯克源码
+ * @author
  */
 public interface TenantTotalStatisticsService extends IService<TenantTotalStatisticsDO> {
 

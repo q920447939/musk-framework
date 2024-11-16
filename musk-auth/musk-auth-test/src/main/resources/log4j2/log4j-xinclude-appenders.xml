@@ -152,7 +152,7 @@
         </Policies>
         <!--日志删除策略-->
         <!--DefaultRolloverStrategy 默认的max=7 代表的是dd（天）最多产生7个文件，多余自动删除，但是我们会自己定义删除策略所以要屏蔽这个配置，如果不屏蔽这个配置，则当天日志最多只有7个 -->
-        <!--源码：org.apache.logging.log4j.core.appender.rolling.DefaultRolloverStrategy.Builder.build ，当fileIndex=nomax，不在使用max变量 -->
+        <!--：org.apache.logging.log4j.core.appender.rolling.DefaultRolloverStrategy.Builder.build ，当fileIndex=nomax，不在使用max变量 -->
         <DefaultRolloverStrategy fileIndex="nomax" max="${DEFAULT_ROLLOVER_STRATEGY}">
             <!--basePath：从此处扫描需要删除的日志基本路径，maxDepth:要访问的日志目录最大级别数，默认是1  -->
             <!--例如我们的日志是/data/logs/app/app-info.log，basePath=/data/logs,maxDepth=2 恰好能访问到app-info.log -->
@@ -186,7 +186,7 @@
         </Policies>
         <!--日志删除策略-->
         <!--DefaultRolloverStrategy 默认的max=7 代表的是dd（天）最多产生7个文件，多余自动删除，但是我们会自己定义删除策略所以要屏蔽这个配置，如果不屏蔽这个配置，则当天日志最多只有7个 -->
-        <!--源码：org.apache.logging.log4j.core.appender.rolling.DefaultRolloverStrategy.Builder.build ，当fileIndex=nomax，不在使用max变量 -->
+        <!--：org.apache.logging.log4j.core.appender.rolling.DefaultRolloverStrategy.Builder.build ，当fileIndex=nomax，不在使用max变量 -->
         <DefaultRolloverStrategy fileIndex="nomax" max="${DEFAULT_ROLLOVER_STRATEGY}">
             <!--basePath：从此处扫描需要删除的日志基本路径，maxDepth:要访问的日志目录最大级别数，默认是1  -->
             <!--例如我们的日志是/data/logs/app/app-info.log，basePath=/data/logs,maxDepth=2 恰好能访问到app-info.log -->

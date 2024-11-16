@@ -9,7 +9,7 @@ import java.time.LocalDate;
 /**
  * 租户注册按日期统计 Service 接口
  *
- * @author 马斯克源码
+ * @author
  */
 public interface TenantRegisterDailyStatisticsService extends IService<TenantRegisterDailyStatisticsDO> {
 

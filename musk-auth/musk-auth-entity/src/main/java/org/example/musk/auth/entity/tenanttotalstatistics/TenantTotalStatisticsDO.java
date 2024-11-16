@@ -14,7 +14,7 @@ import org.example.musk.common.pojo.db.TenantBaseDO;
 /**
  * 租户统计 DO
  *
- * @author 马斯克源码
+ * @author
  */
 @TableName("member_tenant_total_statistics")
 @KeySequence("member_tenant_total_statistics_seq") // 用于 Oracle、PostgreSQL、Kingbase、DB2、H2 数据库的主键自增。如果是 MySQL 等数据库，可不写。
