@@ -421,6 +421,11 @@
                 <artifactId>musk-auth-web</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
+            <dependency>
+                <groupId>org.example</groupId>
+                <artifactId>musk-plugin-web-upload</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
@@ -470,6 +475,7 @@
             <artifactId>druid-spring-boot-3-starter</artifactId>
             <version>${druid.version}</version>
         </dependency>
+
 
     </dependencies>
 

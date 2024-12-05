@@ -27,13 +27,13 @@ spring:
           driver-class-name: com.mysql.jdbc.Driver
           username: root
           password: blk@2024~NIUBI!mysql%mmm
-        auth_test:
-          url: jdbc:mysql://blk-mysql-local.com:63306/auth_test?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2b8&allowMultiQueries=true
+        log:
+          url: jdbc:mysql://blk-mysql-local.com:63306/baby_time_log?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2b8&allowMultiQueries=true
           driver-class-name: com.mysql.jdbc.Driver
           username: root
           password: blk@2024~NIUBI!mysql%mmm
-        auth_statistics:
-          url: jdbc:mysql://blk-mysql-local.com:63306/auth_statistical?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2b8&allowMultiQueries=true
+        statistics:
+          url: jdbc:mysql://blk-mysql-local.com:63306/baby_time_statistics?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2b8&allowMultiQueries=true
           driver-class-name: com.mysql.jdbc.Driver
           username: root
           password: blk@2024~NIUBI!mysql%mmm
@@ -59,7 +59,7 @@ musk:
       config-default-tenant-id: 1
   auth:
     ds:
-      member: auth_test
-      log:  auth_test
-      statistics:  auth_statistics
+      member: baby-time
+      log:  log
+      statistics:  statistics
     default-avatar-url: 'http://www.baidu.image.com'

@@ -16,6 +16,7 @@
         <module>musk-frame-core</module>
         <module>musk-constant</module>
         <module>musk-utils</module>
+        <module>musk-plugin</module>
     </modules>
 
     <properties>

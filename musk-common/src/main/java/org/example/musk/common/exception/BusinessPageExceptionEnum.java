@@ -42,6 +42,12 @@ public enum BusinessPageExceptionEnum implements IBaseErrorInfo{
     USER_IS_NOT_EXISTS("4210101", "用户不存在"),
 
 
+    /**
+     * 上传文件部分
+     */
+    UPLOAD_FILE_REQUEST_IS_EMPTY("4210300", "文件不能为空"),
+    UPLOAD_FILE_FAIL("4210301", "上传文件失败"),
+
 
 
     END("4200000", "");
