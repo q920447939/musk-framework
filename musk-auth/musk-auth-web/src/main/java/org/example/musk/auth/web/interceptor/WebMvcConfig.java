@@ -10,6 +10,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfig implements WebMvcConfigurer {
 
     @Resource
+    private AuthenticationInterceptor authenticationInterceptor;
+
+    @Resource
     private TenantInterceptor tenantInterceptor;
 
     @Resource
@@ -20,5 +23,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
         if (tenantConfig.getEnable()) {
             registry.addInterceptor(tenantInterceptor);
         }
+        registry.addInterceptor(authenticationInterceptor);
     }
 }

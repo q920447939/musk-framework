@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.musk.auth.enums.MemberStatusEnums;
 import org.example.musk.auth.service.core.member.MemberService;
 import org.example.musk.auth.web.anno.LimitRateLogin;
+import org.example.musk.auth.web.anno.PassToken;
 import org.example.musk.auth.web.helper.MemberHelper;
 import org.example.musk.auth.web.helper.MemberSimpleIdHelper;
 import org.example.musk.auth.web.helper.member.MemberNickNameHelper;
@@ -84,6 +85,7 @@ public class AuthenticationController {
      */
     @PostMapping("/login")
     @LimitRateLogin
+    @PassToken
     public CommonResult<LoginResponseDTO> login(HttpServletRequest request, @RequestBody LoginRequestDTO loginRequestDTO) throws Exception {
         Assert.notNull(loginRequestDTO);
         /*if (!AppParamConfigUtil.queryAppParamsConfigByTypeValue1ToBoolean(org.example.auth.context.ThreadLocalTenantContext.getTenantId(), AppParamsConfigTypeEnums.LOGIN_VALIDATE_CODE_SKIP)) {
@@ -132,6 +134,7 @@ public class AuthenticationController {
      * @param request
      */
     @PostMapping("/register")
+    @PassToken
     public CommonResult<Boolean> register(HttpServletRequest request, @RequestBody @Valid @Validated RegisterRequestDTO registerRequestDTO) {
         Assert.notNull(registerRequestDTO);
         /**
@@ -186,6 +189,7 @@ public class AuthenticationController {
     // 生成验证码
     @SneakyThrows
     @GetMapping("/generatorVerificationCode")
+    @PassToken
     public CommonResult<String> generatorVerificationCode(HttpServletRequest request) {
         // 1. 使用工具类生成验证码
         String code = VertifyCodeUtils.generateVerifyCode(4);

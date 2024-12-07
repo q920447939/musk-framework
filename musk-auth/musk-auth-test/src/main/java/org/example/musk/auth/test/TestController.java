@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.SneakyThrows;
 import org.example.musk.auth.web.anno.LimitRateLogin;
+import org.example.musk.auth.web.anno.PassToken;
 import org.example.musk.auth.web.authentication.AuthenticationController;
 import org.example.musk.common.pojo.CommonResult;
 import org.example.musk.auth.web.vo.req.LoginRequestDTO;
@@ -35,6 +36,7 @@ public class TestController {
     @SneakyThrows
     @PostMapping("/login")
     @LimitRateLogin
+    @PassToken
     public CommonResult<LoginResponseDTO> login(HttpServletRequest request, @RequestBody LoginRequestDTO loginRequestDTO){
         ThreadLocalTenantContext.setMemberThread(123);
         ThreadLocalTenantContext.setTenantId(1);
@@ -48,6 +50,7 @@ public class TestController {
      * @param request
      */
     @PostMapping("/register")
+    @PassToken
     public CommonResult<Boolean> register(HttpServletRequest request, @RequestBody @Valid @Validated RegisterRequestDTO registerRequestDTO) {
         ThreadLocalTenantContext.setTenantId(1);
         return authenticationController.register(request,registerRequestDTO);
