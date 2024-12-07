@@ -45,7 +45,7 @@
         </dependency>
         <dependency>
             <groupId>org.example</groupId>
-            <artifactId>musk-auth-service-dynamic-source</artifactId>
+            <artifactId>musk-plugin-service-dynamic-source</artifactId>
         </dependency>
 
     </dependencies>

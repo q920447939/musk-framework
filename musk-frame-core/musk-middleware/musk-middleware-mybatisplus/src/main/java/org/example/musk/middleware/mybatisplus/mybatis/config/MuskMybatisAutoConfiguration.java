@@ -33,7 +33,7 @@ import org.springframework.core.env.Environment;
  * @author
  */
 @AutoConfiguration
-@MuskMapperScan(value = {"org.example.musk","${musk.frame.middleware.mybatis.plus.scan-package}"}, annotationClass = Mapper.class,
+@MuskMapperScan(value = {"org.example.musk","${musk.framework.middleware.mybatis.plus.scan-package}"}, annotationClass = Mapper.class,
         lazyInitialization = "${mybatis.lazy-initialization:false}") // Mapper 懒加载，目前仅用于单元测试
 @EnableConfigurationProperties(TenantConfig.class)
 public class MuskMybatisAutoConfiguration implements EnvironmentAware {

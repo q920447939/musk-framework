@@ -6,6 +6,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.example.musk.auth.dao.logintimebydaystatistics.LoginTimeByDayStatisticsMapper;
 import org.example.musk.auth.entity.logintimebydaystatistics.LoginTimeByDayStatisticsDO;
+import org.example.musk.plugin.service.dynamic.source.anno.PluginDynamicSource;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -21,6 +22,7 @@ import java.util.List;
 @Service
 @Validated
 @Slf4j
+@PluginDynamicSource(group = "auth", ds = "statistics")
 public class LoginTimeByDayStatisticsServiceImpl extends ServiceImpl<LoginTimeByDayStatisticsMapper, LoginTimeByDayStatisticsDO> implements LoginTimeByDayStatisticsService {
 
     @Resource

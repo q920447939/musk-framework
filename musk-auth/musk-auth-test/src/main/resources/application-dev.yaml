@@ -59,7 +59,18 @@ musk:
       config-default-tenant-id: 1
   auth:
     ds:
-      member: baby-time
-      log:  log
-      statistics:  statistics
+      properties:
+        member: baby-time
+        log: log
+        statistics: statistics
     default-avatar-url: 'http://www.baidu.image.com'
+  plugin:
+    service:
+      dynamic-source:
+        ds:
+          properties:
+            auth:
+              member: baby-time
+              log: log
+              statistics: statistics
+

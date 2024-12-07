@@ -8,6 +8,7 @@ import org.example.musk.auth.constants.lock.RedisLockConstant;
 import org.example.musk.auth.dao.tenanttotalstatistics.TenantTotalStatisticsMapper;
 import org.example.musk.auth.entity.tenanttotalstatistics.TenantTotalStatisticsDO;
 import org.example.musk.auth.service.core.wrapper.lock.LockWrapper;
+import org.example.musk.plugin.service.dynamic.source.anno.PluginDynamicSource;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -20,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 @Service
 @Validated
 @Slf4j
+@PluginDynamicSource(group = "auth", ds = "statistics")
 public class TenantTotalStatisticsServiceImpl extends ServiceImpl<TenantTotalStatisticsMapper, TenantTotalStatisticsDO> implements TenantTotalStatisticsService {
 
     @Resource

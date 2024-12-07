@@ -10,6 +10,7 @@ import org.example.musk.auth.dao.tenantregisterdailystatistics.TenantRegisterDai
 import org.example.musk.auth.entity.tenantregisterdailystatistics.TenantRegisterDailyStatisticsDO;
 import org.example.musk.auth.service.core.wrapper.lock.LockWrapper;
 import org.example.musk.middleware.redis.RedisUtil;
+import org.example.musk.plugin.service.dynamic.source.anno.PluginDynamicSource;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -24,6 +25,7 @@ import java.time.LocalDate;
 @Service
 @Validated
 @Slf4j
+@PluginDynamicSource(group = "auth", ds = "statistics")
 public class TenantRegisterDailyStatisticsServiceImpl extends ServiceImpl<TenantRegisterDailyStatisticsMapper, TenantRegisterDailyStatisticsDO> implements TenantRegisterDailyStatisticsService {
 
     @Resource

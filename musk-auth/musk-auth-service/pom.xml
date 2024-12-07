@@ -10,7 +10,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>musk-auth-service-core</module>
-        <module>musk-auth-service-dynamic-source</module>
     </modules>
 
 </project>

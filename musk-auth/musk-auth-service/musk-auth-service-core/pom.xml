@@ -65,6 +65,12 @@
             <artifactId>musk-common</artifactId>
         </dependency>
 
+
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>musk-plugin-service-dynamic-source</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

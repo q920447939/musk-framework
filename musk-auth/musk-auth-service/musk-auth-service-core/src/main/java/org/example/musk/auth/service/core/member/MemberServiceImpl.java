@@ -14,6 +14,7 @@ import org.example.musk.auth.entity.member.vo.MemberSaveReqVO;
 import org.example.musk.auth.enums.MemberStatusEnums;
 import org.example.musk.auth.enums.member.RegisterChannelEnums;
 import org.example.musk.common.exception.BusinessException;
+import org.example.musk.plugin.service.dynamic.source.anno.PluginDynamicSource;
 import org.example.musk.utils.aes.AESKeyEnum;
 import org.example.musk.utils.aes.AESUtils;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,7 @@ import java.util.List;
 @Service
 @Validated
 @Slf4j
+@PluginDynamicSource(group = "auth", ds = "member")
 public class MemberServiceImpl extends ServiceImpl<MemberMapper, MemberDO> implements MemberService {
 
     @Resource
