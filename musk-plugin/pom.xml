@@ -17,6 +17,7 @@
     <module>musk-plugin-web</module>
       <module>musk-plugin-dao</module>
     <module>musk-plugin-service</module>
+    <module>musk-plugin-lock</module>
   </modules>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

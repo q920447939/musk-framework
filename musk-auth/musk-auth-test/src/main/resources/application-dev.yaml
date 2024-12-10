@@ -73,4 +73,6 @@ musk:
               member: baby-time
               log: log
               statistics: statistics
+            plugin:
+              upload: statistics
 

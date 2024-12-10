@@ -22,5 +22,19 @@
             <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>musk-plugin-service-dynamic-source</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>musk-plugin-lock</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>musk-middleware-mybatisplus</artifactId>
+        </dependency>
     </dependencies>
 </project>
