@@ -1,4 +1,4 @@
-package org.example.musk.auth.web.authentication;
+package org.example.musk.auth.web.controller.authentication;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;

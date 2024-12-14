@@ -6,7 +6,7 @@ import jakarta.validation.Valid;
 import lombok.SneakyThrows;
 import org.example.musk.auth.web.anno.LimitRateLogin;
 import org.example.musk.auth.web.anno.PassToken;
-import org.example.musk.auth.web.authentication.AuthenticationController;
+import org.example.musk.auth.web.controller.authentication.AuthenticationController;
 import org.example.musk.common.pojo.CommonResult;
 import org.example.musk.auth.web.vo.req.LoginRequestDTO;
 import org.example.musk.auth.web.vo.req.RegisterRequestDTO;

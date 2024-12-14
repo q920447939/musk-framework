@@ -26,7 +26,7 @@ public class CommonResultUtils {
      * @param <V> 目标类型
      */
     public static <D,V> CommonResult<V> wrapEmptyPageResult(PageResult<D> pageResult , Supplier<V> data) {
-        if (null == pageResult) {
+        if (null == pageResult || null == pageResult.getList() || pageResult.getList().isEmpty()) {
             return (CommonResult<V>) success(PageResult.empty());
         }
         return success(data.get());
