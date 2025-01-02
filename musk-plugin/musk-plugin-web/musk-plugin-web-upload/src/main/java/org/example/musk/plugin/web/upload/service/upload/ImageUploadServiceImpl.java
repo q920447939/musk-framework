@@ -11,6 +11,7 @@ import org.example.musk.common.threadVirtual.ThreadVirtualUtils;
 import org.example.musk.plugin.service.dynamic.source.anno.PluginDynamicSource;
 import org.example.musk.plugin.web.upload.config.UploadProperties;
 import org.example.musk.plugin.web.upload.enums.FileTypeEnums;
+import org.example.musk.plugin.web.upload.helper.UploadPathHelper;
 import org.example.musk.plugin.web.upload.service.uploadFileMemberByDayStatistics.UploadFileMemberByDayStatisticsService;
 import org.example.musk.plugin.web.upload.service.uploadFileMemberTotalStatistics.UploadFileMemberTotalStatisticsService;
 import org.example.musk.plugin.web.upload.service.uploadFileTenantTotalStatistics.UploadFileTenantTotalStatisticsService;
@@ -32,15 +33,8 @@ public class ImageUploadServiceImpl implements UploadService {
     @Resource
     private UploadFileMemberTotalStatisticsService uploadFileMemberTotalStatisticsService;
 
-    private final UploadProperties uploadProperties;
-
-    public ImageUploadServiceImpl(UploadProperties uploadProperties) {
-        this.uploadProperties = uploadProperties;
-    }
-
-    private String getTenantBasePath(){
-        return uploadProperties.getBasePath() + ThreadLocalTenantContext.getTenantId() + File.separator;
-    }
+    @Resource
+    private UploadPathHelper uploadPathHelper;
 
     @Override
     public String save(MultipartFile file) {
@@ -48,7 +42,7 @@ public class ImageUploadServiceImpl implements UploadService {
             return StrUtil.EMPTY;
         }
         File targetFile = null;
-        String basePath = getTenantBasePath();
+        String basePath = uploadPathHelper.getTenantBasePath();
         try {
             //获取源文件
             String filePath = basePath;
@@ -69,7 +63,7 @@ public class ImageUploadServiceImpl implements UploadService {
                 uploadFileMemberByDayStatisticsService.saveUploadFileMemberByDayStatistics(ThreadLocalTenantContext.getMemberId(), LocalDateTimeUtil.now().toLocalDate(), FileTypeEnums.IMAGE,times, fileSize);
                 uploadFileMemberTotalStatisticsService.saveUploadFileMemberTotalStatistics(ThreadLocalTenantContext.getMemberId(),FileTypeEnums.IMAGE,times, fileSize);
             });
-            return getDomainFilePath(uploadFileName);
+            return uploadPathHelper.getDomainFilePath(uploadFileName);
         } catch (Exception e) {
             log.error("上传文件失败,filename={}",file.getOriginalFilename(), e);
             if (null != targetFile) {
@@ -79,12 +73,5 @@ public class ImageUploadServiceImpl implements UploadService {
         }
     }
 
-   // @Override
-    public String getServerFilePath(String filePath) {
-        return (uploadProperties.getDomain() + filePath).replaceAll("\\\\", "/");
-    }
 
-    public String getDomainFilePath(String filePath) {
-        return (uploadProperties.getDomainProjectPath() + ThreadLocalTenantContext.getTenantId() + "/"+ filePath).replaceAll("\\\\", "/").replaceAll("//","/");
-    }
 }

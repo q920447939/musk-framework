@@ -93,4 +93,5 @@ public interface MemberService{
      */
     MemberDO register(MemberSaveReqVO createReqVO);
 
+    boolean updateNickName(Integer memberId, String nickName);
 }

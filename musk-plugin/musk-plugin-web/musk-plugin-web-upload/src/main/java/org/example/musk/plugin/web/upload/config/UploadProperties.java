@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.Data;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.env.Environment;
@@ -14,7 +15,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 @ConfigurationProperties(prefix = "musk.plugin.web.upload")
-@Data
+@Setter
 public class UploadProperties {
 
     private String basePath;
@@ -27,13 +28,21 @@ public class UploadProperties {
 
     @PostConstruct
     public void init() {
+        if (StrUtil.isBlank(domain)) {
+            domain = getServerUrl() + "/" + getContextPath();
+        }
+
+    }
+
+    public String getBasePath() {
         if (StrUtil.isBlank(basePath)) {
             basePath = System.getProperty("user.dir") + File.separator + "upload" + File.separator + DateUtil.today() + File.separator;
         }
-        if (StrUtil.isBlank(domain)) {
-            domain = getServerUrl() + "/" + getContextPath();
-            domainProjectPath = domain + "/" +  "static/file/"  + "/" + DateUtil.today() + "/";
-        }
+        return basePath;
+    }
+
+    public String getDomainProjectPath() {
+        return  domain + "/" +  "static/file/"  + "/" + DateUtil.today() + "/";
     }
 
     public int getServerPort() {

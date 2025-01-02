@@ -161,4 +161,13 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, MemberDO> imple
     }
 
 
+    @Override
+    public boolean updateNickName(Integer memberId, String nickName) {
+        MemberDO memberDO = getMemberInfoByMemberId(memberId);
+
+        MemberDO update = new MemberDO();
+        update.setMemberNickName(nickName);
+        update.setId(memberDO.getId());
+        return this.baseMapper.updateById(update) > 0 ;
+    }
 }

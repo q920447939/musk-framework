@@ -48,6 +48,14 @@ public enum BusinessPageExceptionEnum implements IBaseErrorInfo{
     UPLOAD_FILE_REQUEST_IS_EMPTY("4210300", "文件不能为空"),
     UPLOAD_FILE_FAIL("4210301", "上传文件失败"),
 
+    /**
+     * 通用部分 开始
+     */
+    /**
+     * 通用的 bool 的返回为false
+     */
+    COMMON_RESULT_BOOL_IS_FALSE ("4299900", "操作太快了,请稍后重试"),
+
 
 
     END("4200000", "");
