@@ -15,6 +15,6 @@ public class MuskUpLoadConfiguration {
     @Bean
     @ConditionalOnMissingBean(UploadService.class)
     public UploadService imageUploadService(UploadProperties uploadProperties) {
-        return new ImageUploadServiceImpl(uploadProperties);
+        return new ImageUploadServiceImpl();
     }
 }
