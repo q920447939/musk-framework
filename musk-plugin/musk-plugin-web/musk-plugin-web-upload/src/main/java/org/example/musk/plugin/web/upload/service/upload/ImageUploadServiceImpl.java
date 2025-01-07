@@ -7,11 +7,14 @@ import cn.hutool.core.util.StrUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.example.musk.common.context.ThreadLocalTenantContext;
+import org.example.musk.common.exception.BusinessException;
+import org.example.musk.common.exception.BusinessPageExceptionEnum;
 import org.example.musk.common.threadVirtual.ThreadVirtualUtils;
 import org.example.musk.plugin.service.dynamic.source.anno.PluginDynamicSource;
-import org.example.musk.plugin.web.upload.config.UploadProperties;
 import org.example.musk.plugin.web.upload.enums.FileTypeEnums;
 import org.example.musk.plugin.web.upload.helper.UploadPathHelper;
+import org.example.musk.plugin.web.upload.limit.member.TenantMemberUploadFileLimit;
+import org.example.musk.plugin.web.upload.limit.tenant.TenantUploadFileLimit;
 import org.example.musk.plugin.web.upload.service.uploadFileMemberByDayStatistics.UploadFileMemberByDayStatisticsService;
 import org.example.musk.plugin.web.upload.service.uploadFileMemberTotalStatistics.UploadFileMemberTotalStatisticsService;
 import org.example.musk.plugin.web.upload.service.uploadFileTenantTotalStatistics.UploadFileTenantTotalStatisticsService;
@@ -36,10 +39,23 @@ public class ImageUploadServiceImpl implements UploadService {
     @Resource
     private UploadPathHelper uploadPathHelper;
 
+    @Resource
+    private TenantUploadFileLimit tenantUploadFileLimit;
+
+    @Resource
+    private TenantMemberUploadFileLimit tenantMemberUploadFileLimit;
+
+
     @Override
     public String save(MultipartFile file) {
         if (null == file) {
             return StrUtil.EMPTY;
+        }
+        if (tenantUploadFileLimit.fileExceedLimit(1, file.getSize())) {
+            throw new BusinessException(BusinessPageExceptionEnum.UPLOAD_FILE_SIZE_OR_FILE_NUMBER_FAIL);
+        }
+        if (tenantMemberUploadFileLimit.fileExceedLimit(1, file.getSize(), ThreadLocalTenantContext.getMemberId())) {
+            throw new BusinessException(BusinessPageExceptionEnum.UPLOAD_FILE_SIZE_OR_FILE_NUMBER_BY_MEMBER_FAIL);
         }
         File targetFile = null;
         String basePath = uploadPathHelper.getTenantBasePath();

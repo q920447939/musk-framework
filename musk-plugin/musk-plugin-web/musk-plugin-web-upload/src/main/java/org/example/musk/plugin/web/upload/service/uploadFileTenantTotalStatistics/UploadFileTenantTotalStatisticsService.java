@@ -39,7 +39,7 @@ public interface UploadFileTenantTotalStatisticsService extends IService<UploadF
      * @param id 编号
      * @return
      */
-    UploadFileTenantTotalStatisticsDO getUploadFileTenantTotalStatistics(Integer id);
+    UploadFileTenantTotalStatisticsDO getUploadFileTenantTotalStatisticsTotalFileSize(Integer id);
     /**
      * 获得分
      *
@@ -49,4 +49,7 @@ public interface UploadFileTenantTotalStatisticsService extends IService<UploadF
     PageResult<UploadFileTenantTotalStatisticsDO> getUploadFileTenantTotalStatisticsPage(UploadFileTenantTotalStatisticsPageReqBO pageReqBO);
 
     void saveUploadFileTenantTotalStatistics(Integer tenantId, FileTypeEnums fileTypeEnums, long addFileCount, double fileSize);
+
+    UploadFileTenantTotalStatisticsDO getUploadFileTenantTotalStatistics();
+
 }

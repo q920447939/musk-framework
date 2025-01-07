@@ -48,7 +48,7 @@ public class UploadFileTenantTotalStatisticsController {
     }
     @GetMapping("/get")
     public CommonResult<UploadFileTenantTotalStatisticsRespVO> get(@RequestParam("id") Integer id) {
-        UploadFileTenantTotalStatisticsDO uploadFileTenantTotalStatistics = uploadFileTenantTotalStatisticsService.getUploadFileTenantTotalStatistics(id);
+        UploadFileTenantTotalStatisticsDO uploadFileTenantTotalStatistics = uploadFileTenantTotalStatisticsService.getUploadFileTenantTotalStatisticsTotalFileSize(id);
         return CommonResultUtils.wrapEmptyObjResult(uploadFileTenantTotalStatistics, () ->{
             return BeanUtils.toBean(uploadFileTenantTotalStatistics, UploadFileTenantTotalStatisticsRespVO.class);
         });

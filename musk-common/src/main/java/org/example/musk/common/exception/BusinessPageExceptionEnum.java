@@ -47,6 +47,8 @@ public enum BusinessPageExceptionEnum implements IBaseErrorInfo{
      */
     UPLOAD_FILE_REQUEST_IS_EMPTY("4210300", "文件不能为空"),
     UPLOAD_FILE_FAIL("4210301", "上传文件失败"),
+    UPLOAD_FILE_SIZE_OR_FILE_NUMBER_FAIL("4210302", "上传文件个数或上传文件大小超过限制"),
+    UPLOAD_FILE_SIZE_OR_FILE_NUMBER_BY_MEMBER_FAIL("4210304", "上传文件个数或上传文件大小超过限制"),
 
     /**
      * 通用部分 开始

@@ -18,6 +18,8 @@ import org.example.musk.plugin.web.upload.mapper.uploadFileMemberTotalStatistics
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
+
 /**
  *  Service 实现类
  *
@@ -67,6 +69,7 @@ public class UploadFileMemberTotalStatisticsServiceImpl extends ServiceImpl<Uplo
     public void saveUploadFileMemberTotalStatistics(Integer memberId, FileTypeEnums fileTypeEnums, long times, double fileSize) {
         UploadFileMemberTotalStatisticsDO result = this.baseMapper.selectOne(new LambdaQueryWrapperX<UploadFileMemberTotalStatisticsDO>()
                 .eq(UploadFileMemberTotalStatisticsDO::getFileType,fileTypeEnums.getFileType())
+                .eq(UploadFileMemberTotalStatisticsDO::getMemberId,memberId)
         );
         if (null == result) {
             @Valid UploadFileMemberTotalStatisticsDO info = new UploadFileMemberTotalStatisticsDO();
@@ -83,5 +86,11 @@ public class UploadFileMemberTotalStatisticsServiceImpl extends ServiceImpl<Uplo
 
         update.setId(result.getId());
         this.baseMapper.updateById(update);
+    }
+
+
+    @Override
+    public List<UploadFileMemberTotalStatisticsDO> listUploadFileMemberTotalStatistics(int memberId) {
+        return this.baseMapper.selectList(new LambdaQueryWrapperX<UploadFileMemberTotalStatisticsDO>().eq(UploadFileMemberTotalStatisticsDO::getMemberId,memberId));
     }
 }

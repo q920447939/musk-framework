@@ -7,6 +7,8 @@ import org.example.musk.plugin.web.upload.entity.uploadFileMemberTotalStatistics
 import org.example.musk.plugin.web.upload.entity.uploadFileMemberTotalStatistics.bo.UploadFileMemberTotalStatisticsPageReqBO;
 import org.example.musk.plugin.web.upload.enums.FileTypeEnums;
 
+import java.util.List;
+
 /**
  *  Service 接口
  *
@@ -49,4 +51,6 @@ public interface UploadFileMemberTotalStatisticsService extends IService<UploadF
     PageResult<UploadFileMemberTotalStatisticsDO> getUploadFileMemberTotalStatisticsPage(UploadFileMemberTotalStatisticsPageReqBO pageReqBO);
 
     void saveUploadFileMemberTotalStatistics(Integer memberId, FileTypeEnums fileTypeEnums, long times, double fileSize);
+
+    List<UploadFileMemberTotalStatisticsDO> listUploadFileMemberTotalStatistics(int memberId);
 }

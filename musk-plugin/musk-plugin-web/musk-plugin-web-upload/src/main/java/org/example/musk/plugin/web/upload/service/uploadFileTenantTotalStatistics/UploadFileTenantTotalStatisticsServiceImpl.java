@@ -50,12 +50,12 @@ public class UploadFileTenantTotalStatisticsServiceImpl extends ServiceImpl<Uplo
         this.baseMapper.deleteById(id);
     }
     private void validateUploadFileTenantTotalStatisticsExists(Integer id) {
-        if (getUploadFileTenantTotalStatistics(id) == null) {
+        if (getUploadFileTenantTotalStatisticsTotalFileSize(id) == null) {
             throw new RuntimeException("未获取到信息");
         }
     }
     @Override
-    public UploadFileTenantTotalStatisticsDO getUploadFileTenantTotalStatistics(Integer id) {
+    public UploadFileTenantTotalStatisticsDO getUploadFileTenantTotalStatisticsTotalFileSize(Integer id) {
         return this.baseMapper.selectById(id);
     }
     @Override
@@ -84,5 +84,10 @@ public class UploadFileTenantTotalStatisticsServiceImpl extends ServiceImpl<Uplo
 
         update.setId(uploadFileTenantTotalStatisticsDO.getId());
         this.baseMapper.updateById(update);
+    }
+
+    @Override
+    public UploadFileTenantTotalStatisticsDO getUploadFileTenantTotalStatistics() {
+        return this.baseMapper.selectOne(null);
     }
 }
