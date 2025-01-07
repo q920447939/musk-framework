@@ -80,6 +80,10 @@
         </dependency>
 
 
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>musk-plugin-web-validate</artifactId>
+        </dependency>
 
     </dependencies>
 </project>

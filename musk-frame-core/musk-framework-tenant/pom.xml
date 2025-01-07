@@ -14,6 +14,7 @@
         <module>musk-framework-tenant-config</module>
         <module>musk-framework-tenant-dao</module>
         <module>musk-framework-tenant-service</module>
+        <module>musk-framework-tenant-controller</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

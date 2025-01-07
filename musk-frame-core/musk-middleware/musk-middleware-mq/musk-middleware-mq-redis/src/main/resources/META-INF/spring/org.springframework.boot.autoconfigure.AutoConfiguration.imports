@@ -1,0 +1,2 @@
+org.example.musk.middleware.mq.redis.config.MuskRedisMQConsumerAutoConfiguration
+org.example.musk.middleware.mq.redis.config.MuskRedisMQProducerAutoConfiguration

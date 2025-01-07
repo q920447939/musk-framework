@@ -36,6 +36,7 @@ import org.example.musk.auth.event.login.succ.entity.LoginSuccEventInfo;
 import org.example.musk.auth.event.register.entity.RegisterSuccInfo;
 import org.example.musk.common.context.ThreadLocalTenantContext;
 import org.example.musk.middleware.redis.RedisUtil;
+import org.example.musk.plugin.web.validate.password.PasswordCheckHelper;
 import org.springframework.context.ApplicationContext;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -77,6 +78,8 @@ public class AuthenticationController {
     @Resource
     private ApplicationContext applicationContext;
 
+    @Resource
+    private PasswordCheckHelper passwordCheckHelper;
 
     /**
      * 常规登录接口
@@ -140,11 +143,12 @@ public class AuthenticationController {
         /**
          * 判断账号密码是否未空，账号是否是ascial码 ，并且账号密码是长度是 6-30之间
          */
-        if (StrUtil.isBlank(registerRequestDTO.getUserName()) || StrUtil.isBlank(registerRequestDTO.getPassword())
-                || registerRequestDTO.getUserName().length() < 6 || registerRequestDTO.getUserName().length() > 30
-                || registerRequestDTO.getPassword().length() < 6 || registerRequestDTO.getPassword().length() > 30) {
+        if (StrUtil.isBlank(registerRequestDTO.getUserName())
+                || registerRequestDTO.getUserName().length() < 6 || registerRequestDTO.getUserName().length() > 30) {
             throw new BusinessException(REGISTER_PARAMS_ERROR);
         }
+        passwordCheckHelper.check(registerRequestDTO.getPassword());
+
         MemberSaveReqVO memberSaveReqVO = BeanUtil.toBean(registerRequestDTO, MemberSaveReqVO .class);
 
         memberSaveReqVO.setMemberCode(registerRequestDTO.getUserName());

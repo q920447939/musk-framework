@@ -11,6 +11,10 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
+import static org.example.musk.common.exception.enums.GlobalErrorCodeConstants.TENANT_PACKAGE_DISABLE;
+import static org.example.musk.common.exception.enums.GlobalErrorCodeConstants.TENANT_PACKAGE_NOT_EXISTS;
+import static org.example.musk.common.exception.util.ServiceExceptionUtil.exception;
+
 /**
  * @Description:
  * @date 2024年07月05日
@@ -34,4 +38,17 @@ public class TenantPackageServiceImpl extends ServiceImpl<TenantPackageMapper, T
                 .eq(TenantPackageDO::getStatus, CommonStatusEnum.ENABLE.getStatus())
         );
     }
+
+    @Override
+    public TenantPackageDO validTenantPackage(Long id) {
+        TenantPackageDO tenantPackage = baseMapper.selectById(id);
+        if (tenantPackage == null) {
+            throw exception(TENANT_PACKAGE_NOT_EXISTS);
+        }
+        if (tenantPackage.getStatus().equals(CommonStatusEnum.DISABLE.getStatus())) {
+            throw exception(TENANT_PACKAGE_DISABLE, tenantPackage.getName());
+        }
+        return tenantPackage;
+    }
+
 }

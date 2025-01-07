@@ -16,6 +16,7 @@
         <module>musk-middleware-redis</module>
         <module>musk-middleware-threads</module>
         <module>musk-middleware-generator-uid</module>
+        <module>musk-middleware-mq</module>
     </modules>
 
     <properties>

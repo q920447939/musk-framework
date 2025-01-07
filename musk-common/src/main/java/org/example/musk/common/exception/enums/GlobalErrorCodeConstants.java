@@ -41,6 +41,15 @@ public interface GlobalErrorCodeConstants {
     ErrorCode DEMO_DENY = new ErrorCode(901, "演示模式，禁止写操作");
     ErrorCode LOGIN_LIMIT = new ErrorCode(902, "登录频繁");
 
+    ErrorCode TENANT_NAME_DUPLICATE = new ErrorCode(1_002_015_004, "名字为【{}】的租户已存在");
+    ErrorCode TENANT_WEBSITE_DUPLICATE = new ErrorCode(1_002_015_005, "域名为【{}】的租户已存在");
+
+    // ========== 租户套餐 1-002-016-000 ==========
+    ErrorCode TENANT_PACKAGE_NOT_EXISTS = new ErrorCode(1_002_016_000, "租户套餐不存在");
+    ErrorCode TENANT_PACKAGE_USED = new ErrorCode(1_002_016_001, "租户正在使用该套餐，请给租户重新设置套餐后再尝试删除");
+    ErrorCode TENANT_PACKAGE_DISABLE = new ErrorCode(1_002_016_002, "名字为【{}】的租户套餐已被禁用");
+    ErrorCode TENANT_PACKAGE_NAME_DUPLICATE = new ErrorCode(1_002_016_003, "已经存在该名字的租户套餐");
+
     ErrorCode UNKNOWN = new ErrorCode(999, "未知错误");
 
 }

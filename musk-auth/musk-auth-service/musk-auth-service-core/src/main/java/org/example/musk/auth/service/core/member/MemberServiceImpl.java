@@ -170,4 +170,14 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, MemberDO> imple
         update.setId(memberDO.getId());
         return this.baseMapper.updateById(update) > 0 ;
     }
+
+    @Override
+    public boolean updateAvatar(Integer memberId, String avatarUrl) {
+        MemberDO memberDO = getMemberInfoByMemberId(memberId);
+
+        MemberDO update = new MemberDO();
+        update.setAvatar(avatarUrl);
+        update.setId(memberDO.getId());
+        return this.baseMapper.updateById(update) > 0 ;
+    }
 }

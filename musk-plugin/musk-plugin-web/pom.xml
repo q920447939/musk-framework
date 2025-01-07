@@ -11,6 +11,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>musk-plugin-web-upload</module>
+        <module>musk-plugin-web-validate</module>
     </modules>
 
 

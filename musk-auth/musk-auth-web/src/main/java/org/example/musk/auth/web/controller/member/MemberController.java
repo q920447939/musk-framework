@@ -42,4 +42,9 @@ public class MemberController {
         boolean b = memberService.updateNickName(ThreadLocalTenantContext.getMemberId(), nickName);
         return CommonResult.success(b);
     }
+    @GetMapping("/updateAvatar")
+    public CommonResult<Boolean> updateAvatar(@RequestParam("avatarUrl") String avatarUrl) {
+        boolean b = memberService.updateAvatar(ThreadLocalTenantContext.getMemberId(), avatarUrl);
+        return CommonResult.success(b);
+    }
 }
