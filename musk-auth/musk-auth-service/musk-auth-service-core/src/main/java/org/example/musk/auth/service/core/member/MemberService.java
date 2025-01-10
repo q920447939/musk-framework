@@ -1,9 +1,14 @@
 package org.example.musk.auth.service.core.member;
 
+import cn.hutool.core.collection.CollUtil;
+import org.dromara.hutool.core.map.MapUtil;
 import org.example.musk.auth.entity.member.MemberDO;
 import org.example.musk.auth.entity.member.vo.MemberSaveReqVO;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 
 /**
@@ -83,6 +88,20 @@ public interface MemberService{
      * @return {@link List }<{@link MemberDO }>
      */
     List<MemberDO> getMemberInfoByMemberIds(List<Integer> memberIds);
+
+    /**
+     * 获得会员信息通过会员ID集合
+     *
+     * @param memberIds       会员ID集合
+     * @return {@link List }<{@link MemberDO }>
+     */
+    default Map<Integer,MemberDO> getMemberInfoByMemberIdsToMap(List<Integer> memberIds){
+        List<MemberDO> memberList = getMemberInfoByMemberIds(memberIds);
+        if (CollUtil.isEmpty(memberList)) {
+            return MapUtil.empty();
+        }
+        return memberList.stream().collect(Collectors.toMap(k->k.getId(), Function.identity()));
+    }
 
 
     /**
