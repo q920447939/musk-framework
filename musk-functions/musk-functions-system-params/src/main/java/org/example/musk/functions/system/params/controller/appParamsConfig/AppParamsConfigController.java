@@ -4,7 +4,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.example.musk.common.context.ThreadLocalTenantContext;
 import org.example.musk.common.pojo.CommonResult;
-import org.example.musk.enums.appConfig.AppParamsConfigSystemEnums;
+import org.example.musk.enums.appConfig.SystemDomain;
 import org.example.musk.enums.appConfig.AppParamsConfigTypeEnums;
 import org.example.musk.functions.system.params.services.paramsconfig.AppParamsConfigService;
 import org.springframework.validation.annotation.Validated;
@@ -29,6 +29,6 @@ public class AppParamsConfigController {
 
     @GetMapping("/get")
     public CommonResult<String> queryAppParamsConfigByTypeValue1(@RequestParam("String") String type) {
-        return CommonResult.success(appParamsConfigService.queryAppParamsConfigByTypeValue1(ThreadLocalTenantContext.getTenantId(), AppParamsConfigSystemEnums.APP, AppParamsConfigTypeEnums.fromType(type)));
+        return CommonResult.success(appParamsConfigService.queryAppParamsConfigByTypeValue1(ThreadLocalTenantContext.getTenantId(), SystemDomain.APP, AppParamsConfigTypeEnums.fromType(type)));
     }
 }

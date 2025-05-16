@@ -10,13 +10,12 @@ import org.example.musk.constant.cache.RedisCacheTenantConstant;
 import org.example.musk.constant.db.DBConstant;
 import org.example.musk.enums.appConfig.AppParamConfigEnums;
 import org.example.musk.enums.appConfig.AppParamsConfigGroupEnums;
-import org.example.musk.enums.appConfig.AppParamsConfigSystemEnums;
+import org.example.musk.enums.appConfig.SystemDomain;
 import org.example.musk.enums.appConfig.AppParamsConfigTypeEnums;
 import org.example.musk.framework.tenant.config.TenantConfig;
 import org.example.musk.functions.system.params.mapper.paramsconfig.AppParamsConfigMapper;
 import org.example.musk.middleware.mybatisplus.mybatis.core.query.LambdaQueryWrapperX;
 import org.example.musk.middleware.redis.RedisUtil;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -41,9 +40,9 @@ public class AppParamsConfigServiceImpl extends ServiceImpl<AppParamsConfigMappe
     private TenantConfig tenantConfig;
 
     @Override
-    public List<AppParamsConfigDO> queryAppParamsConfigByGroup(AppParamsConfigSystemEnums appParamsConfigSystemEnums,AppParamsConfigGroupEnums appParamsConfigGroupEnums) {
+    public List<AppParamsConfigDO> queryAppParamsConfigByGroup(SystemDomain systemDomain, AppParamsConfigGroupEnums appParamsConfigGroupEnums) {
         return this.baseMapper.selectList(new LambdaQueryWrapperX<AppParamsConfigDO>()
-                .eq(AppParamsConfigDO::getBSystem, appParamsConfigSystemEnums.getSystem())
+                .eq(AppParamsConfigDO::getBSystem, systemDomain.getDomain())
                 .eq(AppParamsConfigDO::getBGroup, appParamsConfigGroupEnums.getGroup())
                 .eq(AppParamsConfigDO::getStatus, AppParamConfigEnums.VALID.getStatus())
         );
@@ -51,33 +50,33 @@ public class AppParamsConfigServiceImpl extends ServiceImpl<AppParamsConfigMappe
 
 
     @Override
-    public AppParamsConfigDO queryAppParamsConfigByType(Integer tenantId,AppParamsConfigSystemEnums appParamsConfigSystemEnums, AppParamsConfigTypeEnums appParamsConfigTypeEnums) {
-        List<AppParamsConfigDO> appParamsConfigDOList = queryAppParamsConfigByTypes(tenantId,appParamsConfigSystemEnums ,appParamsConfigTypeEnums,true);
+    public AppParamsConfigDO queryAppParamsConfigByType(Integer tenantId, SystemDomain systemDomain, AppParamsConfigTypeEnums appParamsConfigTypeEnums) {
+        List<AppParamsConfigDO> appParamsConfigDOList = queryAppParamsConfigByTypes(tenantId, systemDomain,appParamsConfigTypeEnums,true);
 
         return CollUtil.isEmpty(appParamsConfigDOList) ? null : appParamsConfigDOList.getFirst();
     }
 
-    public List<AppParamsConfigDO> queryAppParamsConfigByTypes(Integer tenantId,AppParamsConfigSystemEnums appParamsConfigSystemEnums, AppParamsConfigTypeEnums appParamsConfigTypeEnums,boolean useCache) {
+    public List<AppParamsConfigDO> queryAppParamsConfigByTypes(Integer tenantId, SystemDomain systemDomain, AppParamsConfigTypeEnums appParamsConfigTypeEnums, boolean useCache) {
         if (!useCache) {
-            return queryAppParamsConfig(tenantId,appParamsConfigSystemEnums,appParamsConfigTypeEnums);
+            return queryAppParamsConfig(tenantId, systemDomain,appParamsConfigTypeEnums);
         }
         String key = String.format(RedisCacheTenantConstant.TENANT_CONTEXT_REDIS_CACHE_SYSTEM_APP_PARAMS, tenantId,
-                (appParamsConfigSystemEnums.getSystem() + "_" + appParamsConfigTypeEnums.getAppParamsConfigGroupEnum().getGroup()+ "_" + appParamsConfigTypeEnums.getType()));
+                (systemDomain.getDomain() + "_" + appParamsConfigTypeEnums.getAppParamsConfigGroupEnum().getGroup()+ "_" + appParamsConfigTypeEnums.getType()));
         List<AppParamsConfigDO> list = redisUtil.lGetAll(key);
         if (CollUtil.isNotEmpty(list)) {
             return list;
         }
-        List<AppParamsConfigDO> appParamsConfigDOList = queryAppParamsConfig(tenantId,appParamsConfigSystemEnums, appParamsConfigTypeEnums);
+        List<AppParamsConfigDO> appParamsConfigDOList = queryAppParamsConfig(tenantId, systemDomain, appParamsConfigTypeEnums);
         redisUtil.lSetDefaultTtl(key,appParamsConfigDOList);
         return appParamsConfigDOList;
     }
 
 
 
-    private List<AppParamsConfigDO> queryAppParamsConfig(Integer tenantId,AppParamsConfigSystemEnums appParamsConfigSystemEnums, AppParamsConfigTypeEnums appParamsConfigTypeEnums) {
+    private List<AppParamsConfigDO> queryAppParamsConfig(Integer tenantId, SystemDomain systemDomain, AppParamsConfigTypeEnums appParamsConfigTypeEnums) {
         List<AppParamsConfigDO> appParamsConfigList = this.baseMapper.selectList(new LambdaQueryWrapperX<AppParamsConfigDO>()
                 .eq(AppParamsConfigDO::getTenantId, tenantId)
-                .eq(AppParamsConfigDO::getBSystem, appParamsConfigSystemEnums.getSystem())
+                .eq(AppParamsConfigDO::getBSystem, systemDomain.getDomain())
                 .eq(AppParamsConfigDO::getBGroup, appParamsConfigTypeEnums.getAppParamsConfigGroupEnum().getGroup())
                 .eq(AppParamsConfigDO::getType, appParamsConfigTypeEnums.getType())
                 .eq(AppParamsConfigDO::getStatus, AppParamConfigEnums.VALID.getStatus())
@@ -88,7 +87,7 @@ public class AppParamsConfigServiceImpl extends ServiceImpl<AppParamsConfigMappe
         //未查到配置，用租户1 的配置
         return this.baseMapper.selectList(new LambdaQueryWrapperX<AppParamsConfigDO>()
                 .eq(AppParamsConfigDO::getTenantId, tenantConfig.getConfigDefaultTenantId())
-                .eq(AppParamsConfigDO::getBSystem, appParamsConfigSystemEnums.getSystem())
+                .eq(AppParamsConfigDO::getBSystem, systemDomain.getDomain())
                 .eq(AppParamsConfigDO::getBGroup, appParamsConfigTypeEnums.getAppParamsConfigGroupEnum().getGroup())
                 .eq(AppParamsConfigDO::getType, appParamsConfigTypeEnums.getType())
                 .eq(AppParamsConfigDO::getStatus, AppParamConfigEnums.VALID.getStatus())
@@ -96,7 +95,7 @@ public class AppParamsConfigServiceImpl extends ServiceImpl<AppParamsConfigMappe
     }
 
     @Override
-    public List<AppParamsConfigDO> queryAppParamsConfigByTypes(Integer tenantId,AppParamsConfigSystemEnums appParamsConfigSystemEnums,AppParamsConfigTypeEnums appParamsConfigTypeEnums) {
-        return queryAppParamsConfigByTypes(tenantId,appParamsConfigSystemEnums,appParamsConfigTypeEnums,true);
+    public List<AppParamsConfigDO> queryAppParamsConfigByTypes(Integer tenantId, SystemDomain systemDomain, AppParamsConfigTypeEnums appParamsConfigTypeEnums) {
+        return queryAppParamsConfigByTypes(tenantId, systemDomain,appParamsConfigTypeEnums,true);
     }
 }
