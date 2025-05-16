@@ -17,6 +17,11 @@
         <module>musk-constant</module>
         <module>musk-utils</module>
         <module>musk-plugin</module>
+        <module>musk-admin</module>
+        <module>musk-functions</module>
+        <module>musk-enums</module>
+        <module>musk-exceptions</module>
+        <module>musk-entity</module>
     </modules>
 
     <properties>

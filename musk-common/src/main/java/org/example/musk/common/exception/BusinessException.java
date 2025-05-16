@@ -28,6 +28,12 @@ public class BusinessException extends RuntimeException {
         this.errorMsg = errorInfo.getResultMsg();
     }
 
+    public BusinessException(BusinessPageExceptionEnum businessPageExceptionEnum) {
+        super(businessPageExceptionEnum.getResultCode());
+        this.errorCode = businessPageExceptionEnum.getResultCode();
+        this.errorMsg = businessPageExceptionEnum.getResultMsg();
+    }
+
     public BusinessException(IBaseErrorInfo errorInfo, Throwable cause) {
         super(errorInfo.getResultCode(), cause);
         this.errorCode = errorInfo.getResultCode();

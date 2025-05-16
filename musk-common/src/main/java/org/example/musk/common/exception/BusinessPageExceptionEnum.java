@@ -49,7 +49,10 @@ public enum BusinessPageExceptionEnum implements IBaseErrorInfo{
     UPLOAD_FILE_FAIL("4210301", "上传文件失败"),
     UPLOAD_FILE_SIZE_OR_FILE_NUMBER_FAIL("4210302", "上传文件个数或上传文件大小超过限制"),
     UPLOAD_FILE_SIZE_OR_FILE_NUMBER_BY_MEMBER_FAIL("4210304", "上传文件个数或上传文件大小超过限制"),
-
+    /**
+     *系统配置
+     */
+    APP_PARAM_CONFIG_IS_EMPTY("4210701", "获取配置失败"),
     /**
      * 通用部分 开始
      */
