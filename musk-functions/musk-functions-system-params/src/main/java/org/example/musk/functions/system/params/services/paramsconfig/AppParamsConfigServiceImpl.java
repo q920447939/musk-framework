@@ -42,7 +42,7 @@ public class AppParamsConfigServiceImpl extends ServiceImpl<AppParamsConfigMappe
     @Override
     public List<AppParamsConfigDO> queryAppParamsConfigByGroup(SystemDomain systemDomain, AppParamsConfigGroupEnums appParamsConfigGroupEnums) {
         return this.baseMapper.selectList(new LambdaQueryWrapperX<AppParamsConfigDO>()
-                .eq(AppParamsConfigDO::getBSystem, systemDomain.getDomain())
+                .eq(AppParamsConfigDO::getDomain, systemDomain.getDomain())
                 .eq(AppParamsConfigDO::getBGroup, appParamsConfigGroupEnums.getGroup())
                 .eq(AppParamsConfigDO::getStatus, AppParamConfigEnums.VALID.getStatus())
         );
@@ -76,7 +76,7 @@ public class AppParamsConfigServiceImpl extends ServiceImpl<AppParamsConfigMappe
     private List<AppParamsConfigDO> queryAppParamsConfig(Integer tenantId, SystemDomain systemDomain, AppParamsConfigTypeEnums appParamsConfigTypeEnums) {
         List<AppParamsConfigDO> appParamsConfigList = this.baseMapper.selectList(new LambdaQueryWrapperX<AppParamsConfigDO>()
                 .eq(AppParamsConfigDO::getTenantId, tenantId)
-                .eq(AppParamsConfigDO::getBSystem, systemDomain.getDomain())
+                .eq(AppParamsConfigDO::getDomain, systemDomain.getDomain())
                 .eq(AppParamsConfigDO::getBGroup, appParamsConfigTypeEnums.getAppParamsConfigGroupEnum().getGroup())
                 .eq(AppParamsConfigDO::getType, appParamsConfigTypeEnums.getType())
                 .eq(AppParamsConfigDO::getStatus, AppParamConfigEnums.VALID.getStatus())
@@ -87,7 +87,7 @@ public class AppParamsConfigServiceImpl extends ServiceImpl<AppParamsConfigMappe
         //未查到配置，用租户1 的配置
         return this.baseMapper.selectList(new LambdaQueryWrapperX<AppParamsConfigDO>()
                 .eq(AppParamsConfigDO::getTenantId, tenantConfig.getConfigDefaultTenantId())
-                .eq(AppParamsConfigDO::getBSystem, systemDomain.getDomain())
+                .eq(AppParamsConfigDO::getDomain, systemDomain.getDomain())
                 .eq(AppParamsConfigDO::getBGroup, appParamsConfigTypeEnums.getAppParamsConfigGroupEnum().getGroup())
                 .eq(AppParamsConfigDO::getType, appParamsConfigTypeEnums.getType())
                 .eq(AppParamsConfigDO::getStatus, AppParamConfigEnums.VALID.getStatus())

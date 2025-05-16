@@ -32,9 +32,9 @@ public class AppParamsConfigDO extends TenantBaseDO {
     @TableId
     private Integer id;
     /**
-     * 系统(1:web)
+     * 域
      */
-    private Short bSystem;
+    private Short domain;
     /**
      * 业务所属组编码
      */
