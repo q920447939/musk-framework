@@ -1,6 +1,6 @@
 package org.example.musk.enums.memberInvestPlan;
 
-import com.musk.constant.enums.cash.CashStatusEnums;
+
 import lombok.Getter;
 
 import java.util.Arrays;

@@ -1,7 +1,8 @@
 package org.example.musk.enums.svg;
 
-import com.musk.constant.enums.cash.CashStatusEnums;
+
 import lombok.Getter;
+import org.example.musk.enums.cash.CashStatusEnums;
 
 import java.util.Arrays;
 

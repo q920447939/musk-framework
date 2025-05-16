@@ -1,7 +1,7 @@
 package org.example.musk.enums.appConfig;
 
-import com.musk.constant.enums.cash.CashStatusEnums;
 import lombok.Getter;
+import org.example.musk.enums.cash.CashStatusEnums;
 
 import java.util.Arrays;
 
@@ -35,7 +35,6 @@ public enum AppParamConfigEnums {
      * 获得枚举通过类型
      *
      * @param status 类型
-     * @return {@link CashStatusEnums }
      */
     public static AppParamConfigEnums getEnumsByType(short status) {
         return Arrays.stream(AppParamConfigEnums.values()).filter(k -> k.getStatus() == status).findFirst().orElseThrow(() -> {
