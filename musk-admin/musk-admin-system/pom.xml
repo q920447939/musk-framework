@@ -8,6 +8,22 @@
     </parent>
 
     <artifactId>musk-admin-system</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>musk-auth-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>musk-plugin-web-upload</artifactId>
+        </dependency>
+    </dependencies>
 </project>

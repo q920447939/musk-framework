@@ -11,7 +11,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>musk-functions-system-params</module>
-        <module>musk-functions-menu</module>
+        <module>musk-functions-system-menu</module>
     </modules>
 
     <properties>
