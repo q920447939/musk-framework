@@ -49,6 +49,10 @@
             <groupId>org.example</groupId>
             <artifactId>musk-functions-system-params</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>musk-functions-icon</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

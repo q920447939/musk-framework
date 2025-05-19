@@ -472,6 +472,11 @@
                 <artifactId>musk-functions-system-params</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.example</groupId>
+                <artifactId>musk-functions-icon</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>

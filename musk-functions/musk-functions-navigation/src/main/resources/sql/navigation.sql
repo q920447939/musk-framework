@@ -1,5 +1,5 @@
 -- 导航配置表
-CREATE TABLE `app_navigation_config` (
+CREATE TABLE `system_navigation_config` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT 'id',
   `tenant_id` int DEFAULT NULL COMMENT '租户ID',
   `domain_id` int DEFAULT NULL COMMENT '域ID',

@@ -14,6 +14,7 @@
         <module>musk-functions-system-menu</module>
         <module>musk-functions-navigation</module>
         <module>musk-functions-cache</module>
+        <module>musk-functions-icon</module>
     </modules>
 
     <properties>
