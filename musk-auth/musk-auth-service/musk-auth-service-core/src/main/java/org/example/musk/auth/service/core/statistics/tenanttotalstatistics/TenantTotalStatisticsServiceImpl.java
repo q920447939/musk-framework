@@ -34,7 +34,7 @@ public class TenantTotalStatisticsServiceImpl extends ServiceImpl<TenantTotalSta
             if (!tenantTotalStatisticsMapper.exists(new LambdaQueryWrapper<TenantTotalStatisticsDO>())) {
                 TenantTotalStatisticsDO info = new TenantTotalStatisticsDO();
                 info.setTotalMember(1);
-                info.setTenantId(Long.valueOf(tenantId));
+                info.setTenantId(tenantId);
                 tenantTotalStatisticsMapper.insert(info);
             }
             TenantTotalStatisticsDO tenantTotalStatistics = getTenantTotalStatistics();

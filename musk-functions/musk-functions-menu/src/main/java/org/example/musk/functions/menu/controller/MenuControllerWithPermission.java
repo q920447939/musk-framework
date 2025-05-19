@@ -30,7 +30,7 @@ import java.util.List;
 
 /**
  * 菜单 Controller（带权限控制）
- * 
+ *
  * 这是一个示例控制器，展示如何使用领域权限控制
  *
  * @author musk-framework-permission
@@ -43,13 +43,13 @@ public class MenuControllerWithPermission {
 
     @Resource
     private MenuService menuService;
-    
+
     @Resource
     private DomainPermissionService domainPermissionService;
 
     /**
      * 创建菜单
-     * 
+     *
      * 使用注解方式进行权限控制
      *
      * @param createReqVO 创建信息
@@ -64,7 +64,7 @@ public class MenuControllerWithPermission {
 
     /**
      * 更新菜单
-     * 
+     *
      * 使用注解方式进行权限控制，并从方法参数中获取资源ID
      *
      * @param updateReqVO 更新信息
@@ -80,7 +80,7 @@ public class MenuControllerWithPermission {
 
     /**
      * 删除菜单
-     * 
+     *
      * 使用服务方式进行权限控制
      *
      * @param id 菜单编号
@@ -90,16 +90,16 @@ public class MenuControllerWithPermission {
     public CommonResult<Boolean> deleteMenu(@RequestParam("id") Long id) {
         // 手动检查权限
         if (!domainPermissionService.hasPermission(ResourceTypeEnum.MENU, id.toString(), OperationTypeEnum.DELETE)) {
-            return CommonResult.error("没有删除此菜单的权限");
+            return CommonResult.error(400,"没有删除此菜单的权限");
         }
-        
+
         menuService.deleteMenu(id);
         return CommonResult.success(true);
     }
 
     /**
      * 获取菜单
-     * 
+     *
      * 使用注解方式进行权限控制
      *
      * @param id 菜单编号
@@ -114,7 +114,7 @@ public class MenuControllerWithPermission {
 
     /**
      * 获取菜单树
-     * 
+     *
      * 使用注解方式进行权限控制
      *
      * @param domain 域
@@ -128,7 +128,7 @@ public class MenuControllerWithPermission {
 
     /**
      * 获取当前租户的菜单树
-     * 
+     *
      * 使用注解方式进行权限控制
      *
      * @param domain 域
