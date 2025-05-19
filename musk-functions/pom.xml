@@ -12,6 +12,7 @@
     <modules>
         <module>musk-functions-system-params</module>
         <module>musk-functions-system-menu</module>
+        <module>musk-functions-navigation</module>
     </modules>
 
     <properties>

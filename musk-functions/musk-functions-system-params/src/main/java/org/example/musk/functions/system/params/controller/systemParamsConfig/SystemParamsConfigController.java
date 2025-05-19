@@ -28,7 +28,7 @@ public class SystemParamsConfigController {
     private SystemParamsConfigService systemParamsConfigService;
 
     @GetMapping("/get")
-    public CommonResult<String> querySystemParamsConfigByTypeValue1(@RequestParam("String") String type) {
+    public CommonResult<String> querySystemParamsConfigByTypeValue1(@RequestParam("type") String type) {
         return CommonResult.success(systemParamsConfigService.querySystemParamsConfigByTypeValue1(ThreadLocalTenantContext.getTenantId(), SystemDomain.APP, AppParamsConfigTypeEnums.fromType(type)));
     }
 }
