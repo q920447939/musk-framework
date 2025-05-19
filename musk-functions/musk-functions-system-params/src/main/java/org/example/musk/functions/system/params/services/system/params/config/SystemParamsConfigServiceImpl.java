@@ -14,8 +14,14 @@ import org.example.musk.enums.appConfig.SystemDomain;
 import org.example.musk.enums.appConfig.AppParamsConfigTypeEnums;
 import org.example.musk.framework.tenant.config.TenantConfig;
 import org.example.musk.functions.system.params.mapper.system.params.config.SystemParamsConfigMapper;
+import org.example.musk.functions.cache.annotation.Cacheable;
+import org.example.musk.functions.cache.core.CacheKeyBuilder;
+import org.example.musk.functions.cache.core.CacheManager;
+import org.example.musk.functions.cache.model.CacheNamespace;
+import org.example.musk.functions.cache.model.CacheOptions;
 import org.example.musk.middleware.mybatisplus.mybatis.core.query.LambdaQueryWrapperX;
 import org.example.musk.middleware.redis.RedisUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -39,6 +45,12 @@ public class SystemParamsConfigServiceImpl extends ServiceImpl<SystemParamsConfi
     @Resource
     private TenantConfig tenantConfig;
 
+    @Autowired
+    private CacheManager cacheManager;
+
+    @Autowired
+    private CacheKeyBuilder cacheKeyBuilder;
+
     @Override
     public List<SystemParamsConfigDO> queryAppParamsConfigByGroup(SystemDomain systemDomain, AppParamsConfigGroupEnums appParamsConfigGroupEnums) {
         return this.baseMapper.selectList(new LambdaQueryWrapperX<SystemParamsConfigDO>()
@@ -57,17 +69,21 @@ public class SystemParamsConfigServiceImpl extends ServiceImpl<SystemParamsConfi
 
     public List<SystemParamsConfigDO> queryAppParamsConfigByTypes(Integer tenantId, SystemDomain systemDomain, AppParamsConfigTypeEnums appParamsConfigTypeEnums, boolean useCache) {
         if (!useCache) {
-            return queryAppParamsConfig(tenantId, systemDomain,appParamsConfigTypeEnums);
+            return queryAppParamsConfig(tenantId, systemDomain, appParamsConfigTypeEnums);
         }
-        String key = String.format(RedisCacheTenantConstant.TENANT_CONTEXT_REDIS_CACHE_SYSTEM_APP_PARAMS, tenantId,
-                (systemDomain.getDomain() + "_" + appParamsConfigTypeEnums.getAppParamsConfigGroupEnum().getGroup()+ "_" + appParamsConfigTypeEnums.getType()));
-        List<SystemParamsConfigDO> list = redisUtil.lGetAll(key);
-        if (CollUtil.isNotEmpty(list)) {
-            return list;
-        }
-        List<SystemParamsConfigDO> systemParamsConfigDOList = queryAppParamsConfig(tenantId, systemDomain, appParamsConfigTypeEnums);
-        redisUtil.lSetDefaultTtl(key, systemParamsConfigDOList);
-        return systemParamsConfigDOList;
+
+        String cacheKey = cacheKeyBuilder.build(
+            CacheNamespace.SYSTEM_PARAMS,
+            "config",
+            tenantId,
+            systemDomain.getDomain(),
+            appParamsConfigTypeEnums.getAppParamsConfigGroupEnum().getGroup(),
+            appParamsConfigTypeEnums.getType()
+        );
+
+        return cacheManager.getOrCompute(cacheKey, () -> {
+            return queryAppParamsConfig(tenantId, systemDomain, appParamsConfigTypeEnums);
+        }, CacheOptions.defaultOptions());
     }
 
 
@@ -92,7 +108,11 @@ public class SystemParamsConfigServiceImpl extends ServiceImpl<SystemParamsConfi
     }
 
     @Override
+    @Cacheable(
+        namespace = "SYSTEM_PARAMS",
+        key = "'config:' + #tenantId + ':' + #systemDomain.domain + ':' + #appParamsConfigTypeEnums.appParamsConfigGroupEnum.group + ':' + #appParamsConfigTypeEnums.type"
+    )
     public List<SystemParamsConfigDO> queryAppParamsConfigByTypes(Integer tenantId, SystemDomain systemDomain, AppParamsConfigTypeEnums appParamsConfigTypeEnums) {
-        return queryAppParamsConfigByTypes(tenantId, systemDomain,appParamsConfigTypeEnums,true);
+        return queryAppParamsConfig(tenantId, systemDomain, appParamsConfigTypeEnums);
     }
 }

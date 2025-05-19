@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.example.musk.common.util.object.BeanUtils;
+import org.example.musk.constant.db.DBConstant;
 import org.example.musk.enums.navigator.NavigatorStatusEnum;
 import org.example.musk.functions.navigation.constant.NavigationConstant;
 import org.example.musk.functions.navigation.controller.vo.NavigationTreeVO;
@@ -12,8 +13,15 @@ import org.example.musk.functions.navigation.entity.NavigationConfigDO;
 import org.example.musk.functions.navigation.exception.NavigationException;
 import org.example.musk.functions.navigation.mapper.NavigationConfigMapper;
 import org.example.musk.functions.navigation.service.NavigationConfigService;
+import org.example.musk.functions.cache.annotation.CacheEvict;
+import org.example.musk.functions.cache.annotation.Cacheable;
+import org.example.musk.functions.cache.core.CacheKeyBuilder;
+import org.example.musk.functions.cache.core.CacheManager;
+import org.example.musk.functions.cache.model.CacheNamespace;
+import org.example.musk.functions.cache.model.CacheOptions;
 import org.example.musk.middleware.mybatisplus.mybatis.core.query.LambdaQueryWrapperX;
 import org.example.musk.middleware.redis.RedisUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -28,7 +36,7 @@ import java.util.stream.Collectors;
 @Service
 @Validated
 @Slf4j
-@DS(NavigationConstant.DB_NAME)
+@DS(DBConstant.SYSTEM)
 public class NavigationConfigServiceImpl extends ServiceImpl<NavigationConfigMapper, NavigationConfigDO>
         implements NavigationConfigService {
 
@@ -38,20 +46,24 @@ public class NavigationConfigServiceImpl extends ServiceImpl<NavigationConfigMap
     @Resource
     private RedisUtil redisUtil;
 
+    @Autowired
+    private CacheManager cacheManager;
+
+    @Autowired
+    private CacheKeyBuilder cacheKeyBuilder;
+
     @Override
+    @CacheEvict(namespace = "NAVIGATION", pattern = "'*:' + #navigationConfig.tenantId + ':' + #navigationConfig.domainId + ':' + #navigationConfig.platformType")
     public Integer createNavigationConfig(NavigationConfigDO navigationConfig) {
         // 校验导航层级和父导航ID的一致性
         validateNavigationLevel(navigationConfig);
         // 保存导航
         save(navigationConfig);
-        // 清除缓存
-        clearNavigationCache(navigationConfig.getTenantId(),
-                            navigationConfig.getDomainId(),
-                            navigationConfig.getPlatformType());
         return navigationConfig.getId();
     }
 
     @Override
+    @CacheEvict(namespace = "NAVIGATION", pattern = "'*:' + #navigationConfig.tenantId + ':' + #navigationConfig.domainId + ':' + #navigationConfig.platformType")
     public void updateNavigationConfig(NavigationConfigDO navigationConfig) {
         // 校验导航存在
         validateNavigationExists(navigationConfig.getId());
@@ -59,10 +71,6 @@ public class NavigationConfigServiceImpl extends ServiceImpl<NavigationConfigMap
         validateNavigationLevel(navigationConfig);
         // 更新导航
         updateById(navigationConfig);
-        // 清除缓存
-        clearNavigationCache(navigationConfig.getTenantId(),
-                            navigationConfig.getDomainId(),
-                            navigationConfig.getPlatformType());
     }
 
     @Override
@@ -76,9 +84,9 @@ public class NavigationConfigServiceImpl extends ServiceImpl<NavigationConfigMap
         // 删除导航
         removeById(id);
         // 清除缓存
-        clearNavigationCache(navigation.getTenantId(),
-                            navigation.getDomainId(),
-                            navigation.getPlatformType());
+        String pattern = cacheKeyBuilder.buildPattern(CacheNamespace.NAVIGATION, "*",
+                navigation.getTenantId(), navigation.getDomainId(), navigation.getPlatformType());
+        cacheManager.removeByPattern(pattern);
     }
 
     @Override
@@ -93,29 +101,16 @@ public class NavigationConfigServiceImpl extends ServiceImpl<NavigationConfigMap
     }
 
     @Override
+    @Cacheable(namespace = "NAVIGATION", key = "'list:' + #tenantId + ':' + #domain + ':' + #platformType", expireSeconds = NavigationConstant.NAVIGATION_CACHE_EXPIRE_SECONDS)
     public List<NavigationConfigDO> getNavigationConfigsByTenantAndDomainAndPlatform(
             Integer tenantId, Integer domain, Integer platformType) {
-        // 尝试从缓存获取
-        String cacheKey = String.format(NavigationConstant.NAVIGATION_CACHE_KEY,
-                                       tenantId, domain, platformType);
-        @SuppressWarnings("unchecked")
-        List<NavigationConfigDO> navigations = (List<NavigationConfigDO>) redisUtil.get(cacheKey);
-        if (navigations != null) {
-            return navigations;
-        }
-
-        // 缓存未命中，从数据库获取
-        navigations = list(new LambdaQueryWrapperX<NavigationConfigDO>()
+        // 从数据库获取
+        return list(new LambdaQueryWrapperX<NavigationConfigDO>()
                 .eq(NavigationConfigDO::getTenantId, tenantId)
                 .eq(NavigationConfigDO::getDomainId, domain)
                 .eq(NavigationConfigDO::getPlatformType, platformType)
                 .eq(NavigationConfigDO::getStatus, NavigatorStatusEnum.ENABLE.getCode())
                 .orderByAsc(NavigationConfigDO::getDisplayIndex));
-
-        // 存入缓存
-        redisUtil.set(cacheKey, navigations, NavigationConstant.NAVIGATION_CACHE_EXPIRE_SECONDS);
-
-        return navigations;
     }
 
     @Override
@@ -140,18 +135,10 @@ public class NavigationConfigServiceImpl extends ServiceImpl<NavigationConfigMap
     }
 
     @Override
+    @Cacheable(namespace = "NAVIGATION", key = "'tree:' + #tenantId + ':' + #domain + ':' + #platformType", expireSeconds = NavigationConstant.NAVIGATION_CACHE_EXPIRE_SECONDS)
     public List<NavigationTreeVO> getNavigationTreeByTenant(
             Integer tenantId, Integer domain, Integer platformType) {
-        // 尝试从缓存获取
-        String cacheKey = String.format(NavigationConstant.NAVIGATION_TREE_CACHE_KEY,
-                                       tenantId, domain, platformType);
-        @SuppressWarnings("unchecked")
-        List<NavigationTreeVO> navigationTree = (List<NavigationTreeVO>) redisUtil.get(cacheKey);
-        if (navigationTree != null) {
-            return navigationTree;
-        }
-
-        // 缓存未命中，从数据库获取
+        // 从数据库获取
         List<NavigationConfigDO> navigations = list(new LambdaQueryWrapperX<NavigationConfigDO>()
                 .eq(NavigationConfigDO::getTenantId, tenantId)
                 .eq(NavigationConfigDO::getDomainId, domain)
@@ -160,12 +147,7 @@ public class NavigationConfigServiceImpl extends ServiceImpl<NavigationConfigMap
                 .orderByAsc(NavigationConfigDO::getDisplayIndex));
 
         // 构建导航树
-        navigationTree = buildNavigationTree(navigations, null);
-
-        // 存入缓存
-        redisUtil.set(cacheKey, navigationTree, NavigationConstant.NAVIGATION_CACHE_EXPIRE_SECONDS);
-
-        return navigationTree;
+        return buildNavigationTree(navigations, null);
     }
 
     /**
@@ -234,15 +216,5 @@ public class NavigationConfigServiceImpl extends ServiceImpl<NavigationConfigMap
                 .eq(NavigationConfigDO::getParentNavigatorId, id)) > 0;
     }
 
-    /**
-     * 清除导航缓存
-     */
-    private void clearNavigationCache(Integer tenantId, Integer domain, Integer platformType) {
-        String cacheKey = String.format(NavigationConstant.NAVIGATION_CACHE_KEY,
-                                       tenantId, domain, platformType);
-        String treeCacheKey = String.format(NavigationConstant.NAVIGATION_TREE_CACHE_KEY,
-                                          tenantId, domain, platformType);
-        redisUtil.del(cacheKey);
-        redisUtil.del(treeCacheKey);
-    }
+
 }

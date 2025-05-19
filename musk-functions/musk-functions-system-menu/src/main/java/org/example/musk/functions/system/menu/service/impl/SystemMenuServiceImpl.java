@@ -11,8 +11,15 @@ import org.example.musk.functions.system.menu.entity.SystemMenuDO;
 import org.example.musk.functions.system.menu.exception.MenuException;
 import org.example.musk.functions.system.menu.mapper.SystemMenuMapper;
 import org.example.musk.functions.system.menu.service.SystemMenuService;
+import org.example.musk.functions.cache.annotation.CacheEvict;
+import org.example.musk.functions.cache.annotation.Cacheable;
+import org.example.musk.functions.cache.core.CacheKeyBuilder;
+import org.example.musk.functions.cache.core.CacheManager;
+import org.example.musk.functions.cache.model.CacheNamespace;
+import org.example.musk.functions.cache.model.CacheOptions;
 import org.example.musk.middleware.mybatisplus.mybatis.core.query.LambdaQueryWrapperX;
 import org.example.musk.middleware.redis.RedisUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -37,18 +44,24 @@ public class SystemMenuServiceImpl extends ServiceImpl<SystemMenuMapper, SystemM
     @Resource
     private RedisUtil redisUtil;
 
+    @Autowired
+    private CacheManager cacheManager;
+
+    @Autowired
+    private CacheKeyBuilder cacheKeyBuilder;
+
     @Override
+    @CacheEvict(namespace = "MENU", pattern = "'tree:' + #menu.tenantId + ':' + #menu.domainId")
     public Long createMenu(SystemMenuDO menu) {
         // 校验菜单层级和父菜单ID的一致性
         validateMenuLevel(menu);
         // 保存菜单
         save(menu);
-        // 清除缓存
-        clearMenuCache(menu.getTenantId(), menu.getDomainId());
         return menu.getId();
     }
 
     @Override
+    @CacheEvict(namespace = "MENU", pattern = "'tree:' + #menu.tenantId + ':' + #menu.domainId")
     public void updateMenu(SystemMenuDO menu) {
         // 校验菜单存在
         validateMenuExists(menu.getId());
@@ -56,8 +69,6 @@ public class SystemMenuServiceImpl extends ServiceImpl<SystemMenuMapper, SystemM
         validateMenuLevel(menu);
         // 更新菜单
         updateById(menu);
-        // 清除缓存
-        clearMenuCache(menu.getTenantId(), menu.getDomainId());
     }
 
     @Override
@@ -71,7 +82,8 @@ public class SystemMenuServiceImpl extends ServiceImpl<SystemMenuMapper, SystemM
         // 删除菜单
         removeById(id);
         // 清除缓存
-        clearMenuCache(menu.getTenantId(), menu.getDomainId());
+        String pattern = cacheKeyBuilder.buildPattern(CacheNamespace.MENU, "tree", menu.getTenantId(), menu.getDomainId());
+        cacheManager.removeByPattern(pattern);
     }
 
     @Override
@@ -100,27 +112,15 @@ public class SystemMenuServiceImpl extends ServiceImpl<SystemMenuMapper, SystemM
     }
 
     @Override
+    @Cacheable(namespace = "MENU", key = "'tree:' + #tenantId + ':' + #domain", expireSeconds = MenuConstant.MENU_CACHE_EXPIRE_SECONDS)
     public List<SystemMenuTreeVO> getMenuTreeByTenant(Integer tenantId, Integer domain) {
-        // 尝试从缓存获取
-        String cacheKey = MenuConstant.MENU_TREE_CACHE_KEY + tenantId + ":" + domain;
-        @SuppressWarnings("unchecked")
-        List<SystemMenuTreeVO> menuTree = (List<SystemMenuTreeVO>) redisUtil.get(cacheKey);
-        if (menuTree != null) {
-            return menuTree;
-        }
-
-        // 缓存未命中，从数据库获取
+        // 从数据库获取
         List<SystemMenuDO> menus = list(new LambdaQueryWrapperX<SystemMenuDO>()
                 .eq(SystemMenuDO::getTenantId, tenantId)
                 .eq(SystemMenuDO::getDomainId, domain));
 
         // 构建菜单树
-        menuTree = buildMenuTree(menus, null);
-
-        // 存入缓存
-        redisUtil.set(cacheKey, menuTree, MenuConstant.MENU_CACHE_EXPIRE_SECONDS);
-
-        return menuTree;
+        return buildMenuTree(menus, null);
     }
 
     /**
@@ -197,14 +197,5 @@ public class SystemMenuServiceImpl extends ServiceImpl<SystemMenuMapper, SystemM
                 .collect(Collectors.toList());
     }
 
-    /**
-     * 清除菜单缓存
-     *
-     * @param tenantId 租户ID
-     * @param domain 域
-     */
-    private void clearMenuCache(Integer tenantId, Integer domain) {
-        String cacheKey = MenuConstant.MENU_TREE_CACHE_KEY + tenantId + ":" + domain;
-        redisUtil.del(cacheKey);
-    }
+
 }

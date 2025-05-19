@@ -13,6 +13,7 @@
         <module>musk-functions-system-params</module>
         <module>musk-functions-system-menu</module>
         <module>musk-functions-navigation</module>
+        <module>musk-functions-cache</module>
     </modules>
 
     <properties>

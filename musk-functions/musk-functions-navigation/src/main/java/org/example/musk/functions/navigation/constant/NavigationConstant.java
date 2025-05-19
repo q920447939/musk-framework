@@ -13,11 +13,6 @@ public class NavigationConstant {
     public static final Integer ROOT_NAVIGATION_LEVEL = 0;
 
     /**
-     * 数据源名称
-     */
-    public static final String DB_NAME = "navigation";
-
-    /**
      * Redis缓存前缀
      */
     public static final String REDIS_CACHE_PREFIX = "musk:navigation:";

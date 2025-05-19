@@ -63,6 +63,11 @@
             <groupId>org.example</groupId>
             <artifactId>musk-middleware-redis</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>musk-functions-cache</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
 
     </dependencies>
 </project>
