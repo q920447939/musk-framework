@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.example.musk.common.pojo.db.DomainBaseDO;
 import org.example.musk.common.pojo.db.TenantBaseDO;
 
 /**
@@ -23,21 +24,13 @@ import org.example.musk.common.pojo.db.TenantBaseDO;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SystemParamsConfigDO extends TenantBaseDO {
+public class SystemParamsConfigDO extends DomainBaseDO {
 
     /**
      * 主键
      */
     @TableId
     private Integer id;
-    /**
-     * 域
-     */
-    private Short domain;
-    /**
-     * 业务所属组编码
-     */
-    private String bGroup;
     /**
      * 参数类型编码
      */

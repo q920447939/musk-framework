@@ -44,7 +44,7 @@ public class SystemMenuServiceImpl extends ServiceImpl<SystemMenuMapper, SystemM
         // 保存菜单
         save(menu);
         // 清除缓存
-        clearMenuCache(menu.getTenantId(), menu.getDomain());
+        clearMenuCache(menu.getTenantId(), menu.getDomainId());
         return menu.getId();
     }
 
@@ -57,7 +57,7 @@ public class SystemMenuServiceImpl extends ServiceImpl<SystemMenuMapper, SystemM
         // 更新菜单
         updateById(menu);
         // 清除缓存
-        clearMenuCache(menu.getTenantId(), menu.getDomain());
+        clearMenuCache(menu.getTenantId(), menu.getDomainId());
     }
 
     @Override
@@ -71,7 +71,7 @@ public class SystemMenuServiceImpl extends ServiceImpl<SystemMenuMapper, SystemM
         // 删除菜单
         removeById(id);
         // 清除缓存
-        clearMenuCache(menu.getTenantId(), menu.getDomain());
+        clearMenuCache(menu.getTenantId(), menu.getDomainId());
     }
 
     @Override
@@ -82,7 +82,7 @@ public class SystemMenuServiceImpl extends ServiceImpl<SystemMenuMapper, SystemM
     @Override
     public List<SystemMenuDO> getMenusByDomain(Integer domain) {
         return list(new LambdaQueryWrapperX<SystemMenuDO>()
-                .eq(SystemMenuDO::getDomain, domain));
+                .eq(SystemMenuDO::getDomainId, domain));
     }
 
     @Override
@@ -112,7 +112,7 @@ public class SystemMenuServiceImpl extends ServiceImpl<SystemMenuMapper, SystemM
         // 缓存未命中，从数据库获取
         List<SystemMenuDO> menus = list(new LambdaQueryWrapperX<SystemMenuDO>()
                 .eq(SystemMenuDO::getTenantId, tenantId)
-                .eq(SystemMenuDO::getDomain, domain));
+                .eq(SystemMenuDO::getDomainId, domain));
 
         // 构建菜单树
         menuTree = buildMenuTree(menus, null);

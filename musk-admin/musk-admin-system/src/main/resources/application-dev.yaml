@@ -19,21 +19,26 @@ spring:
         test-while-idle: true
         test-on-borrow: false
         test-on-return: false
-      primary: baby-time
+      primary: musk_auth
       strict: true #设置严格模式,默认false不启动. 启动后在未匹配到指定数据源时候回抛出异常,不启动会使用默认数据源.
       datasource:
-        baby-time:
-          url: jdbc:mysql://blk-mysql-local.com:63306/baby_time?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2b8&allowMultiQueries=true
+        musk_auth:
+          url: jdbc:mysql://blk-mysql-local.com:63306/musk_auth?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2b8&allowMultiQueries=true
           driver-class-name: com.mysql.jdbc.Driver
           username: root
           password: blk@2024~NIUBI!mysql%mmm
-        log:
-          url: jdbc:mysql://blk-mysql-local.com:63306/baby_time_log?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2b8&allowMultiQueries=true
+        musk_system:
+          url: jdbc:mysql://blk-mysql-local.com:63306/musk_system?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2b8&allowMultiQueries=true
           driver-class-name: com.mysql.jdbc.Driver
           username: root
           password: blk@2024~NIUBI!mysql%mmm
-        statistics:
-          url: jdbc:mysql://blk-mysql-local.com:63306/baby_time_statistics?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2b8&allowMultiQueries=true
+        musk_log:
+          url: jdbc:mysql://blk-mysql-local.com:63306/musk_log?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2b8&allowMultiQueries=true
+          driver-class-name: com.mysql.jdbc.Driver
+          username: root
+          password: blk@2024~NIUBI!mysql%mmm
+        musk_statistics:
+          url: jdbc:mysql://blk-mysql-local.com:63306/musk_statistics?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2b8&allowMultiQueries=true
           driver-class-name: com.mysql.jdbc.Driver
           username: root
           password: blk@2024~NIUBI!mysql%mmm
@@ -60,9 +65,9 @@ musk:
   auth:
     ds:
       properties:
-        member: baby-time
-        log: log
-        statistics: statistics
+        member: musk_auth
+        log: musk_log
+        statistics: musk_statistics
     default-avatar-url: 'http://www.baidu.image.com'
   plugin:
     service:
@@ -70,9 +75,7 @@ musk:
         ds:
           properties:
             auth:
-              member: baby-time
-              log: log
-              statistics: statistics
-            plugin:
-              upload: statistics
+                member: musk_auth
+                log: musk_log
+                statistics: musk_statistics
 

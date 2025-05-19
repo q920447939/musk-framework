@@ -5,7 +5,6 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.example.musk.auth.service.core.member.MemberService;
 import org.example.musk.auth.web.anno.PassToken;
 import org.example.musk.auth.web.config.exception.IllegalityTokenException;
 import org.example.musk.auth.web.config.exception.NoTokenException;
@@ -62,7 +61,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         } catch (Exception e) {
             throw new IllegalityTokenException("50008", "非法的token值");
         }
-        ThreadLocalTenantContext.setMemberThread((int) StpUtil.getLoginIdAsLong());
+        ThreadLocalTenantContext.setMember((int) StpUtil.getLoginIdAsLong());
         return true;
     }
 

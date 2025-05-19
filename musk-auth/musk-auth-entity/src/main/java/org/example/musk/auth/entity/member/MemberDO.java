@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.example.musk.common.pojo.db.DomainBaseDO;
 import org.example.musk.common.pojo.db.TenantBaseDO;
 
 /**
@@ -24,7 +25,7 @@ import org.example.musk.common.pojo.db.TenantBaseDO;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberDO extends TenantBaseDO {
+public class MemberDO extends DomainBaseDO {
 
     /**
      * id
@@ -35,7 +36,6 @@ public class MemberDO extends TenantBaseDO {
     /**
      * 注册渠道
      *
-     * 枚举 {@link TODO member_register_channel 对应的类}
      */
     private Integer registerChannel;
 

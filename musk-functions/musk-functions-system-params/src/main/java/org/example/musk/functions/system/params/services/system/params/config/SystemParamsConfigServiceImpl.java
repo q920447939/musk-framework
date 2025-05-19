@@ -29,7 +29,7 @@ import java.util.List;
  */
 @Service
 @Validated
-@DS(DBConstant.APP_CONFIG)
+@DS(DBConstant.SYSTEM)
 @Slf4j
 public class SystemParamsConfigServiceImpl extends ServiceImpl<SystemParamsConfigMapper, SystemParamsConfigDO> implements SystemParamsConfigService {
 
@@ -42,8 +42,7 @@ public class SystemParamsConfigServiceImpl extends ServiceImpl<SystemParamsConfi
     @Override
     public List<SystemParamsConfigDO> queryAppParamsConfigByGroup(SystemDomain systemDomain, AppParamsConfigGroupEnums appParamsConfigGroupEnums) {
         return this.baseMapper.selectList(new LambdaQueryWrapperX<SystemParamsConfigDO>()
-                .eq(SystemParamsConfigDO::getDomain, systemDomain.getDomain())
-                .eq(SystemParamsConfigDO::getBGroup, appParamsConfigGroupEnums.getGroup())
+                .eq(SystemParamsConfigDO::getDomainId, systemDomain.getDomain())
                 .eq(SystemParamsConfigDO::getStatus, AppParamConfigEnums.VALID.getStatus())
         );
     }
@@ -76,8 +75,7 @@ public class SystemParamsConfigServiceImpl extends ServiceImpl<SystemParamsConfi
     private List<SystemParamsConfigDO> queryAppParamsConfig(Integer tenantId, SystemDomain systemDomain, AppParamsConfigTypeEnums appParamsConfigTypeEnums) {
         List<SystemParamsConfigDO> appParamsConfigList = this.baseMapper.selectList(new LambdaQueryWrapperX<SystemParamsConfigDO>()
                 .eq(SystemParamsConfigDO::getTenantId, tenantId)
-                .eq(SystemParamsConfigDO::getDomain, systemDomain.getDomain())
-                .eq(SystemParamsConfigDO::getBGroup, appParamsConfigTypeEnums.getAppParamsConfigGroupEnum().getGroup())
+                .eq(SystemParamsConfigDO::getDomainId, systemDomain.getDomain())
                 .eq(SystemParamsConfigDO::getType, appParamsConfigTypeEnums.getType())
                 .eq(SystemParamsConfigDO::getStatus, AppParamConfigEnums.VALID.getStatus())
         );
@@ -87,8 +85,7 @@ public class SystemParamsConfigServiceImpl extends ServiceImpl<SystemParamsConfi
         //未查到配置，用租户1 的配置
         return this.baseMapper.selectList(new LambdaQueryWrapperX<SystemParamsConfigDO>()
                 .eq(SystemParamsConfigDO::getTenantId, tenantConfig.getConfigDefaultTenantId())
-                .eq(SystemParamsConfigDO::getDomain, systemDomain.getDomain())
-                .eq(SystemParamsConfigDO::getBGroup, appParamsConfigTypeEnums.getAppParamsConfigGroupEnum().getGroup())
+                .eq(SystemParamsConfigDO::getDomainId, systemDomain.getDomain())
                 .eq(SystemParamsConfigDO::getType, appParamsConfigTypeEnums.getType())
                 .eq(SystemParamsConfigDO::getStatus, AppParamConfigEnums.VALID.getStatus())
         );

@@ -38,7 +38,7 @@ public class TestController {
     @LimitRateLogin
     @PassToken
     public CommonResult<LoginResponseDTO> login(HttpServletRequest request, @RequestBody LoginRequestDTO loginRequestDTO){
-        ThreadLocalTenantContext.setMemberThread(123);
+        ThreadLocalTenantContext.setMember(123);
         ThreadLocalTenantContext.setTenantId(1);
 
         return authenticationController.login(request,loginRequestDTO);

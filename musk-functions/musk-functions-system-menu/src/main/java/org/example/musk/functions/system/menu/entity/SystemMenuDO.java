@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.example.musk.common.pojo.db.DomainBaseDO;
 import org.example.musk.common.pojo.db.TenantBaseDO;
 
 /**
@@ -22,7 +23,7 @@ import org.example.musk.common.pojo.db.TenantBaseDO;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SystemMenuDO extends TenantBaseDO {
+public class SystemMenuDO extends DomainBaseDO {
 
     /**
      * ID
@@ -30,10 +31,6 @@ public class SystemMenuDO extends TenantBaseDO {
     @TableId
     private Long id;
 
-    /**
-     * 所属域(1:APP)
-     */
-    private Integer domain;
 
     /**
      * 菜单名称

@@ -36,6 +36,10 @@
             <artifactId>jakarta.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>musk-auth-service-core</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

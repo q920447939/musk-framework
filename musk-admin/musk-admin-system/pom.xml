@@ -41,6 +41,14 @@
             <groupId>org.example</groupId>
             <artifactId>musk-plugin-web-upload</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>musk-functions-system-menu</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>musk-functions-system-params</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

@@ -35,7 +35,7 @@ public class ThreadLocalTenantContext {
     }
 
 
-    public static void setMemberThread(Integer memberId) {
+    public static void setMember(Integer memberId) {
         assert null != memberId;
 
         memberThreadLocal.set(memberId);
