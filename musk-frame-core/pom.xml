@@ -13,6 +13,7 @@
     <modules>
         <module>musk-middleware</module>
         <module>musk-framework-tenant</module>
+        <module>musk-framework-permission</module>
     </modules>
 
     <properties>
