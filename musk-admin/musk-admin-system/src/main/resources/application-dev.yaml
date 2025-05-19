@@ -42,8 +42,8 @@ spring:
     redis:
       host: blk-redis-local.com # 地址
       port: 61379 # 端口
-      database: 2 # 数据库索引
-      password: "blk@2024~NIUBI!redis%h"
+      database: 10 # 数据库索引
+      password: "redis@480@2024~"
       username: default
       # 密码，建议生产环境开启
 

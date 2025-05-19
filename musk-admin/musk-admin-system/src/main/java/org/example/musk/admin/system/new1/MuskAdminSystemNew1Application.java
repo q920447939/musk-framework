@@ -1,20 +1,13 @@
-package org.example.musk.admin.system;
+package org.example.musk.admin.system.new1;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/**
- * ClassName: Application
- *
- * @author
- * @Description:
- * @date 2024年11月13日
- */
 @SpringBootApplication(scanBasePackages = {"org.example"})
-public class Application {
+public class MuskAdminSystemNew1Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(MuskAdminSystemNew1Application.class, args);
     }
 
 }
