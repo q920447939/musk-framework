@@ -15,6 +15,7 @@
         <module>musk-functions-navigation</module>
         <module>musk-functions-cache</module>
         <module>musk-functions-icon</module>
+        <module>musk-functions-message</module>
     </modules>
 
     <properties>

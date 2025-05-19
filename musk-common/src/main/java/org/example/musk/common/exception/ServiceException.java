@@ -9,7 +9,7 @@ import org.example.musk.common.exception.enums.ServiceErrorCodeRange;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public final class ServiceException extends RuntimeException {
+public  class ServiceException extends RuntimeException {
 
     /**
      * 业务错误码

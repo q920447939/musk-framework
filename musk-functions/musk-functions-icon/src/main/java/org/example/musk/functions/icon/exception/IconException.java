@@ -64,13 +64,4 @@ public class IconException extends ServiceException {
         super(code);
     }
 
-    /**
-     * 构造函数
-     *
-     * @param code 错误码
-     * @param params 错误参数
-     */
-    public IconException(ErrorCode code, Object... params) {
-        super(code, params);
-    }
 }

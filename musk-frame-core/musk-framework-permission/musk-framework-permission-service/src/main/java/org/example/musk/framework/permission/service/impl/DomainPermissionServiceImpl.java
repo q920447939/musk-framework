@@ -1,9 +1,11 @@
 package org.example.musk.framework.permission.service.impl;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.example.musk.common.context.ThreadLocalTenantContext;
+import org.example.musk.constant.db.DBConstant;
 import org.example.musk.framework.permission.constant.PermissionConstant;
 import org.example.musk.framework.permission.dao.DomainPermissionMapper;
 import org.example.musk.framework.permission.entity.DomainPermissionDO;
@@ -24,6 +26,7 @@ import org.springframework.validation.annotation.Validated;
 @Service
 @Validated
 @Slf4j
+@DS(DBConstant.SYSTEM)
 public class DomainPermissionServiceImpl extends ServiceImpl<DomainPermissionMapper, DomainPermissionDO> implements DomainPermissionService {
 
     @Resource
