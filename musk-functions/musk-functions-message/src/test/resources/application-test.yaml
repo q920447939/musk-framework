@@ -1,0 +1,86 @@
+server:
+  port: 48081
+
+--- #################### 数据库相关配置 ####################
+
+spring:
+  # 数据源配置项
+  datasource:
+    dynamic: # 多数据源配置
+      druid: # Druid 【连接池】相关的全局配置
+        initial-size: 5 # 初始连接数
+        min-idle: 10 # 最小连接池数量
+        max-active: 10 # 最大连接池数量
+        max-wait: 600000 # 配置获取连接等待超时的时间，单位：毫秒
+        time-between-eviction-runs-millis: 60000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位：毫秒
+        min-evictable-idle-time-millis: 300000 # 配置一个连接在池中最小生存的时间，单位：毫秒
+        max-evictable-idle-time-millis: 900000 # 配置一个连接在池中最大生存的时间，单位：毫秒
+        validation-query: SELECT 1 # 配置检测连接是否有效
+        test-while-idle: true
+        test-on-borrow: false
+        test-on-return: false
+      primary: musk_auth
+      strict: true #设置严格模式,默认false不启动. 启动后在未匹配到指定数据源时候回抛出异常,不启动会使用默认数据源.
+      datasource:
+        musk_auth:
+          url: jdbc:mysql://blk-mysql-local.com:63306/musk_auth?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2b8&allowMultiQueries=true
+          driver-class-name: com.mysql.jdbc.Driver
+          username: root
+          password: blk@2024~NIUBI!mysql%mmm
+        musk_system:
+          url: jdbc:mysql://blk-mysql-local.com:63306/musk_system?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2b8&allowMultiQueries=true
+          driver-class-name: com.mysql.jdbc.Driver
+          username: root
+          password: blk@2024~NIUBI!mysql%mmm
+        musk_log:
+          url: jdbc:mysql://blk-mysql-local.com:63306/musk_log?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2b8&allowMultiQueries=true
+          driver-class-name: com.mysql.jdbc.Driver
+          username: root
+          password: blk@2024~NIUBI!mysql%mmm
+        musk_statistics:
+          url: jdbc:mysql://blk-mysql-local.com:63306/musk_statistics?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2b8&allowMultiQueries=true
+          driver-class-name: com.mysql.jdbc.Driver
+          username: root
+          password: blk@2024~NIUBI!mysql%mmm
+        musk_message:
+          url: jdbc:mysql://blk-mysql-local.com:63306/musk_message?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2b8&allowMultiQueries=true
+          driver-class-name: com.mysql.jdbc.Driver
+          username: root
+          password: blk@2024~NIUBI!mysql%mmm
+  # Redis 配置。Redisson 默认的配置足够使用，一般不需要进行调优
+  data:
+    redis:
+      host: blk-redis-local.com # 地址
+      port: 61379 # 端口
+      database: 10 # 数据库索引
+      password: "redis@480@2024~"
+      username: default
+      # 密码，建议生产环境开启
+
+musk:
+  frame:
+    middleware:
+      mybatis:
+        plus:
+          scan-package: org.example.musk.auth.dao
+        print-sql: true
+    tenant:
+      enable: true
+      config-default-tenant-id: 1
+  auth:
+    ds:
+      properties:
+        member: musk_auth
+        log: musk_log
+        statistics: musk_statistics
+    default-avatar-url: 'http://www.baidu.image.com'
+  plugin:
+    service:
+      dynamic-source:
+        ds:
+          properties:
+            auth:
+                member: musk_auth
+                log: musk_log
+                statistics: musk_statistics
+

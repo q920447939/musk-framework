@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.musk.functions.message.dao.SystemMessageMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="org.example.musk.functions.message.model.entity.SystemMessageDO">
+        <id column="id" property="id"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="domain_id" property="domainId"/>
+        <result column="message_type" property="messageType"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="image_url" property="imageUrl"/>
+        <result column="priority" property="priority"/>
+        <result column="is_forced" property="isForced"/>
+        <result column="action_type" property="actionType"/>
+        <result column="action_url" property="actionUrl"/>
+        <result column="action_params" property="actionParams"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="status" property="status"/>
+        <result column="platform_type" property="platformType"/>
+        <result column="template_id" property="templateId"/>
+        <result column="creator" property="creator"/>
+        <result column="create_time" property="createTime"/>
+        <result column="updater" property="updater"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, tenant_id, domain_id, message_type, title, content, image_url, priority, is_forced, 
+        action_type, action_url, action_params, start_time, end_time, status, platform_type, template_id,
+        creator, create_time, updater, update_time, deleted
+    </sql>
+
+</mapper>

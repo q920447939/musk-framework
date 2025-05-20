@@ -53,6 +53,10 @@
             <groupId>org.example</groupId>
             <artifactId>musk-functions-icon</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>musk-functions-message</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

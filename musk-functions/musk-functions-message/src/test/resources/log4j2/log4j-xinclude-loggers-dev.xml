@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Loggers>
+    <Root level="debug" includeLocation="true" additivity="false">
+        <AppenderRef ref="obfuscateSensitiveData-CONSOLE"/>
+        <AppenderRef ref="obfuscateSensitiveData-FILE-ALL"/>
+    </Root>
+    <logger name="com.alibaba.nacos.shaded.io.grpc.netty.shaded.io.grpc.netty" level="INFO"/>
+    <!-- 过滤框架的一大堆debug日志-->
+    <logger name="org" level="INFO"/>
+    <logger name="_org" level="INFO"/>
+    <logger name="com.baomidou" level="INFO"/>
+    <logger name="io.lettuce" level="INFO"/>
+    <logger name="sun.rmi.loader" level="INFO"/>
+    <logger name="javax.management.remote.rmi" level="INFO"/>
+    <logger name="sun.rmi.loader" level="INFO"/>
+    <logger name="sun.rmi.transport.tcp" level="INFO"/>
+    <logger name="sun.rmi.server.call" level="INFO"/>
+    <!-- 过滤框架的一大堆debug日志-->
+    <!--<AsyncLogger name="druid.sql.Statement" level="DEBUG" additivity="false" includeLocation="true">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE-DEBUG"/>
+    </AsyncLogger>-->
+</Loggers>

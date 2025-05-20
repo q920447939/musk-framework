@@ -17,9 +17,8 @@ public enum ResourceTypeEnum {
     MENU("MENU", "菜单模块"),
     SYSTEM_PARAMS("SYSTEM_PARAMS", "系统参数模块"),
     ICON("ICON", "图标模块"),
-    // 可以根据需要扩展更多资源类型
-    ;
-
+    MESSAGE("MESSAGE", "消息模块"),
+;
     /**
      * 资源类型编码
      */

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.musk.functions.message.dao.SystemMessageTemplateMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="org.example.musk.functions.message.model.entity.SystemMessageTemplateDO">
+        <id column="id" property="id"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="domain_id" property="domainId"/>
+        <result column="template_code" property="templateCode"/>
+        <result column="template_name" property="templateName"/>
+        <result column="template_type" property="templateType"/>
+        <result column="title_template" property="titleTemplate"/>
+        <result column="content_template" property="contentTemplate"/>
+        <result column="image_url" property="imageUrl"/>
+        <result column="priority" property="priority"/>
+        <result column="is_forced" property="isForced"/>
+        <result column="action_type" property="actionType"/>
+        <result column="action_url" property="actionUrl"/>
+        <result column="action_params" property="actionParams"/>
+        <result column="platform_type" property="platformType"/>
+        <result column="status" property="status"/>
+        <result column="creator" property="creator"/>
+        <result column="create_time" property="createTime"/>
+        <result column="updater" property="updater"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, tenant_id, domain_id, template_code, template_name, template_type, title_template, content_template,
+        image_url, priority, is_forced, action_type, action_url, action_params, platform_type, status,
+        creator, create_time, updater, update_time, deleted
+    </sql>
+
+    <!-- 根据模板编码获取模板 -->
+    <select id="getByTemplateCode" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM
+            system_message_template
+        WHERE
+            template_code = #{templateCode}
+            AND deleted = 0
+            AND status = 1
+            <if test="tenantId != null">
+                AND tenant_id = #{tenantId}
+            </if>
+            <if test="domainId != null">
+                AND domain_id = #{domainId}
+            </if>
+        LIMIT 1
+    </select>
+
+</mapper>

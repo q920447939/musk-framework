@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.musk.functions.message.dao.SystemUserMessageMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="org.example.musk.functions.message.model.entity.SystemUserMessageDO">
+        <id column="id" property="id"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="domain_id" property="domainId"/>
+        <result column="user_id" property="userId"/>
+        <result column="message_id" property="messageId"/>
+        <result column="is_read" property="isRead"/>
+        <result column="read_time" property="readTime"/>
+        <result column="is_deleted_by_user" property="isDeletedByUser"/>
+        <result column="creator" property="creator"/>
+        <result column="create_time" property="createTime"/>
+        <result column="updater" property="updater"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+    <!-- 用户消息视图映射结果 -->
+    <resultMap id="UserMessageVOMap" type="org.example.musk.functions.message.model.vo.UserMessageVO">
+        <result column="message_id" property="messageId"/>
+        <result column="message_type" property="messageType"/>
+        <result column="title" property="title"/>
+        <result column="summary" property="summary"/>
+        <result column="image_url" property="imageUrl"/>
+        <result column="priority" property="priority"/>
+        <result column="is_forced" property="isForced"/>
+        <result column="is_read" property="isRead"/>
+        <result column="read_time" property="readTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="action_type" property="actionType"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, tenant_id, domain_id, user_id, message_id, is_read, read_time, is_deleted_by_user,
+        creator, create_time, updater, update_time, deleted
+    </sql>
+
+    <!-- 获取用户消息列表 -->
+    <select id="getUserMessages" resultMap="UserMessageVOMap">
+        SELECT
+            m.id AS message_id,
+            m.message_type,
+            m.title,
+            SUBSTRING(m.content, 1, 100) AS summary,
+            m.image_url,
+            m.priority,
+            m.is_forced,
+            um.is_read,
+            um.read_time,
+            m.create_time,
+            m.action_type
+        FROM
+            system_user_message um
+        JOIN
+            system_message m ON um.message_id = m.id
+        WHERE
+            um.user_id = #{userId}
+            AND um.deleted = 0
+            AND um.is_deleted_by_user = 0
+            AND m.deleted = 0
+            <if test="tenantId != null">
+                AND um.tenant_id = #{tenantId}
+            </if>
+            <if test="domainId != null">
+                AND um.domain_id = #{domainId}
+            </if>
+            <if test="isRead != null">
+                AND um.is_read = #{isRead}
+            </if>
+        ORDER BY
+            m.priority DESC,
+            um.create_time DESC
+    </select>
+
+    <!-- 获取用户未读消息数量 -->
+    <select id="getUnreadMessageCount" resultType="int">
+        SELECT
+            COUNT(1)
+        FROM
+            system_user_message um
+        JOIN
+            system_message m ON um.message_id = m.id
+        WHERE
+            um.user_id = #{userId}
+            AND um.is_read = 0
+            AND um.deleted = 0
+            AND um.is_deleted_by_user = 0
+            AND m.deleted = 0
+            <if test="tenantId != null">
+                AND um.tenant_id = #{tenantId}
+            </if>
+            <if test="domainId != null">
+                AND um.domain_id = #{domainId}
+            </if>
+    </select>
+
+</mapper>

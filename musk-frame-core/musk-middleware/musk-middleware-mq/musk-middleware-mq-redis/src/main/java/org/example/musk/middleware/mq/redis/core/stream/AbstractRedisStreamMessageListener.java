@@ -38,7 +38,6 @@ public abstract class AbstractRedisStreamMessageListener<T extends AbstractRedis
     /**
      * Redis 消费者分组，默认使用 spring.application.name 名字
      */
-    @Value("${spring.application.name}")
     @Getter
     private String group;
     /**
@@ -48,7 +47,8 @@ public abstract class AbstractRedisStreamMessageListener<T extends AbstractRedis
     private RedisMQTemplate redisMQTemplate;
 
     @SneakyThrows
-    protected AbstractRedisStreamMessageListener() {
+    protected AbstractRedisStreamMessageListener(String group) {
+        this.group = group;
         this.messageType = getMessageClass();
         this.streamKey = messageType.getDeclaredConstructor().newInstance().getStreamKey();
     }
