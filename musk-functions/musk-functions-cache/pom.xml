@@ -66,5 +66,9 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>musk-common</artifactId>
+        </dependency>
     </dependencies>
 </project>
