@@ -17,6 +17,9 @@ spring:
     name: musk
 
   profiles:
+    include:
+      - config-processing
+      - domain-config
     active: dev
 
   main:

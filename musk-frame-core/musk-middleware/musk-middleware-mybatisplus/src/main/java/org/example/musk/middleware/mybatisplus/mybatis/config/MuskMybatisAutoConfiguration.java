@@ -13,10 +13,12 @@ import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
 import org.apache.ibatis.annotations.Mapper;
+import org.example.musk.framework.domain.config.DomainConfig;
 import org.example.musk.framework.tenant.config.TenantConfig;
 import org.example.musk.middleware.mybatisplus.anno.MuskMapperScan;
 import org.example.musk.middleware.mybatisplus.mybatis.core.handler.DefaultDBFieldHandler;
 import org.example.musk.middleware.mybatisplus.mybatis.core.util.MyBatisUtils;
+import org.example.musk.middleware.mybatisplus.mybatis.db.DomainDatabaseInterceptor;
 import org.example.musk.middleware.mybatisplus.mybatis.db.TenantDatabaseInterceptor;
 import org.example.musk.middleware.mybatisplus.mybatis.interceptor.PrintSqlInterceptor;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -35,7 +37,7 @@ import org.springframework.core.env.Environment;
 @AutoConfiguration
 @MuskMapperScan(value = {"org.example.musk","${musk.framework.middleware.mybatis.plus.scan-package}"}, annotationClass = Mapper.class,
         lazyInitialization = "${mybatis.lazy-initialization:false}") // Mapper 懒加载，目前仅用于单元测试
-@EnableConfigurationProperties(TenantConfig.class)
+@EnableConfigurationProperties({TenantConfig.class, DomainConfig.class})
 public class MuskMybatisAutoConfiguration implements EnvironmentAware {
     private Environment environment;
 
@@ -64,6 +66,17 @@ public class MuskMybatisAutoConfiguration implements EnvironmentAware {
         // 添加到 interceptor 中
         // 需要加在首个，主要是为了在分页插件前面。这个是 MyBatis Plus 的规定
         MyBatisUtils.addInterceptor(interceptor, inner, 0);
+        return inner;
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "musk.framework.domain", name = "enable", havingValue = "true", matchIfMissing = true)
+    public TenantLineInnerInterceptor domainLineInnerInterceptor(DomainConfig domainConfig,
+                                                               MybatisPlusInterceptor interceptor) {
+        TenantLineInnerInterceptor inner = new TenantLineInnerInterceptor(new DomainDatabaseInterceptor(domainConfig));
+        // 添加到 interceptor 中
+        // 需要加在租户拦截器之后
+        MyBatisUtils.addInterceptor(interceptor, inner, 1);
         return inner;
     }
 

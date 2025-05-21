@@ -46,7 +46,7 @@ public class MemberLevelBenefitController {
 
     @DeleteMapping("/delete/{id}")
     public CommonResult<Boolean> deleteLevelBenefit(@PathVariable("id") Integer id) {
-        memberLevelBenefitService.deleteLevelBenefit(id);
+        memberLevelBenefitService.deleteLevelBenefit(ThreadLocalTenantContext.getDomainId(),id);
         return CommonResult.success(true);
     }
 
