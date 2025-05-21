@@ -2,7 +2,7 @@ package org.example.musk.functions.message.mq;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.musk.functions.message.constant.MessageConstant;
-import org.example.musk.functions.message.service.MessagePushService;
+import org.example.musk.tests.service.MessagePushService;
 import org.example.musk.middleware.mq.redis.core.stream.AbstractRedisStreamMessageListener;
 import org.springframework.stereotype.Component;
 

@@ -12,7 +12,7 @@ import org.example.musk.functions.message.enums.MessageTargetTypeEnum;
 import org.example.musk.functions.message.enums.MessageTypeEnum;
 import org.example.musk.functions.message.enums.MessagePlatformTypeEnum;
 import org.example.musk.functions.message.model.dto.SystemMessageCreateReqDTO;
-import org.example.musk.functions.message.service.SystemMessageService;
+import org.example.musk.tests.service.SystemMessageService;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 

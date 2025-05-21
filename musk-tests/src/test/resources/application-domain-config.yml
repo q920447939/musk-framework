@@ -1,0 +1,14 @@
+# 域配置示例
+musk:
+  framework:
+    domain:
+      # 是否启用域隔离，默认为true
+      enable: true
+      # 需要忽略域隔离的表
+      ignore-tables:
+        - system_config
+        - system_param
+      # 域ID列名，默认为domain_id
+      domain-id-column: domain_id
+      # 配置的默认域ID
+      config-default-domain-id: 2

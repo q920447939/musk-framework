@@ -14,7 +14,7 @@ import org.example.musk.framework.permission.web.anno.RequirePermission;
 import org.example.musk.functions.message.model.entity.SystemMessageTemplateDO;
 import org.example.musk.functions.message.model.vo.MessageTemplateCreateReqVO;
 import org.example.musk.functions.message.model.vo.MessageTemplateRespVO;
-import org.example.musk.functions.message.service.MessageTemplateService;
+import org.example.musk.tests.service.MessageTemplateService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
