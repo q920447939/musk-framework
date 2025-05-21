@@ -35,18 +35,18 @@ public class MemberLevelBenefitController {
 
     @PostMapping("/create")
     public CommonResult<Integer> createLevelBenefit(@Valid @RequestBody MemberLevelBenefitCreateReqVO createReqVO) {
-        return CommonResult.success(memberLevelBenefitService.createLevelBenefit(ThreadLocalTenantContext.getTenantId(),ThreadLocalTenantContext.getDomainId(),createReqVO));
+        return CommonResult.success(memberLevelBenefitService.createLevelBenefit(createReqVO));
     }
 
     @PutMapping("/update")
     public CommonResult<Boolean> updateLevelBenefit(@Valid @RequestBody MemberLevelBenefitUpdateReqVO updateReqVO) {
-        memberLevelBenefitService.updateLevelBenefit(ThreadLocalTenantContext.getTenantId(),ThreadLocalTenantContext.getDomainId(),updateReqVO);
+        memberLevelBenefitService.updateLevelBenefit(updateReqVO);
         return CommonResult.success(true);
     }
 
     @DeleteMapping("/delete/{id}")
     public CommonResult<Boolean> deleteLevelBenefit(@PathVariable("id") Integer id) {
-        memberLevelBenefitService.deleteLevelBenefit(ThreadLocalTenantContext.getDomainId(),id);
+        memberLevelBenefitService.deleteLevelBenefit(id);
         return CommonResult.success(true);
     }
 
@@ -62,20 +62,20 @@ public class MemberLevelBenefitController {
 
     @GetMapping("/member-current-benefits")
     public CommonResult<List<MemberLevelBenefitVO>> getMemberCurrentBenefits(@RequestParam("memberId") Integer memberId) {
-        return CommonResult.success(memberLevelBenefitService.getMemberCurrentBenefits(ThreadLocalTenantContext.getDomainId(),memberId));
+        return CommonResult.success(memberLevelBenefitService.getMemberCurrentBenefits(memberId));
     }
 
     @GetMapping("/has-benefit")
     public CommonResult<Boolean> hasBenefit(
             @RequestParam("memberId") Integer memberId,
             @RequestParam("benefitType") Integer benefitType) {
-        return CommonResult.success(memberLevelBenefitService.hasBenefit(ThreadLocalTenantContext.getDomainId(),memberId, benefitType));
+        return CommonResult.success(memberLevelBenefitService.hasBenefit(memberId, benefitType));
     }
 
     @GetMapping("/get-benefit-value")
     public CommonResult<String> getBenefitValue(
             @RequestParam("memberId") Integer memberId,
             @RequestParam("benefitType") Integer benefitType) {
-        return CommonResult.success(memberLevelBenefitService.getBenefitValue(ThreadLocalTenantContext.getDomainId(),memberId, benefitType));
+        return CommonResult.success(memberLevelBenefitService.getBenefitValue(memberId, benefitType));
     }
 }

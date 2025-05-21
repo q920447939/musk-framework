@@ -48,17 +48,15 @@ public class MemberPointsRuleServiceImpl implements MemberPointsRuleService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Integer createPointsRule(Integer tenantId,Integer domainId,MemberPointsRuleCreateReqVO createReqVO) {
+    public Integer createPointsRule(MemberPointsRuleCreateReqVO createReqVO) {
         // 检查规则编码是否已存在
-        MemberPointsRuleDO existRule = memberPointsRuleMapper.selectByRuleCode(tenantId, domainId, createReqVO.getRuleCode());
+        MemberPointsRuleDO existRule = memberPointsRuleMapper.selectByRuleCode( createReqVO.getRuleCode());
         if (existRule != null) {
             throw new BusinessException("规则编码已存在");
         }
 
         // 创建规则
         MemberPointsRuleDO rule = BeanUtil.copyProperties(createReqVO, MemberPointsRuleDO.class);
-        rule.setTenantId(tenantId);
-        rule.setDomainId(domainId);
         memberPointsRuleMapper.insert(rule);
 
         return rule.getId();
@@ -66,20 +64,15 @@ public class MemberPointsRuleServiceImpl implements MemberPointsRuleService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updatePointsRule(Integer tenantId,Integer domainId,MemberPointsRuleUpdateReqVO updateReqVO) {
+    public void updatePointsRule(MemberPointsRuleUpdateReqVO updateReqVO) {
         // 检查规则是否存在
         MemberPointsRuleDO rule = memberPointsRuleMapper.selectById(updateReqVO.getId());
         if (rule == null) {
             throw new BusinessException("规则不存在");
         }
 
-        // 检查是否有权限修改
-        if (!ObjectUtil.equal(rule.getTenantId(), tenantId) || !ObjectUtil.equal(rule.getDomainId(), domainId)) {
-            throw new BusinessException("无权限修改该规则");
-        }
-
         // 检查规则编码是否已存在（排除自身）
-        MemberPointsRuleDO existRule = memberPointsRuleMapper.selectByRuleCode(tenantId, domainId, updateReqVO.getRuleCode());
+        MemberPointsRuleDO existRule = memberPointsRuleMapper.selectByRuleCode( updateReqVO.getRuleCode());
         if (existRule != null && !existRule.getId().equals(updateReqVO.getId())) {
             throw new BusinessException("规则编码已存在");
         }
@@ -91,17 +84,13 @@ public class MemberPointsRuleServiceImpl implements MemberPointsRuleService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void deletePointsRule(Integer tenantId,Integer domainId,Integer id) {
+    public void deletePointsRule(Integer id) {
         // 检查规则是否存在
         MemberPointsRuleDO rule = memberPointsRuleMapper.selectById(id);
         if (rule == null) {
             throw new BusinessException("规则不存在");
         }
 
-        // 检查是否有权限删除
-        if (!ObjectUtil.equal(rule.getTenantId(), tenantId) || !ObjectUtil.equal(rule.getDomainId(), domainId)) {
-            throw new BusinessException("无权限删除该规则");
-        }
 
         // 删除规则
         memberPointsRuleMapper.deleteById(id);
@@ -113,17 +102,17 @@ public class MemberPointsRuleServiceImpl implements MemberPointsRuleService {
     }
 
     @Override
-    public List<MemberPointsRuleDO> getPointsRuleList(Integer tenantId, Integer domainId) {
-        return memberPointsRuleMapper.selectListByTenantIdAndDomainId(tenantId, domainId);
+    public List<MemberPointsRuleDO> getPointsRuleList() {
+        return memberPointsRuleMapper.selectListByTenantIdAndDomainId();
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void calculateConsumptionPointsAndGrowth(Integer tenantId,Integer domainId,Integer memberId, Integer amount, String sourceId, String operator) {
+    public void calculateConsumptionPointsAndGrowth(Integer memberId, Integer amount, String sourceId, String operator) {
         try {
             // 获取消费积分规则
             List<MemberPointsRuleDO> rules = memberPointsRuleMapper.selectListByRuleType(
-                    tenantId, domainId, PointsRuleTypeEnum.CONSUMPTION.getValue());
+                     PointsRuleTypeEnum.CONSUMPTION.getValue());
 
             if (rules.isEmpty()) {
                 log.warn("未找到有效的消费积分规则，memberId={}, amount={}", memberId, amount);
@@ -177,7 +166,6 @@ public class MemberPointsRuleServiceImpl implements MemberPointsRuleService {
             // 增加积分
             if (points > 0) {
                 memberPointsService.addPoints(
-                        tenantId,domainId,
                         memberId,
                         points,
                         PointsSourceTypeEnum.CONSUMPTION.getValue(),
@@ -190,7 +178,6 @@ public class MemberPointsRuleServiceImpl implements MemberPointsRuleService {
             // 增加成长值
             if (growthValue > 0) {
                 memberGrowthValueService.addGrowthValue(
-                        domainId,
                         memberId,
                         growthValue,
                         GrowthValueSourceTypeEnum.CONSUMPTION.getValue(),
@@ -210,12 +197,12 @@ public class MemberPointsRuleServiceImpl implements MemberPointsRuleService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void calculateSignInPointsAndGrowth(Integer tenantId,Integer domainId,Integer memberId, Integer continuousDays, String operator) {
+    public void calculateSignInPointsAndGrowth(Integer memberId, Integer continuousDays, String operator) {
         try {
 
             // 获取签到积分规则
             List<MemberPointsRuleDO> rules = memberPointsRuleMapper.selectListByRuleType(
-                    tenantId, domainId, PointsRuleTypeEnum.SIGN_IN.getValue());
+                     PointsRuleTypeEnum.SIGN_IN.getValue());
 
             if (rules.isEmpty()) {
                 log.warn("未找到有效的签到积分规则，memberId={}, continuousDays={}", memberId, continuousDays);
@@ -269,7 +256,6 @@ public class MemberPointsRuleServiceImpl implements MemberPointsRuleService {
             // 增加积分
             if (points > 0) {
                 memberPointsService.addPoints(
-                        tenantId,domainId,
                         memberId,
                         points,
                         PointsSourceTypeEnum.SIGN_IN.getValue(),
@@ -282,7 +268,6 @@ public class MemberPointsRuleServiceImpl implements MemberPointsRuleService {
             // 增加成长值
             if (growthValue > 0) {
                 memberGrowthValueService.addGrowthValue(
-                        domainId,
                         memberId,
                         growthValue,
                         GrowthValueSourceTypeEnum.SIGN_IN.getValue(),

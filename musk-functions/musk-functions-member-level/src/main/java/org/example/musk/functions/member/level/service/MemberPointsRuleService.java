@@ -19,21 +19,21 @@ public interface MemberPointsRuleService {
      * @param createReqVO 创建请求
      * @return 规则ID
      */
-    Integer createPointsRule(Integer tenantId,Integer domainId,MemberPointsRuleCreateReqVO createReqVO);
+    Integer createPointsRule(MemberPointsRuleCreateReqVO createReqVO);
 
     /**
      * 更新积分规则
      *
      * @param updateReqVO 更新请求
      */
-    void updatePointsRule(Integer tenantId,Integer domainId,MemberPointsRuleUpdateReqVO updateReqVO);
+    void updatePointsRule(MemberPointsRuleUpdateReqVO updateReqVO);
 
     /**
      * 删除积分规则
      *
      * @param id 规则ID
      */
-    void deletePointsRule(Integer tenantId,Integer domainId,Integer id);
+    void deletePointsRule(Integer id);
 
     /**
      * 获取积分规则
@@ -50,7 +50,7 @@ public interface MemberPointsRuleService {
      * @param domainId 域ID
      * @return 规则列表
      */
-    List<MemberPointsRuleDO> getPointsRuleList(Integer tenantId, Integer domainId);
+    List<MemberPointsRuleDO> getPointsRuleList();
 
     /**
      * 计算消费积分和成长值
@@ -60,7 +60,7 @@ public interface MemberPointsRuleService {
      * @param sourceId 订单ID
      * @param operator 操作人
      */
-    void calculateConsumptionPointsAndGrowth(Integer tenantId,Integer domainId,Integer memberId, Integer amount, String sourceId, String operator);
+    void calculateConsumptionPointsAndGrowth(Integer memberId, Integer amount, String sourceId, String operator);
 
     /**
      * 计算签到积分和成长值
@@ -69,5 +69,5 @@ public interface MemberPointsRuleService {
      * @param continuousDays 连续签到天数
      * @param operator 操作人
      */
-    void calculateSignInPointsAndGrowth(Integer tenantId,Integer domainId,Integer memberId, Integer continuousDays, String operator);
+    void calculateSignInPointsAndGrowth(Integer memberId, Integer continuousDays, String operator);
 }

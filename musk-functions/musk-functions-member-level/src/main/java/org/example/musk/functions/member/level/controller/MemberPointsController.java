@@ -35,7 +35,7 @@ public class MemberPointsController {
             @RequestParam("sourceId") String sourceId,
             @RequestParam("description") String description,
             @RequestParam("operator") String operator) {
-        return CommonResult.success(memberPointsService.addPoints(ThreadLocalTenantContext.getTenantId(),ThreadLocalTenantContext.getDomainId(),memberId, points, sourceType, sourceId, description, operator));
+        return CommonResult.success(memberPointsService.addPoints(memberId, points, sourceType, sourceId, description, operator));
     }
 
     @PostMapping("/deduct")

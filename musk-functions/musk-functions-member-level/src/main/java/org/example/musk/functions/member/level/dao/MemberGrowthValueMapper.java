@@ -18,10 +18,9 @@ public interface MemberGrowthValueMapper extends BaseMapperX<MemberGrowthValueDO
      * @param memberId 会员ID
      * @return 会员成长值
      */
-    default MemberGrowthValueDO selectByMemberId(Integer domainId,Integer memberId) {
+    default MemberGrowthValueDO selectByMemberId(Integer memberId) {
         return selectOne(
                 new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<MemberGrowthValueDO>()
-                        .eq(MemberGrowthValueDO::getDomainId, domainId)
                         .eq(MemberGrowthValueDO::getMemberId, memberId)
                         .eq(MemberGrowthValueDO::getDeleted, false)
         );

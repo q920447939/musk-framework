@@ -49,7 +49,7 @@ public class MemberPointsServiceImpl implements MemberPointsService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     @CacheEvict(namespace = "MEMBER", key = "'points:' + #memberId")
-    public Integer addPoints(Integer tenantId,Integer domainId,Integer memberId, Integer points, Integer sourceType, String sourceId, String description, String operator) {
+    public Integer addPoints(Integer memberId, Integer points, Integer sourceType, String sourceId, String description, String operator) {
         if (points <= 0) {
             throw new BusinessException("积分值必须大于0");
         }
@@ -66,8 +66,6 @@ public class MemberPointsServiceImpl implements MemberPointsService {
             memberPoints.setUsedPoints(0);
             memberPoints.setExpiredPoints(0);
 
-            memberPoints.setTenantId(tenantId);
-            memberPoints.setDomainId(domainId);
 
             memberPointsMapper.insert(memberPoints);
         }

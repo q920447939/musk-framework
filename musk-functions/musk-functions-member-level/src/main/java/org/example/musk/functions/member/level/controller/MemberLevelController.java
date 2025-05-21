@@ -39,18 +39,18 @@ public class MemberLevelController {
 
     @PostMapping("/create")
     public CommonResult<Integer> createLevelDefinition(@Valid @RequestBody MemberLevelDefinitionCreateReqVO createReqVO) {
-        return CommonResult.success(memberLevelService.createLevelDefinition(ThreadLocalTenantContext.getTenantId(),ThreadLocalTenantContext.getDomainId(),createReqVO));
+        return CommonResult.success(memberLevelService.createLevelDefinition(createReqVO));
     }
 
     @PutMapping("/update")
     public CommonResult<Boolean> updateLevelDefinition(@Valid @RequestBody MemberLevelDefinitionUpdateReqVO updateReqVO) {
-        memberLevelService.updateLevelDefinition(ThreadLocalTenantContext.getTenantId(),ThreadLocalTenantContext.getDomainId(),updateReqVO);
+        memberLevelService.updateLevelDefinition(updateReqVO);
         return CommonResult.success(true);
     }
 
     @DeleteMapping("/delete/{id}")
     public CommonResult<Boolean> deleteLevelDefinition(@PathVariable("id") Integer id) {
-        memberLevelService.deleteLevelDefinition(ThreadLocalTenantContext.getTenantId(),ThreadLocalTenantContext.getDomainId(),id);
+        memberLevelService.deleteLevelDefinition(id);
         return CommonResult.success(true);
     }
 
@@ -60,15 +60,13 @@ public class MemberLevelController {
     }
 
     @GetMapping("/list")
-    public CommonResult<List<MemberLevelDefinitionDO>> getLevelDefinitionList(
-            @RequestParam(value = "tenantId", required = false) Integer tenantId,
-            @RequestParam(value = "domainId", required = false) Integer domainId) {
-        return CommonResult.success(memberLevelService.getLevelDefinitionList(tenantId, domainId));
+    public CommonResult<List<MemberLevelDefinitionDO>> getLevelDefinitionList() {
+        return CommonResult.success(memberLevelService.getLevelDefinitionList());
     }
 
     @GetMapping("/member-current-level")
     public CommonResult<MemberLevelInfoVO> getMemberCurrentLevel(@RequestParam("memberId") Integer memberId) {
-        return CommonResult.success(memberLevelService.getMemberCurrentLevel(ThreadLocalTenantContext.getDomainId(),memberId));
+        return CommonResult.success(memberLevelService.getMemberCurrentLevel(memberId));
     }
 
     @PostMapping("/set-member-level")
@@ -77,13 +75,13 @@ public class MemberLevelController {
             @RequestParam("levelId") Integer levelId,
             @RequestParam("reason") String reason,
             @RequestParam("operator") String operator) {
-        memberLevelService.setMemberLevel(ThreadLocalTenantContext.getTenantId(),ThreadLocalTenantContext.getDomainId(),memberId, levelId, reason, operator);
+        memberLevelService.setMemberLevel(memberId, levelId, reason, operator);
         return CommonResult.success(true);
     }
 
     @GetMapping("/calculate-member-level")
     public CommonResult<Integer> calculateMemberLevel(@RequestParam("memberId") Integer memberId) {
-        return CommonResult.success(memberLevelService.calculateMemberLevel(ThreadLocalTenantContext.getDomainId(),memberId));
+        return CommonResult.success(memberLevelService.calculateMemberLevel(memberId));
     }
 
     @GetMapping("/member-level-change-history")
@@ -95,6 +93,6 @@ public class MemberLevelController {
 
     @GetMapping("/calculate-member-level-progress")
     public CommonResult<MemberLevelProgressVO> calculateMemberLevelProgress(@RequestParam("memberId") Integer memberId) {
-        return CommonResult.success(memberLevelService.calculateMemberLevelProgress(ThreadLocalTenantContext.getDomainId(),memberId));
+        return CommonResult.success(memberLevelService.calculateMemberLevelProgress(memberId));
     }
 }

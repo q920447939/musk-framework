@@ -22,7 +22,7 @@ public interface MemberPointsService {
      * @param operator 操作人
      * @return 操作后的积分
      */
-    Integer addPoints(Integer tenantId,Integer domainId,Integer memberId, Integer points, Integer sourceType, String sourceId, String description, String operator);
+    Integer addPoints(Integer memberId, Integer points, Integer sourceType, String sourceId, String description, String operator);
 
     /**
      * 减少会员积分

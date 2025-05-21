@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.hutool.core.bean.BeanUtil;
+import org.example.musk.common.context.ThreadLocalTenantContext;
 import org.example.musk.common.exception.BusinessException;
 import org.example.musk.common.pojo.db.PageResult;
 import org.example.musk.functions.cache.annotation.CacheEvict;
@@ -57,24 +58,23 @@ public class MemberGrowthValueServiceImpl implements MemberGrowthValueService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Integer addGrowthValue(Integer domainId,Integer memberId, Integer growthValue, Integer sourceType, String sourceId, String description, String operator) {
+    public Integer addGrowthValue(Integer memberId, Integer growthValue, Integer sourceType, String sourceId, String description, String operator) {
         if (growthValue <= 0) {
             throw new BusinessException("成长值必须大于0");
         }
 
         // 获取会员成长值信息
-        MemberGrowthValueDO memberGrowthValue = memberGrowthValueMapper.selectByMemberId(domainId,memberId);
+        MemberGrowthValueDO memberGrowthValue = memberGrowthValueMapper.selectByMemberId( memberId);
         if (memberGrowthValue == null) {
             // 如果不存在，则初始化
             memberGrowthValue = new MemberGrowthValueDO();
             memberGrowthValue.setMemberId(memberId);
             memberGrowthValue.setTotalGrowthValue(0);
             memberGrowthValue.setCurrentPeriodGrowthValue(0);
-
-            memberGrowthValue.setDomainId(domainId);
+            memberGrowthValue.setTenantId(ThreadLocalTenantContext.getTenantId());
 
             // 获取初始等级
-            MemberLevelDefinitionDO initialLevel = memberLevelDefinitionMapper.selectByGrowthValue( domainId, 0);
+            MemberLevelDefinitionDO initialLevel = memberLevelDefinitionMapper.selectByGrowthValue( 0);
             if (initialLevel == null) {
                 throw new BusinessException("未找到初始等级");
             }
@@ -82,7 +82,7 @@ public class MemberGrowthValueServiceImpl implements MemberGrowthValueService {
 
             // 获取下一等级门槛
             MemberLevelDefinitionDO nextLevel = memberLevelDefinitionMapper.selectNextLevel(
-                    domainId, initialLevel.getLevelValue());
+                     initialLevel.getLevelValue());
             if (nextLevel != null) {
                 memberGrowthValue.setNextLevelThreshold(nextLevel.getGrowthValueThreshold());
             }
@@ -119,13 +119,16 @@ public class MemberGrowthValueServiceImpl implements MemberGrowthValueService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Integer deductGrowthValue(Integer domainId,Integer memberId, Integer growthValue, Integer sourceType, String sourceId, String description, String operator) {
+    public Integer deductGrowthValue(Integer memberId, Integer growthValue, Integer sourceType, String sourceId, String description, String operator) {
         if (growthValue <= 0) {
             throw new BusinessException("成长值必须大于0");
         }
 
+        // 从线程上下文获取域ID
+        Integer domainId = ThreadLocalTenantContext.getDomainId();
+
         // 获取会员成长值信息
-        MemberGrowthValueDO memberGrowthValue = memberGrowthValueMapper.selectByMemberId(domainId,memberId);
+        MemberGrowthValueDO memberGrowthValue = memberGrowthValueMapper.selectByMemberId( memberId);
         if (memberGrowthValue == null || memberGrowthValue.getTotalGrowthValue() < growthValue) {
             throw new BusinessException("成长值不足");
         }
@@ -158,10 +161,13 @@ public class MemberGrowthValueServiceImpl implements MemberGrowthValueService {
     }
 
     @Override
-    @Cacheable(namespace = "MEMBER", key = "'growth:' + #domainId + #memberId", expireSeconds = MemberLevelConstant.MEMBER_GROWTH_VALUE_CACHE_EXPIRE_SECONDS)
-    public MemberGrowthValueVO getMemberGrowthValue(Integer domainId,Integer memberId) {
+    @Cacheable(namespace = "MEMBER", key = "'growth:' + #memberId", expireSeconds = MemberLevelConstant.MEMBER_GROWTH_VALUE_CACHE_EXPIRE_SECONDS, autoTenantPrefix = true, autoDomainPrefix = true)
+    public MemberGrowthValueVO getMemberGrowthValue(Integer memberId) {
+        // 从线程上下文获取域ID
+        Integer domainId = ThreadLocalTenantContext.getDomainId();
+
         // 获取会员成长值信息
-        MemberGrowthValueDO memberGrowthValue = memberGrowthValueMapper.selectByMemberId(domainId,memberId);
+        MemberGrowthValueDO memberGrowthValue = memberGrowthValueMapper.selectByMemberId( memberId);
         if (memberGrowthValue == null) {
             throw new BusinessException("会员成长值信息不存在");
         }
@@ -175,8 +181,7 @@ public class MemberGrowthValueServiceImpl implements MemberGrowthValueService {
         // 获取下一等级
         MemberLevelDefinitionDO nextLevel = null;
         if (memberGrowthValue.getNextLevelThreshold() != null) {
-            nextLevel = memberLevelDefinitionMapper.selectNextLevel(
-                    currentLevel.getDomainId(), currentLevel.getLevelValue());
+            nextLevel = memberLevelDefinitionMapper.selectNextLevel(currentLevel.getLevelValue());
         }
 
         // 构建成长值信息
@@ -252,7 +257,7 @@ public class MemberGrowthValueServiceImpl implements MemberGrowthValueService {
      *
      * @param memberId 会员ID
      */
-    @CacheEvict(namespace = "MEMBER", key = "'growth:' + #memberId")
+    @CacheEvict(namespace = "MEMBER", key = "'growth:' + #memberId", autoTenantPrefix = true, autoDomainPrefix = true)
     public void clearMemberGrowthValueCache(Integer memberId) {
         // 使用注解自动清除缓存，方法体为空
     }

@@ -35,7 +35,7 @@ private CacheKeyBuilder cacheKeyBuilder;
 // 获取或计算缓存
 public List<NavigationTreeVO> getNavigationTree(Integer tenantId, Integer domain, Integer platformType) {
     String cacheKey = cacheKeyBuilder.build(CacheNamespace.NAVIGATION, "tree", tenantId, domain, platformType);
-    
+
     return cacheManager.getOrCompute(cacheKey, () -> {
         // 从数据库获取并构建树
         List<NavigationConfigDO> navigations = fetchFromDatabase(tenantId, domain, platformType);
@@ -55,7 +55,8 @@ public void clearNavigationCache(Integer tenantId, Integer domain, Integer platf
 ```java
 @Service
 public class MenuServiceImpl implements MenuService {
-    
+
+    // 基本用法 - 手动指定租户ID和域ID
     @Override
     @Cacheable(namespace = "MENU", key = "'tree:' + #tenantId + ':' + #domain", expireSeconds = 3600)
     public List<SystemMenuTreeVO> getMenuTreeByTenant(Integer tenantId, Integer domain) {
@@ -63,12 +64,45 @@ public class MenuServiceImpl implements MenuService {
         List<SystemMenuDO> menus = fetchFromDatabase(tenantId, domain);
         return buildMenuTree(menus, null);
     }
-    
+
+    // 自动添加租户ID和域ID前缀
+    @Override
+    @Cacheable(namespace = "MENU", key = "'tree'", expireSeconds = 3600, autoTenantPrefix = true, autoDomainPrefix = true)
+    public List<SystemMenuTreeVO> getMenuTree() {
+        // 从线程上下文获取租户ID和域ID
+        Integer tenantId = ThreadLocalTenantContext.getTenantId();
+        Integer domainId = ThreadLocalTenantContext.getDomainId();
+
+        // 从数据库获取并构建树
+        List<SystemMenuDO> menus = fetchFromDatabase(tenantId, domainId);
+        return buildMenuTree(menus, null);
+    }
+
+    // 只添加租户ID前缀，不添加域ID前缀
+    @Override
+    @Cacheable(namespace = "MENU", key = "'tree:' + #domain", expireSeconds = 3600, autoTenantPrefix = true, autoDomainPrefix = false)
+    public List<SystemMenuTreeVO> getMenuTreeByDomain(Integer domain) {
+        // 从线程上下文获取租户ID
+        Integer tenantId = ThreadLocalTenantContext.getTenantId();
+
+        // 从数据库获取并构建树
+        List<SystemMenuDO> menus = fetchFromDatabase(tenantId, domain);
+        return buildMenuTree(menus, null);
+    }
+
+    // 清除缓存 - 手动指定租户ID和域ID
     @Override
     @CacheEvict(namespace = "MENU", pattern = "'tree:' + #menu.tenantId + ':' + #menu.domainId")
     public void updateMenu(SystemMenuDO menu) {
         // 在数据库中更新
         updateInDatabase(menu);
+    }
+
+    // 清除缓存 - 自动添加租户ID和域ID前缀
+    @Override
+    @CacheEvict(namespace = "MENU", pattern = "'tree:*'", autoTenantPrefix = true, autoDomainPrefix = true)
+    public void clearMenuCache() {
+        log.info("清除菜单缓存");
     }
 }
 ```
@@ -93,11 +127,28 @@ public class MenuServiceImpl implements MenuService {
 
 ### @Cacheable
 
-缓存注解，用于标记方法的返回值需要被缓存。
+缓存注解，用于标记方法的返回值需要被缓存。支持以下属性：
+
+- `namespace`: 缓存命名空间
+- `key`: 缓存键，支持SpEL表达式
+- `expireSeconds`: 缓存过期时间（秒）
+- `cacheNullValues`: 是否缓存空值
+- `condition`: 条件表达式，只有当表达式结果为true时才进行缓存
+- `autoTenantPrefix`: 是否自动添加租户ID前缀，默认为true
+- `autoDomainPrefix`: 是否自动添加域ID前缀，默认为true
 
 ### @CacheEvict
 
-缓存清除注解，用于标记方法执行后需要清除缓存。
+缓存清除注解，用于标记方法执行后需要清除缓存。支持以下属性：
+
+- `namespace`: 缓存命名空间
+- `key`: 缓存键，支持SpEL表达式
+- `pattern`: 缓存键模式，用于批量删除缓存
+- `allEntries`: 是否清除命名空间下的所有缓存
+- `condition`: 条件表达式，只有当表达式结果为true时才清除缓存
+- `beforeInvocation`: 是否在方法执行前清除缓存
+- `autoTenantPrefix`: 是否自动添加租户ID前缀，默认为true
+- `autoDomainPrefix`: 是否自动添加域ID前缀，默认为true
 
 ## 注意事项
 

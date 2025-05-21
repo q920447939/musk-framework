@@ -23,21 +23,21 @@ public interface MemberLevelService {
      * @param createReqVO 创建请求
      * @return 等级ID
      */
-    Integer createLevelDefinition(Integer tenantId,Integer domainId,MemberLevelDefinitionCreateReqVO createReqVO);
+    Integer createLevelDefinition(MemberLevelDefinitionCreateReqVO createReqVO);
 
     /**
      * 更新会员等级定义
      *
      * @param updateReqVO 更新请求
      */
-    void updateLevelDefinition(Integer tenantId,Integer domainId,MemberLevelDefinitionUpdateReqVO updateReqVO);
+    void updateLevelDefinition(MemberLevelDefinitionUpdateReqVO updateReqVO);
 
     /**
      * 删除会员等级定义
      *
      * @param id 等级ID
      */
-    void deleteLevelDefinition(Integer tenantId,Integer domainId,Integer id);
+    void deleteLevelDefinition(Integer id);
 
     /**
      * 获取会员等级定义
@@ -54,7 +54,7 @@ public interface MemberLevelService {
      * @param domainId 域ID
      * @return 等级定义列表
      */
-    List<MemberLevelDefinitionDO> getLevelDefinitionList(Integer tenantId, Integer domainId);
+    List<MemberLevelDefinitionDO> getLevelDefinitionList( );
 
     /**
      * 获取会员当前等级
@@ -62,7 +62,7 @@ public interface MemberLevelService {
      * @param memberId 会员ID
      * @return 会员等级信息
      */
-    MemberLevelInfoVO getMemberCurrentLevel(Integer domainId,Integer memberId);
+    MemberLevelInfoVO getMemberCurrentLevel(Integer memberId);
 
     /**
      * 手动设置会员等级
@@ -72,7 +72,7 @@ public interface MemberLevelService {
      * @param reason 原因
      * @param operator 操作人
      */
-    void setMemberLevel(Integer tenantId, Integer domainId,Integer memberId, Integer levelId, String reason, String operator);
+    void setMemberLevel( Integer memberId, Integer levelId, String reason, String operator);
 
     /**
      * 计算会员等级
@@ -81,7 +81,7 @@ public interface MemberLevelService {
      * @param memberId 会员ID
      * @return 计算后的等级ID
      */
-    Integer calculateMemberLevel(Integer domainId,Integer memberId);
+    Integer calculateMemberLevel(Integer memberId);
 
     /**
      * 获取会员等级变更历史
@@ -99,5 +99,5 @@ public interface MemberLevelService {
      * @param memberId 会员ID
      * @return 升级进度信息
      */
-    MemberLevelProgressVO calculateMemberLevelProgress(Integer domainId,Integer memberId);
+    MemberLevelProgressVO calculateMemberLevelProgress(Integer memberId);
 }

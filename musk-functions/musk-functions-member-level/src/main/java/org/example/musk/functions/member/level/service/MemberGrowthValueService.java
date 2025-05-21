@@ -22,7 +22,7 @@ public interface MemberGrowthValueService {
      * @param operator 操作人
      * @return 操作后的成长值
      */
-    Integer addGrowthValue(Integer domainId,Integer memberId, Integer growthValue, Integer sourceType, String sourceId, String description, String operator);
+    Integer addGrowthValue(Integer memberId, Integer growthValue, Integer sourceType, String sourceId, String description, String operator);
 
     /**
      * 减少会员成长值
@@ -35,7 +35,7 @@ public interface MemberGrowthValueService {
      * @param operator 操作人
      * @return 操作后的成长值
      */
-    Integer deductGrowthValue(Integer domainId,Integer memberId, Integer growthValue, Integer sourceType, String sourceId, String description, String operator);
+    Integer deductGrowthValue(Integer memberId, Integer growthValue, Integer sourceType, String sourceId, String description, String operator);
 
     /**
      * 获取会员成长值信息
@@ -43,7 +43,7 @@ public interface MemberGrowthValueService {
      * @param memberId 会员ID
      * @return 成长值信息
      */
-    MemberGrowthValueVO getMemberGrowthValue(Integer domainId,Integer memberId);
+    MemberGrowthValueVO getMemberGrowthValue(Integer memberId);
 
     /**
      * 获取会员成长值变更历史

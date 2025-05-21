@@ -34,18 +34,18 @@ public class MemberPointsRuleController {
 
     @PostMapping("/create")
     public CommonResult<Integer> createPointsRule(@Valid @RequestBody MemberPointsRuleCreateReqVO createReqVO) {
-        return CommonResult.success(memberPointsRuleService.createPointsRule(ThreadLocalTenantContext.getTenantId(),ThreadLocalTenantContext.getDomainId(),createReqVO));
+        return CommonResult.success(memberPointsRuleService.createPointsRule(createReqVO));
     }
 
     @PutMapping("/update")
     public CommonResult<Boolean> updatePointsRule(@Valid @RequestBody MemberPointsRuleUpdateReqVO updateReqVO) {
-        memberPointsRuleService.updatePointsRule(ThreadLocalTenantContext.getTenantId(),ThreadLocalTenantContext.getDomainId(),updateReqVO);
+        memberPointsRuleService.updatePointsRule(updateReqVO);
         return CommonResult.success(true);
     }
 
     @DeleteMapping("/delete/{id}")
     public CommonResult<Boolean> deletePointsRule(@PathVariable("id") Integer id) {
-        memberPointsRuleService.deletePointsRule(ThreadLocalTenantContext.getTenantId(),ThreadLocalTenantContext.getDomainId(),id);
+        memberPointsRuleService.deletePointsRule(id);
         return CommonResult.success(true);
     }
 
@@ -55,10 +55,8 @@ public class MemberPointsRuleController {
     }
 
     @GetMapping("/list")
-    public CommonResult<List<MemberPointsRuleDO>> getPointsRuleList(
-            @RequestParam(value = "tenantId", required = false) Integer tenantId,
-            @RequestParam(value = "domainId", required = false) Integer domainId) {
-        return CommonResult.success(memberPointsRuleService.getPointsRuleList(tenantId, domainId));
+    public CommonResult<List<MemberPointsRuleDO>> getPointsRuleList() {
+        return CommonResult.success(memberPointsRuleService.getPointsRuleList());
     }
 
     @PostMapping("/calculate-consumption-points")
@@ -67,7 +65,7 @@ public class MemberPointsRuleController {
             @RequestParam("amount") Integer amount,
             @RequestParam("sourceId") String sourceId,
             @RequestParam("operator") String operator) {
-        memberPointsRuleService.calculateConsumptionPointsAndGrowth(ThreadLocalTenantContext.getTenantId(),ThreadLocalTenantContext.getDomainId(),memberId, amount, sourceId, operator);
+        memberPointsRuleService.calculateConsumptionPointsAndGrowth(memberId, amount, sourceId, operator);
         return CommonResult.success(true);
     }
 
@@ -76,7 +74,7 @@ public class MemberPointsRuleController {
             @RequestParam("memberId") Integer memberId,
             @RequestParam("continuousDays") Integer continuousDays,
             @RequestParam("operator") String operator) {
-        memberPointsRuleService.calculateSignInPointsAndGrowth(ThreadLocalTenantContext.getTenantId(),ThreadLocalTenantContext.getDomainId(),memberId, continuousDays, operator);
+        memberPointsRuleService.calculateSignInPointsAndGrowth(memberId, continuousDays, operator);
         return CommonResult.success(true);
     }
 }

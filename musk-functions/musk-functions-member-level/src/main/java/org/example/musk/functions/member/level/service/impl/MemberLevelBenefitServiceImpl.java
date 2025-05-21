@@ -5,6 +5,7 @@ import cn.hutool.core.util.ObjectUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.hutool.core.bean.BeanUtil;
+import org.example.musk.common.context.ThreadLocalTenantContext;
 import org.example.musk.common.exception.BusinessException;
 import org.example.musk.functions.cache.annotation.CacheEvict;
 import org.example.musk.functions.cache.annotation.Cacheable;
@@ -49,17 +50,12 @@ public class MemberLevelBenefitServiceImpl implements MemberLevelBenefitService 
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Integer createLevelBenefit(Integer tenantId,Integer domainId,MemberLevelBenefitCreateReqVO createReqVO) {
+    public Integer createLevelBenefit(MemberLevelBenefitCreateReqVO createReqVO) {
 
         // 检查等级是否存在
         MemberLevelDefinitionDO levelDefinition = memberLevelDefinitionMapper.selectById(createReqVO.getLevelId());
         if (levelDefinition == null) {
             throw new BusinessException("等级不存在");
-        }
-
-        // 检查是否有权限创建
-        if (!ObjectUtil.equal(levelDefinition.getTenantId(), tenantId) || !ObjectUtil.equal(levelDefinition.getDomainId(), domainId)) {
-            throw new BusinessException("无权限为该等级创建权益");
         }
 
         // 检查权益类型是否已存在
@@ -71,28 +67,22 @@ public class MemberLevelBenefitServiceImpl implements MemberLevelBenefitService 
 
         // 创建权益
         MemberLevelBenefitDO benefit = BeanUtil.copyProperties(createReqVO, MemberLevelBenefitDO.class);
-        benefit.setTenantId(tenantId);
-        benefit.setDomainId(domainId);
         memberLevelBenefitMapper.insert(benefit);
 
         // 清除缓存
-        clearLevelBenefitListCache(domainId,createReqVO.getLevelId());
+        clearLevelBenefitListCache(createReqVO.getLevelId());
 
         return benefit.getId();
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateLevelBenefit(Integer tenantId,Integer domainId,MemberLevelBenefitUpdateReqVO updateReqVO) {
+    public void updateLevelBenefit(MemberLevelBenefitUpdateReqVO updateReqVO) {
+
         // 检查权益是否存在
         MemberLevelBenefitDO benefit = memberLevelBenefitMapper.selectById(updateReqVO.getId());
         if (benefit == null) {
             throw new BusinessException("权益不存在");
-        }
-
-        // 检查是否有权限修改
-        if (!ObjectUtil.equal(benefit.getTenantId(), tenantId) || !ObjectUtil.equal(benefit.getDomainId(), domainId)) {
-            throw new BusinessException("无权限修改该权益");
         }
 
         // 检查等级是否存在
@@ -101,10 +91,6 @@ public class MemberLevelBenefitServiceImpl implements MemberLevelBenefitService 
             throw new BusinessException("等级不存在");
         }
 
-        // 检查是否有权限修改
-        if (!ObjectUtil.equal(levelDefinition.getTenantId(), tenantId) || !ObjectUtil.equal(levelDefinition.getDomainId(), domainId)) {
-            throw new BusinessException("无权限修改该等级的权益");
-        }
 
         // 如果修改了等级ID或权益类型，需要检查是否已存在
         if (!benefit.getLevelId().equals(updateReqVO.getLevelId()) || !benefit.getBenefitType().equals(updateReqVO.getBenefitType())) {
@@ -120,15 +106,15 @@ public class MemberLevelBenefitServiceImpl implements MemberLevelBenefitService 
         memberLevelBenefitMapper.updateById(updateBenefit);
 
         // 清除缓存
-        clearLevelBenefitListCache(domainId,benefit.getLevelId());
+        clearLevelBenefitListCache(benefit.getLevelId());
         if (!benefit.getLevelId().equals(updateReqVO.getLevelId())) {
-            clearLevelBenefitListCache(domainId,updateReqVO.getLevelId());
+            clearLevelBenefitListCache(updateReqVO.getLevelId());
         }
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void deleteLevelBenefit(Integer domainId,Integer id) {
+    public void deleteLevelBenefit(Integer id) {
         // 检查权益是否存在
         MemberLevelBenefitDO benefit = memberLevelBenefitMapper.selectById(id);
         if (benefit == null) {
@@ -138,7 +124,7 @@ public class MemberLevelBenefitServiceImpl implements MemberLevelBenefitService 
         memberLevelBenefitMapper.deleteById(id);
 
         // 清除缓存
-        clearLevelBenefitListCache(domainId,benefit.getLevelId());
+        clearLevelBenefitListCache(benefit.getLevelId());
     }
 
     @Override
@@ -147,16 +133,19 @@ public class MemberLevelBenefitServiceImpl implements MemberLevelBenefitService 
     }
 
     @Override
-    @Cacheable(namespace = "MEMBER", key = "'benefit:list:' + #levelId", expireSeconds = MemberLevelConstant.LEVEL_BENEFIT_LIST_CACHE_EXPIRE_SECONDS)
+    @Cacheable(namespace = "MEMBER", key = "'benefit:list:' + #levelId", expireSeconds = MemberLevelConstant.LEVEL_BENEFIT_LIST_CACHE_EXPIRE_SECONDS, autoTenantPrefix = true, autoDomainPrefix = true)
     public List<MemberLevelBenefitDO> getLevelBenefitList(Integer levelId) {
         // 从数据库中获取
         return memberLevelBenefitMapper.selectListByLevelId(levelId);
     }
 
     @Override
-    public List<MemberLevelBenefitVO> getMemberCurrentBenefits(Integer domainId,Integer memberId) {
+    public List<MemberLevelBenefitVO> getMemberCurrentBenefits(Integer memberId) {
+        // 从线程上下文获取域ID
+        Integer domainId = ThreadLocalTenantContext.getDomainId();
+
         // 获取会员成长值信息
-        MemberGrowthValueDO growthValue = memberGrowthValueMapper.selectByMemberId(domainId,memberId);
+        MemberGrowthValueDO growthValue = memberGrowthValueMapper.selectByMemberId( memberId);
         if (growthValue == null) {
             throw new BusinessException("会员成长值信息不存在");
         }
@@ -191,9 +180,12 @@ public class MemberLevelBenefitServiceImpl implements MemberLevelBenefitService 
     }
 
     @Override
-    public boolean hasBenefit(Integer domainId,Integer memberId, Integer benefitType) {
+    public boolean hasBenefit(Integer memberId, Integer benefitType) {
+        // 从线程上下文获取域ID
+        Integer domainId = ThreadLocalTenantContext.getDomainId();
+
         // 获取会员成长值信息
-        MemberGrowthValueDO growthValue = memberGrowthValueMapper.selectByMemberId(domainId,memberId);
+        MemberGrowthValueDO growthValue = memberGrowthValueMapper.selectByMemberId( memberId);
         if (growthValue == null) {
             return false;
         }
@@ -210,9 +202,10 @@ public class MemberLevelBenefitServiceImpl implements MemberLevelBenefitService 
     }
 
     @Override
-    public String getBenefitValue(Integer domainId,Integer memberId, Integer benefitType) {
+    public String getBenefitValue(Integer memberId, Integer benefitType) {
+
         // 获取会员成长值信息
-        MemberGrowthValueDO growthValue = memberGrowthValueMapper.selectByMemberId(domainId,memberId);
+        MemberGrowthValueDO growthValue = memberGrowthValueMapper.selectByMemberId( memberId);
         if (growthValue == null) {
             return null;
         }
@@ -237,8 +230,8 @@ public class MemberLevelBenefitServiceImpl implements MemberLevelBenefitService 
      *
      * @param levelId 等级ID
      */
-    @CacheEvict(namespace = "MEMBER", key = "'benefit:list:' + #levelId")
-    public void clearLevelBenefitListCache(Integer domainId,Integer levelId) {
+    @CacheEvict(namespace = "MEMBER", key = "'benefit:list:' + #levelId", autoTenantPrefix = true, autoDomainPrefix = true)
+    public void clearLevelBenefitListCache(Integer levelId) {
         // 使用注解自动清除缓存，方法体为空
     }
 }

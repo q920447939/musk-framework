@@ -60,56 +60,44 @@ public class MemberLevelServiceImpl implements MemberLevelService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Integer createLevelDefinition(Integer tenantId,Integer domainId,MemberLevelDefinitionCreateReqVO createReqVO) {
+    public Integer createLevelDefinition(MemberLevelDefinitionCreateReqVO createReqVO) {
         // 检查等级编码是否已存在
-        MemberLevelDefinitionDO existLevel = memberLevelDefinitionMapper.selectByLevelCode(tenantId, domainId, createReqVO.getLevelCode());
+        MemberLevelDefinitionDO existLevel = memberLevelDefinitionMapper.selectByLevelCode(createReqVO.getLevelCode());
         if (existLevel != null) {
             throw new BusinessException("等级编码已存在");
         }
 
         // 创建等级定义
         MemberLevelDefinitionDO levelDefinition = BeanUtil.copyProperties(createReqVO, MemberLevelDefinitionDO.class);
-        levelDefinition.setTenantId(tenantId);
-        levelDefinition.setDomainId(domainId);
         memberLevelDefinitionMapper.insert(levelDefinition);
 
         // 清除缓存
-        clearLevelDefinitionListCache(tenantId, domainId);
+        clearLevelDefinitionListCache();
 
         return levelDefinition.getId();
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateLevelDefinition(Integer tenantId,Integer domainId,MemberLevelDefinitionUpdateReqVO updateReqVO) {
+    public void updateLevelDefinition(MemberLevelDefinitionUpdateReqVO updateReqVO) {
         // 检查等级是否存在
         MemberLevelDefinitionDO levelDefinition = memberLevelDefinitionMapper.selectById(updateReqVO.getId());
         if (levelDefinition == null) {
             throw new BusinessException("等级不存在");
         }
 
-        // 检查是否有权限修改
-        if (!ObjectUtil.equal(levelDefinition.getTenantId(), tenantId) || !ObjectUtil.equal(levelDefinition.getDomainId(), domainId)) {
-            throw new BusinessException("无权限修改该等级");
-        }
-
-        // 检查等级编码是否已存在（排除自身）
-        MemberLevelDefinitionDO existLevel = memberLevelDefinitionMapper.selectByLevelCode(tenantId, domainId, updateReqVO.getLevelCode());
-        if (existLevel != null && !existLevel.getId().equals(updateReqVO.getId())) {
-            throw new BusinessException("等级编码已存在");
-        }
 
         // 更新等级定义
         MemberLevelDefinitionDO updateLevel = BeanUtil.copyProperties(updateReqVO, MemberLevelDefinitionDO.class);
         memberLevelDefinitionMapper.updateById(updateLevel);
 
         // 清除缓存
-        clearLevelDefinitionListCache(tenantId, domainId);
+        clearLevelDefinitionListCache();
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void deleteLevelDefinition(Integer tenantId,Integer domainId,Integer id) {
+    public void deleteLevelDefinition(Integer id) {
 
         // 检查等级是否存在
         MemberLevelDefinitionDO levelDefinition = memberLevelDefinitionMapper.selectById(id);
@@ -128,7 +116,7 @@ public class MemberLevelServiceImpl implements MemberLevelService {
         memberLevelDefinitionMapper.deleteById(id);
 
         // 清除缓存
-        clearLevelDefinitionListCache(tenantId, domainId);
+        clearLevelDefinitionListCache();
     }
 
     @Override
@@ -137,16 +125,16 @@ public class MemberLevelServiceImpl implements MemberLevelService {
     }
 
     @Override
-    public List<MemberLevelDefinitionDO> getLevelDefinitionList(Integer tenantId, Integer domainId) {
+    public List<MemberLevelDefinitionDO> getLevelDefinitionList() {
         // 从数据库中获取
-        return memberLevelDefinitionMapper.selectListByTenantIdAndDomainId(domainId);
+        return memberLevelDefinitionMapper.selectListByTenantIdAndDomainId();
     }
 
     @Override
     @Cacheable(namespace = "MEMBER", key = "'current:' + #memberId", expireSeconds = MemberLevelConstant.MEMBER_CURRENT_LEVEL_CACHE_EXPIRE_SECONDS)
-    public MemberLevelInfoVO getMemberCurrentLevel(Integer domainId,Integer memberId) {
+    public MemberLevelInfoVO getMemberCurrentLevel(Integer memberId) {
         // 获取会员成长值信息
-        MemberGrowthValueDO growthValue = memberGrowthValueMapper.selectByMemberId(domainId,memberId);
+        MemberGrowthValueDO growthValue = memberGrowthValueMapper.selectByMemberId(memberId);
         if (growthValue == null) {
             throw new BusinessException("会员成长值信息不存在");
         }
@@ -158,8 +146,7 @@ public class MemberLevelServiceImpl implements MemberLevelService {
         }
 
         // 获取下一等级
-        MemberLevelDefinitionDO nextLevel = memberLevelDefinitionMapper.selectNextLevel(
-                currentLevel.getDomainId(), currentLevel.getLevelValue());
+        MemberLevelDefinitionDO nextLevel = memberLevelDefinitionMapper.selectNextLevel(currentLevel.getLevelValue());
 
         // 构建会员等级信息
         MemberLevelInfoVO levelInfo = new MemberLevelInfoVO();
@@ -200,16 +187,16 @@ public class MemberLevelServiceImpl implements MemberLevelService {
         }
 
         // 获取当前等级权益
-        levelInfo.setBenefits(memberLevelBenefitService.getMemberCurrentBenefits(domainId,memberId));
+        levelInfo.setBenefits(memberLevelBenefitService.getMemberCurrentBenefits(memberId));
 
         return levelInfo;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void setMemberLevel(Integer tenantId, Integer domainId,Integer memberId, Integer levelId, String reason, String operator) {
+    public void setMemberLevel(Integer memberId, Integer levelId, String reason, String operator) {
         // 获取会员成长值信息
-        MemberGrowthValueDO growthValue = memberGrowthValueMapper.selectByMemberId(domainId,memberId);
+        MemberGrowthValueDO growthValue = memberGrowthValueMapper.selectByMemberId(memberId);
         if (growthValue == null) {
             throw new BusinessException("会员成长值信息不存在");
         }
@@ -218,10 +205,6 @@ public class MemberLevelServiceImpl implements MemberLevelService {
         MemberLevelDefinitionDO targetLevel = memberLevelDefinitionMapper.selectById(levelId);
         if (targetLevel == null) {
             throw new BusinessException("目标等级不存在");
-        }
-
-        if (!ObjectUtil.equal(targetLevel.getTenantId(), tenantId) || !ObjectUtil.equal(targetLevel.getDomainId(), domainId)) {
-            throw new BusinessException("无权限设置该等级");
         }
 
         // 记录旧等级
@@ -241,8 +224,7 @@ public class MemberLevelServiceImpl implements MemberLevelService {
         }
 
         // 计算下一等级门槛
-        MemberLevelDefinitionDO nextLevel = memberLevelDefinitionMapper.selectNextLevel(
-                targetLevel.getDomainId(), targetLevel.getLevelValue());
+        MemberLevelDefinitionDO nextLevel = memberLevelDefinitionMapper.selectNextLevel(targetLevel.getLevelValue());
         if (nextLevel != null) {
             growthValue.setNextLevelThreshold(nextLevel.getGrowthValueThreshold());
         } else {
@@ -282,15 +264,15 @@ public class MemberLevelServiceImpl implements MemberLevelService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Integer calculateMemberLevel(Integer domainId,Integer memberId) {
+    public Integer calculateMemberLevel(Integer memberId) {
         // 获取会员成长值
-        MemberGrowthValueDO growthValue = memberGrowthValueMapper.selectByMemberId(domainId,memberId);
+        MemberGrowthValueDO growthValue = memberGrowthValueMapper.selectByMemberId(memberId);
         if (growthValue == null) {
             throw new BusinessException("会员成长值不存在");
         }
 
         // 获取当前租户和域的所有等级定义，按成长值门槛升序排序
-        List<MemberLevelDefinitionDO> levelDefinitions = getLevelDefinitionList(growthValue.getTenantId(), growthValue.getDomainId());
+        List<MemberLevelDefinitionDO> levelDefinitions = getLevelDefinitionList();
 
         if (CollUtil.isEmpty(levelDefinitions)) {
             throw new BusinessException("未找到有效的会员等级定义");
@@ -433,9 +415,9 @@ public class MemberLevelServiceImpl implements MemberLevelService {
     }
 
     @Override
-    public MemberLevelProgressVO calculateMemberLevelProgress(Integer domainId,Integer memberId) {
+    public MemberLevelProgressVO calculateMemberLevelProgress(Integer memberId) {
         // 获取会员成长值
-        MemberGrowthValueDO growthValue = memberGrowthValueMapper.selectByMemberId(domainId,memberId);
+        MemberGrowthValueDO growthValue = memberGrowthValueMapper.selectByMemberId(memberId);
         if (growthValue == null) {
             throw new BusinessException("会员成长值不存在");
         }
@@ -447,8 +429,7 @@ public class MemberLevelServiceImpl implements MemberLevelService {
         }
 
         // 获取下一等级
-        MemberLevelDefinitionDO nextLevel = memberLevelDefinitionMapper.selectNextLevel(
-                currentLevel.getDomainId(), currentLevel.getLevelValue());
+        MemberLevelDefinitionDO nextLevel = memberLevelDefinitionMapper.selectNextLevel(currentLevel.getLevelValue());
 
         // 构建进度信息
         MemberLevelProgressVO progressVO = new MemberLevelProgressVO();
@@ -504,12 +485,9 @@ public class MemberLevelServiceImpl implements MemberLevelService {
 
     /**
      * 清除等级定义列表缓存
-     *
-     * @param tenantId 租户ID
-     * @param domainId 域ID
      */
-    @CacheEvict(namespace = "MEMBER", key = "'definition:list:' + #tenantId + ':' + #domainId")
-    public void clearLevelDefinitionListCache(Integer tenantId, Integer domainId) {
+    @CacheEvict(namespace = "MEMBER", key = "'definition:list:")
+    public void clearLevelDefinitionListCache() {
         // 使用注解自动清除缓存，方法体为空
     }
 }

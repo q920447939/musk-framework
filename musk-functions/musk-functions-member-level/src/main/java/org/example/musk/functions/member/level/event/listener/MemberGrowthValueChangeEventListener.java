@@ -84,7 +84,7 @@ public class MemberGrowthValueChangeEventListener {
      * @param event 事件
      */
     private void calculateMemberLevel(MemberGrowthValueChangeEvent event) {
-        Integer newLevelId = memberLevelService.calculateMemberLevel(event.getDomainId(),event.getMemberId());
+        Integer newLevelId = memberLevelService.calculateMemberLevel(event.getMemberId());
         log.info("会员等级计算完成，memberId={}, newLevelId={}", event.getMemberId(), newLevelId);
     }
 }

@@ -17,14 +17,11 @@ public interface MemberLevelDefinitionMapper extends BaseMapperX<MemberLevelDefi
     /**
      * 根据租户ID和域ID获取会员等级定义列表
      *
-     * @param tenantId 租户ID
-     * @param domainId 域ID
      * @return 会员等级定义列表
      */
-    default List<MemberLevelDefinitionDO> selectListByTenantIdAndDomainId(Integer domainId) {
+    default List<MemberLevelDefinitionDO> selectListByTenantIdAndDomainId() {
         return selectList(
                 new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<MemberLevelDefinitionDO>()
-                        .eq(MemberLevelDefinitionDO::getDomainId, domainId)
                         .eq(MemberLevelDefinitionDO::getDeleted, false)
                         .orderByAsc(MemberLevelDefinitionDO::getLevelValue)
         );
@@ -33,16 +30,12 @@ public interface MemberLevelDefinitionMapper extends BaseMapperX<MemberLevelDefi
     /**
      * 根据等级编码获取会员等级定义
      *
-     * @param tenantId  租户ID
-     * @param domainId  域ID
      * @param levelCode 等级编码
      * @return 会员等级定义
      */
-    default MemberLevelDefinitionDO selectByLevelCode(Integer tenantId, Integer domainId, String levelCode) {
+    default MemberLevelDefinitionDO selectByLevelCode( String levelCode) {
         return selectOne(
                 new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<MemberLevelDefinitionDO>()
-                        .eq(MemberLevelDefinitionDO::getTenantId, tenantId)
-                        .eq(MemberLevelDefinitionDO::getDomainId, domainId)
                         .eq(MemberLevelDefinitionDO::getLevelCode, levelCode)
                         .eq(MemberLevelDefinitionDO::getDeleted, false)
         );
@@ -51,14 +44,12 @@ public interface MemberLevelDefinitionMapper extends BaseMapperX<MemberLevelDefi
     /**
      * 根据成长值获取对应的会员等级定义
      *
-     * @param domainId     域ID
      * @param growthValue  成长值
      * @return 会员等级定义
      */
-    default MemberLevelDefinitionDO selectByGrowthValue( Integer domainId, Integer growthValue) {
+    default MemberLevelDefinitionDO selectByGrowthValue(  Integer growthValue) {
         return selectOne(
                 new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<MemberLevelDefinitionDO>()
-                        .eq(MemberLevelDefinitionDO::getDomainId, domainId)
                         .eq(MemberLevelDefinitionDO::getStatus, 0)
                         .le(MemberLevelDefinitionDO::getGrowthValueThreshold, growthValue)
                         .orderByDesc(MemberLevelDefinitionDO::getGrowthValueThreshold)
@@ -69,14 +60,12 @@ public interface MemberLevelDefinitionMapper extends BaseMapperX<MemberLevelDefi
     /**
      * 获取下一个等级
      *
-     * @param domainId     域ID
      * @param currentLevelValue 当前等级值
      * @return 下一个等级
      */
-    default MemberLevelDefinitionDO selectNextLevel( Integer domainId, Integer currentLevelValue) {
+    default MemberLevelDefinitionDO selectNextLevel(  Integer currentLevelValue) {
         return selectOne(
                 new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<MemberLevelDefinitionDO>()
-                        .eq(MemberLevelDefinitionDO::getDomainId, domainId)
                         .eq(MemberLevelDefinitionDO::getStatus, 0)
                         .eq(MemberLevelDefinitionDO::getDeleted, false)
                         .gt(MemberLevelDefinitionDO::getLevelValue, currentLevelValue)

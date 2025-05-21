@@ -35,7 +35,7 @@ public class MemberGrowthValueController {
             @RequestParam("sourceId") String sourceId,
             @RequestParam("description") String description,
             @RequestParam("operator") String operator) {
-        return CommonResult.success(memberGrowthValueService.addGrowthValue(ThreadLocalTenantContext.getDomainId(),
+        return CommonResult.success(memberGrowthValueService.addGrowthValue(
                 memberId, growthValue, sourceType, sourceId, description, operator));
     }
 
@@ -47,13 +47,13 @@ public class MemberGrowthValueController {
             @RequestParam("sourceId") String sourceId,
             @RequestParam("description") String description,
             @RequestParam("operator") String operator) {
-        return CommonResult.success(memberGrowthValueService.deductGrowthValue(ThreadLocalTenantContext.getDomainId(),
+        return CommonResult.success(memberGrowthValueService.deductGrowthValue(
                 memberId, growthValue, sourceType, sourceId, description, operator));
     }
 
     @GetMapping("/get")
     public CommonResult<MemberGrowthValueVO> getMemberGrowthValue(@RequestParam("memberId") Integer memberId) {
-        return CommonResult.success(memberGrowthValueService.getMemberGrowthValue(ThreadLocalTenantContext.getDomainId(),memberId));
+        return CommonResult.success(memberGrowthValueService.getMemberGrowthValue(memberId));
     }
 
     @GetMapping("/history")
