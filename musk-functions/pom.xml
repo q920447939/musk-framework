@@ -16,6 +16,7 @@
         <module>musk-functions-cache</module>
         <module>musk-functions-icon</module>
         <module>musk-functions-message</module>
+        <module>musk-functions-member-level</module>
     </modules>
 
     <properties>
