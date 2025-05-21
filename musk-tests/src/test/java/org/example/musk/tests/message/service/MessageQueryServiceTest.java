@@ -1,4 +1,4 @@
-package org.example.musk.tests.service;
+package org.example.musk.tests.message.service;
 
 import jakarta.annotation.Resource;
 import org.example.musk.common.pojo.db.PageResult;

@@ -1,4 +1,4 @@
-package org.example.musk.tests.service;
+package org.example.musk.tests.message.service;
 
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +12,7 @@ import org.example.musk.functions.message.model.vo.MessageRespVO;
 import org.example.musk.functions.message.model.vo.MessageUpdateReqVO;
 import org.example.musk.tests.BaseTest;
 import org.example.musk.tests.TestApplication;
+import org.example.musk.tests.service.MessageManageService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
