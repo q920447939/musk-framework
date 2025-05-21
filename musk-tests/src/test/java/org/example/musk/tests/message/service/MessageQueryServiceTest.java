@@ -5,6 +5,7 @@ import org.example.musk.common.pojo.db.PageResult;
 import org.example.musk.functions.message.model.vo.MessageDetailVO;
 import org.example.musk.functions.message.model.vo.UserMessageVO;
 import org.example.musk.tests.TestApplication;
+import org.example.musk.tests.service.MessageQueryService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -9,6 +9,8 @@ import org.example.musk.functions.message.model.vo.MessageSendReqVO;
 import org.example.musk.functions.message.model.vo.MessageTemplateSendReqVO;
 import org.example.musk.tests.BaseTest;
 import org.example.musk.tests.TestApplication;
+import org.example.musk.tests.service.MessageManageService;
+import org.example.musk.tests.service.MessageSendService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

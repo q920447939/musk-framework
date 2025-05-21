@@ -8,6 +8,7 @@ import org.example.musk.functions.message.model.entity.SystemMessageTemplateDO;
 import org.example.musk.functions.message.model.vo.MessageTemplateCreateReqVO;
 import org.example.musk.functions.message.model.vo.MessageTemplateRespVO;
 import org.example.musk.tests.TestApplication;
+import org.example.musk.tests.service.MessageTemplateService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
