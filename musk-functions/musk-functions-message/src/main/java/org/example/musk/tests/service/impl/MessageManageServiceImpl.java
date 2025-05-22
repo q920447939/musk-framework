@@ -1,6 +1,7 @@
 package org.example.musk.tests.service.impl;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
+import com.baomidou.dynamic.datasource.annotation.DSTransactional;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -42,7 +43,7 @@ public class MessageManageServiceImpl extends ServiceImpl<SystemMessageMapper, S
     private SystemMessageMapper systemMessageMapper;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public Integer createMessage(MessageCreateReqVO createReqVO) {
         // 转换请求VO为DO
         SystemMessageDO message = BeanUtils.toBean(createReqVO, SystemMessageDO.class);
@@ -69,7 +70,7 @@ public class MessageManageServiceImpl extends ServiceImpl<SystemMessageMapper, S
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     @CacheEvict(namespace = "MESSAGE", pattern = "'message:' + #updateReqVO.id")
     public boolean updateMessage(MessageUpdateReqVO updateReqVO) {
         // 校验消息存在
@@ -94,7 +95,7 @@ public class MessageManageServiceImpl extends ServiceImpl<SystemMessageMapper, S
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     @CacheEvict(namespace = "MESSAGE", pattern = "'message:' + #messageId")
     public boolean deleteMessage(Integer messageId) {
         // 校验消息存在
@@ -184,7 +185,7 @@ public class MessageManageServiceImpl extends ServiceImpl<SystemMessageMapper, S
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     @CacheEvict(namespace = "MESSAGE", pattern = "'message:' + #messageId")
     public boolean publishMessage(Integer messageId) {
         // 校验消息存在
@@ -215,7 +216,7 @@ public class MessageManageServiceImpl extends ServiceImpl<SystemMessageMapper, S
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     @CacheEvict(namespace = "MESSAGE", pattern = "'message:' + #messageId")
     public boolean unpublishMessage(Integer messageId) {
         // 校验消息存在
@@ -241,7 +242,7 @@ public class MessageManageServiceImpl extends ServiceImpl<SystemMessageMapper, S
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public void checkMessageStatus() {
         LocalDateTime now = LocalDateTime.now();
 

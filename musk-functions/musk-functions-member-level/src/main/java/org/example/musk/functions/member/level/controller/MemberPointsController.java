@@ -5,6 +5,7 @@ import org.example.musk.common.context.ThreadLocalTenantContext;
 import org.example.musk.common.pojo.CommonResult;
 import org.example.musk.common.pojo.db.PageParam;
 import org.example.musk.common.pojo.db.PageResult;
+import org.example.musk.functions.member.level.enums.PointsSourceTypeEnum;
 import org.example.musk.functions.member.level.model.vo.MemberPointsRecordVO;
 import org.example.musk.functions.member.level.model.vo.MemberPointsVO;
 import org.example.musk.functions.member.level.service.MemberPointsService;
@@ -35,7 +36,12 @@ public class MemberPointsController {
             @RequestParam("sourceId") String sourceId,
             @RequestParam("description") String description,
             @RequestParam("operator") String operator) {
-        return CommonResult.success(memberPointsService.addPoints(memberId, points, sourceType, sourceId, description, operator));
+        // 将Integer类型的sourceType转换为枚举类型
+        PointsSourceTypeEnum sourceTypeEnum = PointsSourceTypeEnum.getByValue(sourceType);
+        if (sourceTypeEnum == null) {
+            throw new IllegalArgumentException("无效的来源类型: " + sourceType);
+        }
+        return CommonResult.success(memberPointsService.addPoints(memberId, points, sourceTypeEnum, sourceId, description, operator));
     }
 
     @PostMapping("/deduct")
@@ -46,7 +52,12 @@ public class MemberPointsController {
             @RequestParam("sourceId") String sourceId,
             @RequestParam("description") String description,
             @RequestParam("operator") String operator) {
-        return CommonResult.success(memberPointsService.deductPoints(memberId, points, sourceType, sourceId, description, operator));
+        // 将Integer类型的sourceType转换为枚举类型
+        PointsSourceTypeEnum sourceTypeEnum = PointsSourceTypeEnum.getByValue(sourceType);
+        if (sourceTypeEnum == null) {
+            throw new IllegalArgumentException("无效的来源类型: " + sourceType);
+        }
+        return CommonResult.success(memberPointsService.deductPoints(memberId, points, sourceTypeEnum, sourceId, description, operator));
     }
 
     @PostMapping("/freeze")
@@ -57,7 +68,12 @@ public class MemberPointsController {
             @RequestParam("sourceId") String sourceId,
             @RequestParam("description") String description,
             @RequestParam("operator") String operator) {
-        return CommonResult.success(memberPointsService.freezePoints(memberId, points, sourceType, sourceId, description, operator));
+        // 将Integer类型的sourceType转换为枚举类型
+        PointsSourceTypeEnum sourceTypeEnum = PointsSourceTypeEnum.getByValue(sourceType);
+        if (sourceTypeEnum == null) {
+            throw new IllegalArgumentException("无效的来源类型: " + sourceType);
+        }
+        return CommonResult.success(memberPointsService.freezePoints(memberId, points, sourceTypeEnum, sourceId, description, operator));
     }
 
     @PostMapping("/unfreeze")
@@ -68,7 +84,12 @@ public class MemberPointsController {
             @RequestParam("sourceId") String sourceId,
             @RequestParam("description") String description,
             @RequestParam("operator") String operator) {
-        return CommonResult.success(memberPointsService.unfreezePoints(memberId, points, sourceType, sourceId, description, operator));
+        // 将Integer类型的sourceType转换为枚举类型
+        PointsSourceTypeEnum sourceTypeEnum = PointsSourceTypeEnum.getByValue(sourceType);
+        if (sourceTypeEnum == null) {
+            throw new IllegalArgumentException("无效的来源类型: " + sourceType);
+        }
+        return CommonResult.success(memberPointsService.unfreezePoints(memberId, points, sourceTypeEnum, sourceId, description, operator));
     }
 
     @PostMapping("/expire")
@@ -79,7 +100,12 @@ public class MemberPointsController {
             @RequestParam("sourceId") String sourceId,
             @RequestParam("description") String description,
             @RequestParam("operator") String operator) {
-        return CommonResult.success(memberPointsService.expirePoints(memberId, points, sourceType, sourceId, description, operator));
+        // 将Integer类型的sourceType转换为枚举类型
+        PointsSourceTypeEnum sourceTypeEnum = PointsSourceTypeEnum.getByValue(sourceType);
+        if (sourceTypeEnum == null) {
+            throw new IllegalArgumentException("无效的来源类型: " + sourceType);
+        }
+        return CommonResult.success(memberPointsService.expirePoints(memberId, points, sourceTypeEnum, sourceId, description, operator));
     }
 
     @GetMapping("/get")

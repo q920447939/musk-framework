@@ -2,12 +2,15 @@ package org.example.musk.functions.member.level.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.dynamic.datasource.annotation.DS;
+import com.baomidou.dynamic.datasource.annotation.DSTransactional;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.hutool.core.bean.BeanUtil;
 import org.example.musk.common.exception.BusinessException;
 import org.example.musk.common.pojo.db.PageResult;
+import org.example.musk.constant.db.DBConstant;
 import org.example.musk.functions.cache.annotation.CacheEvict;
 import org.example.musk.functions.cache.annotation.Cacheable;
 import org.example.musk.functions.member.level.constant.MemberLevelConstant;
@@ -40,6 +43,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
+@DS(DBConstant.MEMBER_LEVEL)
 public class MemberLevelServiceImpl implements MemberLevelService {
 
     @Resource
@@ -59,7 +63,7 @@ public class MemberLevelServiceImpl implements MemberLevelService {
     private ApplicationEventPublisher applicationEventPublisher;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public Integer createLevelDefinition(MemberLevelDefinitionCreateReqVO createReqVO) {
         // 检查等级编码是否已存在
         MemberLevelDefinitionDO existLevel = memberLevelDefinitionMapper.selectByLevelCode(createReqVO.getLevelCode());
@@ -78,7 +82,7 @@ public class MemberLevelServiceImpl implements MemberLevelService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public void updateLevelDefinition(MemberLevelDefinitionUpdateReqVO updateReqVO) {
         // 检查等级是否存在
         MemberLevelDefinitionDO levelDefinition = memberLevelDefinitionMapper.selectById(updateReqVO.getId());
@@ -96,7 +100,7 @@ public class MemberLevelServiceImpl implements MemberLevelService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public void deleteLevelDefinition(Integer id) {
 
         // 检查等级是否存在
@@ -127,7 +131,7 @@ public class MemberLevelServiceImpl implements MemberLevelService {
     @Override
     public List<MemberLevelDefinitionDO> getLevelDefinitionList() {
         // 从数据库中获取
-        return memberLevelDefinitionMapper.selectListByTenantIdAndDomainId();
+        return memberLevelDefinitionMapper.selectList();
     }
 
     @Override
@@ -193,7 +197,7 @@ public class MemberLevelServiceImpl implements MemberLevelService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public void setMemberLevel(Integer memberId, Integer levelId, String reason, String operator) {
         // 获取会员成长值信息
         MemberGrowthValueDO growthValue = memberGrowthValueMapper.selectByMemberId(memberId);
@@ -263,7 +267,6 @@ public class MemberLevelServiceImpl implements MemberLevelService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public Integer calculateMemberLevel(Integer memberId) {
         // 获取会员成长值
         MemberGrowthValueDO growthValue = memberGrowthValueMapper.selectByMemberId(memberId);

@@ -1,6 +1,7 @@
 package org.example.musk.tests.service.impl;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
+import com.baomidou.dynamic.datasource.annotation.DSTransactional;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import jakarta.annotation.Resource;
@@ -38,7 +39,7 @@ public class MessageReadServiceImpl implements MessageReadService {
     private SystemUserMessageMapper systemUserMessageMapper;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     @CacheEvict(namespace = "MESSAGE", pattern = "'unread:' + #userId + ':*'")
     public boolean markAsRead(Integer messageId, Integer userId) {
         // 校验消息存在
@@ -77,7 +78,7 @@ public class MessageReadServiceImpl implements MessageReadService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     @CacheEvict(namespace = "MESSAGE", pattern = "'unread:' + #userId + ':*'")
     public int markAllAsRead(Integer userId, Integer tenantId, Integer domainId) {
         // 查询用户未读消息
@@ -112,7 +113,7 @@ public class MessageReadServiceImpl implements MessageReadService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     @CacheEvict(namespace = "MESSAGE", pattern = "'unread:' + #userId + ':*'")
     public boolean deleteUserMessage(Integer messageId, Integer userId) {
         // 校验消息存在

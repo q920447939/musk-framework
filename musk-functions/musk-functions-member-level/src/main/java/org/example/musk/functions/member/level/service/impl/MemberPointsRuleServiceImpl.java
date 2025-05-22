@@ -3,10 +3,13 @@ package org.example.musk.functions.member.level.service.impl;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.dynamic.datasource.annotation.DS;
+import com.baomidou.dynamic.datasource.annotation.DSTransactional;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.hutool.core.bean.BeanUtil;
 import org.example.musk.common.exception.BusinessException;
+import org.example.musk.constant.db.DBConstant;
 import org.example.musk.functions.member.level.dao.MemberPointsRuleMapper;
 import org.example.musk.functions.member.level.enums.GrowthValueSourceTypeEnum;
 import org.example.musk.functions.member.level.enums.PointsRuleTypeEnum;
@@ -34,6 +37,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
+@DS(DBConstant.MEMBER_LEVEL)
 public class MemberPointsRuleServiceImpl implements MemberPointsRuleService {
 
     @Resource
@@ -47,7 +51,7 @@ public class MemberPointsRuleServiceImpl implements MemberPointsRuleService {
 
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public Integer createPointsRule(MemberPointsRuleCreateReqVO createReqVO) {
         // 检查规则编码是否已存在
         MemberPointsRuleDO existRule = memberPointsRuleMapper.selectByRuleCode( createReqVO.getRuleCode());
@@ -63,7 +67,7 @@ public class MemberPointsRuleServiceImpl implements MemberPointsRuleService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public void updatePointsRule(MemberPointsRuleUpdateReqVO updateReqVO) {
         // 检查规则是否存在
         MemberPointsRuleDO rule = memberPointsRuleMapper.selectById(updateReqVO.getId());
@@ -83,7 +87,7 @@ public class MemberPointsRuleServiceImpl implements MemberPointsRuleService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public void deletePointsRule(Integer id) {
         // 检查规则是否存在
         MemberPointsRuleDO rule = memberPointsRuleMapper.selectById(id);
@@ -107,7 +111,7 @@ public class MemberPointsRuleServiceImpl implements MemberPointsRuleService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public void calculateConsumptionPointsAndGrowth(Integer memberId, Integer amount, String sourceId, String operator) {
         try {
             // 获取消费积分规则
@@ -168,7 +172,7 @@ public class MemberPointsRuleServiceImpl implements MemberPointsRuleService {
                 memberPointsService.addPoints(
                         memberId,
                         points,
-                        PointsSourceTypeEnum.CONSUMPTION.getValue(),
+                        PointsSourceTypeEnum.CONSUMPTION,
                         sourceId,
                         "消费奖励积分，订单：" + sourceId,
                         operator
@@ -180,7 +184,7 @@ public class MemberPointsRuleServiceImpl implements MemberPointsRuleService {
                 memberGrowthValueService.addGrowthValue(
                         memberId,
                         growthValue,
-                        GrowthValueSourceTypeEnum.CONSUMPTION.getValue(),
+                        GrowthValueSourceTypeEnum.CONSUMPTION,
                         sourceId,
                         "消费奖励成长值，订单：" + sourceId,
                         operator
@@ -196,7 +200,7 @@ public class MemberPointsRuleServiceImpl implements MemberPointsRuleService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public void calculateSignInPointsAndGrowth(Integer memberId, Integer continuousDays, String operator) {
         try {
 
@@ -258,7 +262,7 @@ public class MemberPointsRuleServiceImpl implements MemberPointsRuleService {
                 memberPointsService.addPoints(
                         memberId,
                         points,
-                        PointsSourceTypeEnum.SIGN_IN.getValue(),
+                        PointsSourceTypeEnum.SIGN_IN,
                         signInId,
                         "签到奖励积分，连续签到" + continuousDays + "天",
                         operator
@@ -270,7 +274,7 @@ public class MemberPointsRuleServiceImpl implements MemberPointsRuleService {
                 memberGrowthValueService.addGrowthValue(
                         memberId,
                         growthValue,
-                        GrowthValueSourceTypeEnum.SIGN_IN.getValue(),
+                        GrowthValueSourceTypeEnum.SIGN_IN,
                         signInId,
                         "签到奖励成长值，连续签到" + continuousDays + "天",
                         operator

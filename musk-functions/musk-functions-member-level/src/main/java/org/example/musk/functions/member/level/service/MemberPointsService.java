@@ -1,6 +1,7 @@
 package org.example.musk.functions.member.level.service;
 
 import org.example.musk.common.pojo.db.PageResult;
+import org.example.musk.functions.member.level.enums.PointsSourceTypeEnum;
 import org.example.musk.functions.member.level.model.vo.MemberPointsRecordVO;
 import org.example.musk.functions.member.level.model.vo.MemberPointsVO;
 
@@ -22,7 +23,7 @@ public interface MemberPointsService {
      * @param operator 操作人
      * @return 操作后的积分
      */
-    Integer addPoints(Integer memberId, Integer points, Integer sourceType, String sourceId, String description, String operator);
+    Integer addPoints(Integer memberId, Integer points, PointsSourceTypeEnum sourceType, String sourceId, String description, String operator);
 
     /**
      * 减少会员积分
@@ -35,7 +36,7 @@ public interface MemberPointsService {
      * @param operator 操作人
      * @return 操作后的积分
      */
-    Integer deductPoints(Integer memberId, Integer points, Integer sourceType, String sourceId, String description, String operator);
+    Integer deductPoints(Integer memberId, Integer points, PointsSourceTypeEnum sourceType, String sourceId, String description, String operator);
 
     /**
      * 冻结会员积分
@@ -48,7 +49,7 @@ public interface MemberPointsService {
      * @param operator 操作人
      * @return 操作后的冻结积分
      */
-    Integer freezePoints(Integer memberId, Integer points, Integer sourceType, String sourceId, String description, String operator);
+    Integer freezePoints(Integer memberId, Integer points, PointsSourceTypeEnum sourceType, String sourceId, String description, String operator);
 
     /**
      * 解冻会员积分
@@ -61,7 +62,7 @@ public interface MemberPointsService {
      * @param operator 操作人
      * @return 操作后的可用积分
      */
-    Integer unfreezePoints(Integer memberId, Integer points, Integer sourceType, String sourceId, String description, String operator);
+    Integer unfreezePoints(Integer memberId, Integer points, PointsSourceTypeEnum sourceType, String sourceId, String description, String operator);
 
     /**
      * 过期会员积分
@@ -74,7 +75,7 @@ public interface MemberPointsService {
      * @param operator 操作人
      * @return 操作后的可用积分
      */
-    Integer expirePoints(Integer memberId, Integer points, Integer sourceType, String sourceId, String description, String operator);
+    Integer expirePoints(Integer memberId, Integer points, PointsSourceTypeEnum sourceType, String sourceId, String description, String operator);
 
     /**
      * 获取会员积分信息

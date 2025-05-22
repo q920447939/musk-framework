@@ -1,5 +1,7 @@
 package org.example.musk.functions.member.level.service.impl;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
+import com.baomidou.dynamic.datasource.annotation.DSTransactional;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -7,6 +9,7 @@ import org.dromara.hutool.core.bean.BeanUtil;
 import org.example.musk.common.context.ThreadLocalTenantContext;
 import org.example.musk.common.exception.BusinessException;
 import org.example.musk.common.pojo.db.PageResult;
+import org.example.musk.constant.db.DBConstant;
 import org.example.musk.functions.cache.annotation.CacheEvict;
 import org.example.musk.functions.cache.annotation.Cacheable;
 import org.example.musk.functions.member.level.constant.MemberLevelConstant;
@@ -37,6 +40,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
+@DS(DBConstant.MEMBER_LEVEL)
 public class MemberGrowthValueServiceImpl implements MemberGrowthValueService {
 
     @Resource
@@ -57,8 +61,8 @@ public class MemberGrowthValueServiceImpl implements MemberGrowthValueService {
     private ApplicationEventPublisher applicationEventPublisher;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public Integer addGrowthValue(Integer memberId, Integer growthValue, Integer sourceType, String sourceId, String description, String operator) {
+    @DSTransactional(rollbackFor = Exception.class)
+    public Integer addGrowthValue(Integer memberId, Integer growthValue, GrowthValueSourceTypeEnum sourceType, String sourceId, String description, String operator) {
         if (growthValue <= 0) {
             throw new BusinessException("成长值必须大于0");
         }
@@ -105,7 +109,7 @@ public class MemberGrowthValueServiceImpl implements MemberGrowthValueService {
                 .changeValue(growthValue)
                 .beforeValue(beforeValue)
                 .afterValue(memberGrowthValue.getTotalGrowthValue())
-                .sourceType(sourceType)
+                .sourceType(sourceType.getValue())
                 .sourceId(sourceId)
                 .description(description)
                 .operator(operator)
@@ -118,15 +122,11 @@ public class MemberGrowthValueServiceImpl implements MemberGrowthValueService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public Integer deductGrowthValue(Integer memberId, Integer growthValue, Integer sourceType, String sourceId, String description, String operator) {
+    @DSTransactional(rollbackFor = Exception.class)
+    public Integer deductGrowthValue(Integer memberId, Integer growthValue, GrowthValueSourceTypeEnum sourceType, String sourceId, String description, String operator) {
         if (growthValue <= 0) {
             throw new BusinessException("成长值必须大于0");
         }
-
-        // 从线程上下文获取域ID
-        Integer domainId = ThreadLocalTenantContext.getDomainId();
-
         // 获取会员成长值信息
         MemberGrowthValueDO memberGrowthValue = memberGrowthValueMapper.selectByMemberId( memberId);
         if (memberGrowthValue == null || memberGrowthValue.getTotalGrowthValue() < growthValue) {
@@ -148,7 +148,7 @@ public class MemberGrowthValueServiceImpl implements MemberGrowthValueService {
                 .changeValue(growthValue)
                 .beforeValue(beforeValue)
                 .afterValue(memberGrowthValue.getTotalGrowthValue())
-                .sourceType(sourceType)
+                .sourceType(sourceType.getValue())
                 .sourceId(sourceId)
                 .description(description)
                 .operator(operator)
@@ -161,7 +161,7 @@ public class MemberGrowthValueServiceImpl implements MemberGrowthValueService {
     }
 
     @Override
-    @Cacheable(namespace = "MEMBER", key = "'growth:' + #memberId", expireSeconds = MemberLevelConstant.MEMBER_GROWTH_VALUE_CACHE_EXPIRE_SECONDS, autoTenantPrefix = true, autoDomainPrefix = true)
+    @Cacheable(namespace = "MEMBER", key = "'growth:' + #memberId", expireSeconds = MemberLevelConstant.MEMBER_GROWTH_VALUE_CACHE_EXPIRE_SECONDS)
     public MemberGrowthValueVO getMemberGrowthValue(Integer memberId) {
         // 从线程上下文获取域ID
         Integer domainId = ThreadLocalTenantContext.getDomainId();
@@ -233,12 +233,7 @@ public class MemberGrowthValueServiceImpl implements MemberGrowthValueService {
         for (MemberGrowthValueRecordDO record : page.getRecords()) {
             MemberGrowthValueRecordVO vo = BeanUtil.copyProperties(record, MemberGrowthValueRecordVO.class);
 
-            // 设置变更类型名称
-            if (record.getChangeType() == 1) {
-                vo.setChangeTypeName("增加");
-            } else if (record.getChangeType() == 2) {
-                vo.setChangeTypeName("减少");
-            }
+            vo.setChangeTypeName(PointsChangeTypeEnum.getByValue(record.getChangeType()).getName());
 
             // 设置来源类型名称
             GrowthValueSourceTypeEnum sourceType = GrowthValueSourceTypeEnum.getByValue(record.getSourceType());
@@ -257,7 +252,7 @@ public class MemberGrowthValueServiceImpl implements MemberGrowthValueService {
      *
      * @param memberId 会员ID
      */
-    @CacheEvict(namespace = "MEMBER", key = "'growth:' + #memberId", autoTenantPrefix = true, autoDomainPrefix = true)
+    @CacheEvict(namespace = "MEMBER", key = "'growth:' + #memberId")
     public void clearMemberGrowthValueCache(Integer memberId) {
         // 使用注解自动清除缓存，方法体为空
     }

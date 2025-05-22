@@ -155,11 +155,11 @@ private MemberPointsService memberPointsService;
 MemberLevelInfoVO levelInfo = memberLevelService.getMemberCurrentLevel(memberId);
 
 // 增加会员积分
-memberPointsService.addPoints(memberId, 100, PointsSourceTypeEnum.CONSUMPTION.getValue(), 
+memberPointsService.addPoints(memberId, 100, PointsSourceTypeEnum.CONSUMPTION,
     "ORDER123456", "购物奖励积分", "system");
 
 // 增加会员成长值
-memberGrowthValueService.addGrowthValue(memberId, 10, GrowthValueSourceTypeEnum.CONSUMPTION.getValue(), 
+memberGrowthValueService.addGrowthValue(memberId, 10, GrowthValueSourceTypeEnum.CONSUMPTION,
     "ORDER123456", "购物奖励成长值", "system");
 ```
 

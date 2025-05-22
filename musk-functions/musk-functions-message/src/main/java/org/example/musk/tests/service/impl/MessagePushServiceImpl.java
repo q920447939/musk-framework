@@ -1,6 +1,7 @@
 package org.example.musk.tests.service.impl;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
+import com.baomidou.dynamic.datasource.annotation.DSTransactional;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.example.musk.functions.message.constant.MessageConstant;
@@ -71,7 +72,7 @@ public class MessagePushServiceImpl implements MessagePushService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public boolean processMessagePush(Integer messageId, Integer userId, Integer sendRecordId) {
         try {
             // 获取消息

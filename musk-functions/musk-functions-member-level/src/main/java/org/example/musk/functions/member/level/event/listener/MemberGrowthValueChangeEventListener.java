@@ -1,7 +1,11 @@
 package org.example.musk.functions.member.level.event.listener;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
+import com.baomidou.dynamic.datasource.annotation.DSTransactional;
+import com.baomidou.dynamic.datasource.tx.DsPropagation;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.example.musk.constant.db.DBConstant;
 import org.example.musk.functions.member.level.dao.MemberGrowthValueRecordMapper;
 import org.example.musk.functions.member.level.event.MemberGrowthValueChangeEvent;
 import org.example.musk.functions.member.level.model.entity.MemberGrowthValueRecordDO;
@@ -19,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Component
 @Slf4j
+@DS(DBConstant.MEMBER_LEVEL)
 public class MemberGrowthValueChangeEventListener {
 
     @Resource
@@ -36,7 +41,7 @@ public class MemberGrowthValueChangeEventListener {
      */
     @EventListener
     @Async
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
+    @DSTransactional(propagation = DsPropagation.REQUIRED, rollbackFor = Exception.class)
     public void handleMemberGrowthValueChangeEvent(MemberGrowthValueChangeEvent event) {
         try {
             log.info("处理成长值变更事件，memberId={}, changeType={}, changeValue={}",

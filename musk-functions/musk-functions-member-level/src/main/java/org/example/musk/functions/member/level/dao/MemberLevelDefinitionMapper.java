@@ -19,7 +19,7 @@ public interface MemberLevelDefinitionMapper extends BaseMapperX<MemberLevelDefi
      *
      * @return 会员等级定义列表
      */
-    default List<MemberLevelDefinitionDO> selectListByTenantIdAndDomainId() {
+    default List<MemberLevelDefinitionDO> selectList() {
         return selectList(
                 new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<MemberLevelDefinitionDO>()
                         .eq(MemberLevelDefinitionDO::getDeleted, false)

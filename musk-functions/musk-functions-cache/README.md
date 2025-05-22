@@ -67,7 +67,7 @@ public class MenuServiceImpl implements MenuService {
 
     // 自动添加租户ID和域ID前缀
     @Override
-    @Cacheable(namespace = "MENU", key = "'tree'", expireSeconds = 3600, autoTenantPrefix = true, autoDomainPrefix = true)
+    @Cacheable(namespace = "MENU", key = "'tree'", expireSeconds = 3600)
     public List<SystemMenuTreeVO> getMenuTree() {
         // 从线程上下文获取租户ID和域ID
         Integer tenantId = ThreadLocalTenantContext.getTenantId();
@@ -100,7 +100,7 @@ public class MenuServiceImpl implements MenuService {
 
     // 清除缓存 - 自动添加租户ID和域ID前缀
     @Override
-    @CacheEvict(namespace = "MENU", pattern = "'tree:*'", autoTenantPrefix = true, autoDomainPrefix = true)
+    @CacheEvict(namespace = "MENU", pattern = "'tree:*'")
     public void clearMenuCache() {
         log.info("清除菜单缓存");
     }

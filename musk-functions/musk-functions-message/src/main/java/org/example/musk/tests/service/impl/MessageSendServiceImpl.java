@@ -1,6 +1,7 @@
 package org.example.musk.tests.service.impl;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
+import com.baomidou.dynamic.datasource.annotation.DSTransactional;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +60,7 @@ public class MessageSendServiceImpl implements MessageSendService {
     private MessagePushService messagePushService;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public boolean sendMessage(MessageSendReqVO sendReqVO) {
         // 校验消息存在
         SystemMessageDO message = messageManageService.getMessage(sendReqVO.getMessageId());
@@ -96,7 +97,7 @@ public class MessageSendServiceImpl implements MessageSendService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public boolean sendToUser(Integer messageId, Integer userId) {
         // 校验消息存在
         SystemMessageDO message = messageManageService.getMessage(messageId);
@@ -131,7 +132,7 @@ public class MessageSendServiceImpl implements MessageSendService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public int sendToUsers(Integer messageId, List<Integer> userIds) {
         // 校验消息存在
         SystemMessageDO message = messageManageService.getMessage(messageId);
@@ -177,7 +178,7 @@ public class MessageSendServiceImpl implements MessageSendService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public boolean sendToAllUsers(Integer messageId, Integer tenantId, Integer domainId) {
         // 校验消息存在
         SystemMessageDO message = messageManageService.getMessage(messageId);
@@ -204,7 +205,7 @@ public class MessageSendServiceImpl implements MessageSendService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public Integer sendTemplateMessage(MessageTemplateSendReqVO templateSendReqVO) {
         // 获取模板
         SystemMessageTemplateDO template = messageTemplateService.getMessageTemplateByCode(
@@ -250,7 +251,7 @@ public class MessageSendServiceImpl implements MessageSendService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public Integer sendTemplateMessageToUser(String templateCode, Map<String, Object> params, Integer userId) {
         // 创建模板发送请求
         MessageTemplateSendReqVO templateSendReqVO = new MessageTemplateSendReqVO();
@@ -266,7 +267,7 @@ public class MessageSendServiceImpl implements MessageSendService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public void processPendingMessages() {
         // 查询待发送的消息记录
         LambdaQueryWrapper<SystemMessageSendRecordDO> queryWrapper = new LambdaQueryWrapper<>();

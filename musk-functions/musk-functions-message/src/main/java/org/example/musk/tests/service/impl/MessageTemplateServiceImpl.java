@@ -1,6 +1,7 @@
 package org.example.musk.tests.service.impl;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
+import com.baomidou.dynamic.datasource.annotation.DSTransactional;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -46,7 +47,7 @@ public class MessageTemplateServiceImpl extends ServiceImpl<SystemMessageTemplat
     private static final Pattern TEMPLATE_VARIABLE_PATTERN = Pattern.compile("\\$\\{([^}]+)}");
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public Integer createMessageTemplate(MessageTemplateCreateReqVO createReqVO) {
         // 校验模板编码唯一性
         validateTemplateCodeUnique(createReqVO.getTemplateCode(), createReqVO.getTenantId(), createReqVO.getDomainId(), null);
@@ -76,7 +77,7 @@ public class MessageTemplateServiceImpl extends ServiceImpl<SystemMessageTemplat
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     @CacheEvict(namespace = "MESSAGE", pattern = "'template:*'")
     public boolean updateMessageTemplate(SystemMessageTemplateDO template) {
         // 校验模板存在
@@ -96,7 +97,7 @@ public class MessageTemplateServiceImpl extends ServiceImpl<SystemMessageTemplat
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     @CacheEvict(namespace = "MESSAGE", pattern = "'template:*'")
     public boolean deleteMessageTemplate(Integer templateId) {
         // 校验模板存在

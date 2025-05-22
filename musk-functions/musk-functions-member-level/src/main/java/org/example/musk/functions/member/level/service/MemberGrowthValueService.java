@@ -1,6 +1,7 @@
 package org.example.musk.functions.member.level.service;
 
 import org.example.musk.common.pojo.db.PageResult;
+import org.example.musk.functions.member.level.enums.GrowthValueSourceTypeEnum;
 import org.example.musk.functions.member.level.model.vo.MemberGrowthValueRecordVO;
 import org.example.musk.functions.member.level.model.vo.MemberGrowthValueVO;
 
@@ -22,7 +23,7 @@ public interface MemberGrowthValueService {
      * @param operator 操作人
      * @return 操作后的成长值
      */
-    Integer addGrowthValue(Integer memberId, Integer growthValue, Integer sourceType, String sourceId, String description, String operator);
+    Integer addGrowthValue(Integer memberId, Integer growthValue, GrowthValueSourceTypeEnum sourceType, String sourceId, String description, String operator);
 
     /**
      * 减少会员成长值
@@ -35,7 +36,7 @@ public interface MemberGrowthValueService {
      * @param operator 操作人
      * @return 操作后的成长值
      */
-    Integer deductGrowthValue(Integer memberId, Integer growthValue, Integer sourceType, String sourceId, String description, String operator);
+    Integer deductGrowthValue(Integer memberId, Integer growthValue, GrowthValueSourceTypeEnum sourceType, String sourceId, String description, String operator);
 
     /**
      * 获取会员成长值信息

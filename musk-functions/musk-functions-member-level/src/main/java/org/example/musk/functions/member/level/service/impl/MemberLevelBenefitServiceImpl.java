@@ -2,11 +2,14 @@ package org.example.musk.functions.member.level.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.dynamic.datasource.annotation.DS;
+import com.baomidou.dynamic.datasource.annotation.DSTransactional;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.hutool.core.bean.BeanUtil;
 import org.example.musk.common.context.ThreadLocalTenantContext;
 import org.example.musk.common.exception.BusinessException;
+import org.example.musk.constant.db.DBConstant;
 import org.example.musk.functions.cache.annotation.CacheEvict;
 import org.example.musk.functions.cache.annotation.Cacheable;
 import org.example.musk.functions.member.level.constant.MemberLevelConstant;
@@ -34,6 +37,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
+@DS(DBConstant.MEMBER_LEVEL)
 public class MemberLevelBenefitServiceImpl implements MemberLevelBenefitService {
 
     @Resource
@@ -49,7 +53,7 @@ public class MemberLevelBenefitServiceImpl implements MemberLevelBenefitService 
 
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public Integer createLevelBenefit(MemberLevelBenefitCreateReqVO createReqVO) {
 
         // 检查等级是否存在
@@ -76,7 +80,7 @@ public class MemberLevelBenefitServiceImpl implements MemberLevelBenefitService 
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public void updateLevelBenefit(MemberLevelBenefitUpdateReqVO updateReqVO) {
 
         // 检查权益是否存在
@@ -113,7 +117,7 @@ public class MemberLevelBenefitServiceImpl implements MemberLevelBenefitService 
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public void deleteLevelBenefit(Integer id) {
         // 检查权益是否存在
         MemberLevelBenefitDO benefit = memberLevelBenefitMapper.selectById(id);
@@ -133,7 +137,7 @@ public class MemberLevelBenefitServiceImpl implements MemberLevelBenefitService 
     }
 
     @Override
-    @Cacheable(namespace = "MEMBER", key = "'benefit:list:' + #levelId", expireSeconds = MemberLevelConstant.LEVEL_BENEFIT_LIST_CACHE_EXPIRE_SECONDS, autoTenantPrefix = true, autoDomainPrefix = true)
+    @Cacheable(namespace = "MEMBER", key = "'benefit:list:' + #levelId", expireSeconds = MemberLevelConstant.LEVEL_BENEFIT_LIST_CACHE_EXPIRE_SECONDS)
     public List<MemberLevelBenefitDO> getLevelBenefitList(Integer levelId) {
         // 从数据库中获取
         return memberLevelBenefitMapper.selectListByLevelId(levelId);
@@ -230,7 +234,7 @@ public class MemberLevelBenefitServiceImpl implements MemberLevelBenefitService 
      *
      * @param levelId 等级ID
      */
-    @CacheEvict(namespace = "MEMBER", key = "'benefit:list:' + #levelId", autoTenantPrefix = true, autoDomainPrefix = true)
+    @CacheEvict(namespace = "MEMBER", key = "'benefit:list:' + #levelId")
     public void clearLevelBenefitListCache(Integer levelId) {
         // 使用注解自动清除缓存，方法体为空
     }

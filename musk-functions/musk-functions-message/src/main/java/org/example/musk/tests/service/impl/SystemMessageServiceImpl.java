@@ -1,5 +1,6 @@
 package org.example.musk.tests.service.impl;
 
+import com.baomidou.dynamic.datasource.annotation.DSTransactional;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.example.musk.common.util.object.BeanUtils;
@@ -32,7 +33,7 @@ public class SystemMessageServiceImpl implements SystemMessageService {
     private MessageSendService messageSendService;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public Integer createAndSendMessage(SystemMessageCreateReqDTO messageDTO, Integer targetType, List<Integer> targetIds) {
         // 创建消息
         Integer messageId = createMessage(messageDTO);
@@ -47,7 +48,7 @@ public class SystemMessageServiceImpl implements SystemMessageService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public Integer createMessage(SystemMessageCreateReqDTO messageDTO) {
         // 转换DTO为VO
         MessageCreateReqVO createReqVO = BeanUtils.toBean(messageDTO, MessageCreateReqVO.class);
@@ -57,7 +58,7 @@ public class SystemMessageServiceImpl implements SystemMessageService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     public boolean sendMessage(Integer messageId, Integer targetType, List<Integer> targetIds) {
         // 创建发送请求
         MessageSendReqVO sendReqVO = new MessageSendReqVO();

@@ -5,6 +5,7 @@ import org.example.musk.common.context.ThreadLocalTenantContext;
 import org.example.musk.common.pojo.CommonResult;
 import org.example.musk.common.pojo.db.PageParam;
 import org.example.musk.common.pojo.db.PageResult;
+import org.example.musk.functions.member.level.enums.GrowthValueSourceTypeEnum;
 import org.example.musk.functions.member.level.model.vo.MemberGrowthValueRecordVO;
 import org.example.musk.functions.member.level.model.vo.MemberGrowthValueVO;
 import org.example.musk.functions.member.level.service.MemberGrowthValueService;
@@ -35,8 +36,13 @@ public class MemberGrowthValueController {
             @RequestParam("sourceId") String sourceId,
             @RequestParam("description") String description,
             @RequestParam("operator") String operator) {
+        // 将Integer类型的sourceType转换为枚举类型
+        GrowthValueSourceTypeEnum sourceTypeEnum = GrowthValueSourceTypeEnum.getByValue(sourceType);
+        if (sourceTypeEnum == null) {
+            throw new IllegalArgumentException("无效的来源类型: " + sourceType);
+        }
         return CommonResult.success(memberGrowthValueService.addGrowthValue(
-                memberId, growthValue, sourceType, sourceId, description, operator));
+                memberId, growthValue, sourceTypeEnum, sourceId, description, operator));
     }
 
     @PostMapping("/deduct")
@@ -47,8 +53,13 @@ public class MemberGrowthValueController {
             @RequestParam("sourceId") String sourceId,
             @RequestParam("description") String description,
             @RequestParam("operator") String operator) {
+        // 将Integer类型的sourceType转换为枚举类型
+        GrowthValueSourceTypeEnum sourceTypeEnum = GrowthValueSourceTypeEnum.getByValue(sourceType);
+        if (sourceTypeEnum == null) {
+            throw new IllegalArgumentException("无效的来源类型: " + sourceType);
+        }
         return CommonResult.success(memberGrowthValueService.deductGrowthValue(
-                memberId, growthValue, sourceType, sourceId, description, operator));
+                memberId, growthValue, sourceTypeEnum, sourceId, description, operator));
     }
 
     @GetMapping("/get")

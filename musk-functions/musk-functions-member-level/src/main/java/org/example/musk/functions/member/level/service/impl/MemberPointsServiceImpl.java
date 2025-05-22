@@ -1,11 +1,14 @@
 package org.example.musk.functions.member.level.service.impl;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
+import com.baomidou.dynamic.datasource.annotation.DSTransactional;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.hutool.core.bean.BeanUtil;
 import org.example.musk.common.exception.BusinessException;
 import org.example.musk.common.pojo.db.PageResult;
+import org.example.musk.constant.db.DBConstant;
 import org.example.musk.functions.cache.annotation.CacheEvict;
 import org.example.musk.functions.cache.annotation.Cacheable;
 import org.example.musk.functions.member.level.constant.MemberLevelConstant;
@@ -33,6 +36,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
+@DS(DBConstant.MEMBER_LEVEL)
 public class MemberPointsServiceImpl implements MemberPointsService {
 
     @Resource
@@ -47,9 +51,9 @@ public class MemberPointsServiceImpl implements MemberPointsService {
     private ApplicationEventPublisher applicationEventPublisher;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     @CacheEvict(namespace = "MEMBER", key = "'points:' + #memberId")
-    public Integer addPoints(Integer memberId, Integer points, Integer sourceType, String sourceId, String description, String operator) {
+    public Integer addPoints(Integer memberId, Integer points, PointsSourceTypeEnum sourceType, String sourceId, String description, String operator) {
         if (points <= 0) {
             throw new BusinessException("积分值必须大于0");
         }
@@ -87,7 +91,7 @@ public class MemberPointsServiceImpl implements MemberPointsService {
         record.setChangeValue(points);
         record.setBeforeValue(beforeValue);
         record.setAfterValue(memberPoints.getAvailablePoints());
-        record.setSourceType(sourceType);
+        record.setSourceType(sourceType.getValue());
         record.setSourceId(sourceId);
         record.setDescription(description);
         record.setOperator(operator);
@@ -115,9 +119,9 @@ public class MemberPointsServiceImpl implements MemberPointsService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     @CacheEvict(namespace = "MEMBER", key = "'points:' + #memberId")
-    public Integer deductPoints(Integer memberId, Integer points, Integer sourceType, String sourceId, String description, String operator) {
+    public Integer deductPoints(Integer memberId, Integer points, PointsSourceTypeEnum sourceType, String sourceId, String description, String operator) {
         if (points <= 0) {
             throw new BusinessException("积分值必须大于0");
         }
@@ -145,7 +149,7 @@ public class MemberPointsServiceImpl implements MemberPointsService {
         record.setChangeValue(points);
         record.setBeforeValue(beforeValue);
         record.setAfterValue(memberPoints.getAvailablePoints());
-        record.setSourceType(sourceType);
+        record.setSourceType(sourceType.getValue());
         record.setSourceId(sourceId);
         record.setDescription(description);
         record.setOperator(operator);
@@ -173,9 +177,9 @@ public class MemberPointsServiceImpl implements MemberPointsService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     @CacheEvict(namespace = "MEMBER", key = "'points:' + #memberId")
-    public Integer freezePoints(Integer memberId, Integer points, Integer sourceType, String sourceId, String description, String operator) {
+    public Integer freezePoints(Integer memberId, Integer points, PointsSourceTypeEnum sourceType, String sourceId, String description, String operator) {
         if (points <= 0) {
             throw new BusinessException("积分值必须大于0");
         }
@@ -203,7 +207,7 @@ public class MemberPointsServiceImpl implements MemberPointsService {
         record.setChangeValue(points);
         record.setBeforeValue(beforeValue);
         record.setAfterValue(memberPoints.getAvailablePoints());
-        record.setSourceType(sourceType);
+        record.setSourceType(sourceType.getValue());
         record.setSourceId(sourceId);
         record.setDescription(description);
         record.setOperator(operator);
@@ -231,9 +235,9 @@ public class MemberPointsServiceImpl implements MemberPointsService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     @CacheEvict(namespace = "MEMBER", key = "'points:' + #memberId")
-    public Integer unfreezePoints(Integer memberId, Integer points, Integer sourceType, String sourceId, String description, String operator) {
+    public Integer unfreezePoints(Integer memberId, Integer points, PointsSourceTypeEnum sourceType, String sourceId, String description, String operator) {
         if (points <= 0) {
             throw new BusinessException("积分值必须大于0");
         }
@@ -261,7 +265,7 @@ public class MemberPointsServiceImpl implements MemberPointsService {
         record.setChangeValue(points);
         record.setBeforeValue(beforeValue);
         record.setAfterValue(memberPoints.getAvailablePoints());
-        record.setSourceType(sourceType);
+        record.setSourceType(sourceType.getValue());
         record.setSourceId(sourceId);
         record.setDescription(description);
         record.setOperator(operator);
@@ -289,9 +293,9 @@ public class MemberPointsServiceImpl implements MemberPointsService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @DSTransactional(rollbackFor = Exception.class)
     @CacheEvict(namespace = "MEMBER", key = "'points:' + #memberId")
-    public Integer expirePoints(Integer memberId, Integer points, Integer sourceType, String sourceId, String description, String operator) {
+    public Integer expirePoints(Integer memberId, Integer points, PointsSourceTypeEnum sourceType, String sourceId, String description, String operator) {
         if (points <= 0) {
             throw new BusinessException("积分值必须大于0");
         }
@@ -319,7 +323,7 @@ public class MemberPointsServiceImpl implements MemberPointsService {
         record.setChangeValue(points);
         record.setBeforeValue(beforeValue);
         record.setAfterValue(memberPoints.getAvailablePoints());
-        record.setSourceType(sourceType);
+        record.setSourceType(sourceType.getValue());
         record.setSourceId(sourceId);
         record.setDescription(description);
         record.setOperator(operator);
