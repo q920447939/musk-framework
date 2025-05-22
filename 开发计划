@@ -7,4 +7,6 @@
     优先级高
 
     优先级中
+
     优先级低
+        1.会员等级变动表(MemberLevelChangeRecordDO) 为实现创建功能(应与MemberLevelServiceImpl做联动)
