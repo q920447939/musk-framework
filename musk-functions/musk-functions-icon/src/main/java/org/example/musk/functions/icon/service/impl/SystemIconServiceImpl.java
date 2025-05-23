@@ -39,7 +39,7 @@ public class SystemIconServiceImpl extends ServiceImpl<SystemIconMapper, SystemI
     private SystemIconResourceService systemIconResourceService;
 
     @Override
-    @CacheEvict(namespace = "ICON", pattern = "'icon:*'")
+    @CacheEvict(namespace = "ICON", pattern = "icon:*",beforeInvocation = true)
     public Integer createIcon(SystemIconDO icon) {
         // 校验图标编码唯一性
         validateIconCodeUnique(icon);
@@ -49,7 +49,7 @@ public class SystemIconServiceImpl extends ServiceImpl<SystemIconMapper, SystemI
     }
 
     @Override
-    @CacheEvict(namespace = "ICON", pattern = "'icon:*'")
+    @CacheEvict(namespace = "ICON", pattern = "icon:*",beforeInvocation = true)
     public void updateIcon(SystemIconDO icon) {
         // 校验图标存在
         validateIconExists(icon.getId());
@@ -60,7 +60,7 @@ public class SystemIconServiceImpl extends ServiceImpl<SystemIconMapper, SystemI
     }
 
     @Override
-    @CacheEvict(namespace = "ICON", pattern = "'icon:*'")
+    @CacheEvict(namespace = "ICON", pattern = "icon:*",beforeInvocation = true)
     public void deleteIcon(Integer id) {
         // 校验图标存在
         validateIconExists(id);
@@ -87,7 +87,7 @@ public class SystemIconServiceImpl extends ServiceImpl<SystemIconMapper, SystemI
     }
 
     @Override
-    @Cacheable(namespace = "ICON", key = "'icons:category:' + ':' + #categoryId", expireSeconds = IconConstant.ICON_CACHE_EXPIRE_SECONDS)
+    @Cacheable(namespace = "ICON", key = "'icon:category:' + ':' + #categoryId", expireSeconds = IconConstant.ICON_CACHE_EXPIRE_SECONDS)
     public List<SystemIconDO> getIconsByCategory(Integer categoryId) {
         return list(new LambdaQueryWrapperX<SystemIconDO>()
                 .eq(SystemIconDO::getCategoryId, categoryId)
