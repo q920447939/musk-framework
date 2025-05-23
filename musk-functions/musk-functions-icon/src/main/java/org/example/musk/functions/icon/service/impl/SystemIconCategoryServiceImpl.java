@@ -42,7 +42,7 @@ public class SystemIconCategoryServiceImpl extends ServiceImpl<SystemIconCategor
 
 
     @Override
-    @CacheEvict(namespace = "ICON", pattern = "'category:*'")
+    @CacheEvict(namespace = "ICON", pattern = "category:*", beforeInvocation = true)
     public Integer createCategory(SystemIconCategoryDO category) {
         // 校验分类编码唯一性
         validateCategoryCodeUnique(category);
@@ -52,7 +52,7 @@ public class SystemIconCategoryServiceImpl extends ServiceImpl<SystemIconCategor
     }
 
     @Override
-    @CacheEvict(namespace = "ICON", pattern = "'category:*'")
+    @CacheEvict(namespace = "ICON", pattern = "category:*", beforeInvocation = true)
     public void updateCategory(SystemIconCategoryDO category) {
         // 校验分类存在
         validateCategoryExists(category.getId());
@@ -63,7 +63,7 @@ public class SystemIconCategoryServiceImpl extends ServiceImpl<SystemIconCategor
     }
 
     @Override
-    @CacheEvict(namespace = "ICON", pattern = "'category:*'")
+    @CacheEvict(namespace = "ICON", pattern = "category:*", beforeInvocation = true)
     public void deleteCategory(Integer id) {
         // 检查是否有子分类
         if (hasChildCategory(id)) {
@@ -84,18 +84,16 @@ public class SystemIconCategoryServiceImpl extends ServiceImpl<SystemIconCategor
     }
 
     @Override
-    @Cacheable(namespace = "ICON", key = "'categories:root:' + #tenantId + ':' + #domainId", expireSeconds = IconConstant.CATEGORY_CACHE_EXPIRE_SECONDS)
-    public List<SystemIconCategoryDO> getRootCategories(Integer tenantId, Integer domainId) {
+    @Cacheable(namespace = "ICON", key = "'category:root:'", expireSeconds = IconConstant.CATEGORY_CACHE_EXPIRE_SECONDS)
+    public List<SystemIconCategoryDO> getRootCategories() {
         return list(new LambdaQueryWrapperX<SystemIconCategoryDO>()
                 .isNull(SystemIconCategoryDO::getParentId)
-                .eq(SystemIconCategoryDO::getTenantId, tenantId)
-                .eq(SystemIconCategoryDO::getDomainId, domainId)
                 .eq(SystemIconCategoryDO::getStatus, IconConstant.STATUS_NORMAL)
                 .orderByAsc(SystemIconCategoryDO::getDisplayOrder));
     }
 
     @Override
-    @Cacheable(namespace = "ICON", key = "'categories:children:' + #parentId", expireSeconds = IconConstant.CATEGORY_CACHE_EXPIRE_SECONDS)
+    @Cacheable(namespace = "ICON", key = "'category:children:'+ #parentId", expireSeconds = IconConstant.CATEGORY_CACHE_EXPIRE_SECONDS)
     public List<SystemIconCategoryDO> getChildCategories(Integer parentId) {
         return list(new LambdaQueryWrapperX<SystemIconCategoryDO>()
                 .eq(SystemIconCategoryDO::getParentId, parentId)
@@ -104,12 +102,10 @@ public class SystemIconCategoryServiceImpl extends ServiceImpl<SystemIconCategor
     }
 
     @Override
-    @Cacheable(namespace = "ICON", key = "'categories:tree:' + #tenantId + ':' + #domainId", expireSeconds = IconConstant.CATEGORY_CACHE_EXPIRE_SECONDS)
-    public List<SystemIconCategoryTreeVO> getCategoryTree(Integer tenantId, Integer domainId) {
+    @Cacheable(namespace = "ICON", key = "'category:tree:'", expireSeconds = IconConstant.CATEGORY_CACHE_EXPIRE_SECONDS)
+    public List<SystemIconCategoryTreeVO> getCategoryTree() {
         // 获取所有分类
         List<SystemIconCategoryDO> allCategories = list(new LambdaQueryWrapperX<SystemIconCategoryDO>()
-                .eq(SystemIconCategoryDO::getTenantId, tenantId)
-                .eq(SystemIconCategoryDO::getDomainId, domainId)
                 .eq(SystemIconCategoryDO::getStatus, IconConstant.STATUS_NORMAL)
                 .orderByAsc(SystemIconCategoryDO::getDisplayOrder));
 
@@ -120,9 +116,9 @@ public class SystemIconCategoryServiceImpl extends ServiceImpl<SystemIconCategor
     /**
      * 构建分类树
      */
-    private List<SystemIconCategoryTreeVO> buildCategoryTree(List<SystemIconCategoryDO> categories) {
+    private List<SystemIconCategoryTreeVO> buildCategoryTree(List<SystemIconCategoryDO> category) {
         // 转换为VO
-        List<SystemIconCategoryTreeVO> categoryVOs = BeanUtils.toBean(categories, SystemIconCategoryTreeVO.class);
+        List<SystemIconCategoryTreeVO> categoryVOs = BeanUtils.toBean(category, SystemIconCategoryTreeVO.class);
 
         // 按父ID分组
         Map<Integer, List<SystemIconCategoryTreeVO>> parentIdMap = categoryVOs.stream()

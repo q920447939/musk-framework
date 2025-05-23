@@ -46,11 +46,9 @@ public interface SystemIconCategoryService extends IService<SystemIconCategoryDO
     /**
      * 获取所有顶级分类
      *
-     * @param tenantId 租户ID
-     * @param domainId 域ID
      * @return 顶级分类列表
      */
-    List<SystemIconCategoryDO> getRootCategories(Integer tenantId, Integer domainId);
+    List<SystemIconCategoryDO> getRootCategories();
 
     /**
      * 获取子分类
@@ -63,9 +61,7 @@ public interface SystemIconCategoryService extends IService<SystemIconCategoryDO
     /**
      * 获取分类树
      *
-     * @param tenantId 租户ID
-     * @param domainId 域ID
      * @return 分类树
      */
-    List<SystemIconCategoryTreeVO> getCategoryTree(Integer tenantId, Integer domainId);
+    List<SystemIconCategoryTreeVO> getCategoryTree();
 }

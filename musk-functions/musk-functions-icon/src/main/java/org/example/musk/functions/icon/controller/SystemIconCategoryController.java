@@ -48,9 +48,6 @@ public class SystemIconCategoryController {
     public CommonResult<Integer> createCategory(@Valid @RequestBody SystemIconCategoryCreateReqVO createReqVO) {
         // 转换请求VO为DO
         SystemIconCategoryDO category = BeanUtils.toBean(createReqVO, SystemIconCategoryDO.class);
-        // 设置当前租户和域
-        category.setTenantId(ThreadLocalTenantContext.getTenantId());
-        category.setDomainId(ThreadLocalTenantContext.getDomainId());
         // 创建分类
         Integer categoryId = systemIconCategoryService.createCategory(category);
         return success(categoryId);
@@ -83,9 +80,7 @@ public class SystemIconCategoryController {
     @GetMapping("/list-root")
     @RequirePermission(resourceType = ResourceTypeEnum.ICON, operationType = OperationTypeEnum.READ)
     public CommonResult<List<SystemIconCategoryRespVO>> getRootCategories() {
-        Integer tenantId = ThreadLocalTenantContext.getTenantId();
-        Integer domainId = ThreadLocalTenantContext.getDomainId();
-        List<SystemIconCategoryDO> categories = systemIconCategoryService.getRootCategories(tenantId, domainId);
+        List<SystemIconCategoryDO> categories = systemIconCategoryService.getRootCategories();
         return success(BeanUtils.toBean(categories, SystemIconCategoryRespVO.class));
     }
 
@@ -99,9 +94,7 @@ public class SystemIconCategoryController {
     @GetMapping("/tree")
     @RequirePermission(resourceType = ResourceTypeEnum.ICON, operationType = OperationTypeEnum.READ)
     public CommonResult<List<SystemIconCategoryTreeVO>> getCategoryTree() {
-        Integer tenantId = ThreadLocalTenantContext.getTenantId();
-        Integer domainId = ThreadLocalTenantContext.getDomainId();
-        List<SystemIconCategoryTreeVO> tree = systemIconCategoryService.getCategoryTree(tenantId, domainId);
+        List<SystemIconCategoryTreeVO> tree = systemIconCategoryService.getCategoryTree();
         return success(tree);
     }
 }

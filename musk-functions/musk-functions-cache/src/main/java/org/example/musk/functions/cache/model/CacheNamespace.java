@@ -43,6 +43,11 @@ public enum CacheNamespace {
     MESSAGE("MESSAGE"),
 
     /**
+     * 图标
+     */
+    ICON("ICON"),
+
+    /**
      * 系统参数缓存
      */
     SYSTEM_PARAMS("system:params");

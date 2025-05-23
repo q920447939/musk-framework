@@ -87,6 +87,11 @@
             <artifactId>musk-functions-member-level</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>musk-functions-icon</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
