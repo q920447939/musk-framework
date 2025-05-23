@@ -23,11 +23,11 @@ CREATE TABLE `system_icon` (
 -- 图标资源表
 CREATE TABLE `system_icon_resource` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '资源ID',
+  `tenant_id` int DEFAULT NULL COMMENT '租户ID',
+  `domain_id` int DEFAULT NULL COMMENT '域ID',
   `icon_id` int NOT NULL COMMENT '图标ID',
-  `platform_type` int NOT NULL COMMENT '平台类型（1:APP 2:WEB 3:通用）',
   `resource_type` tinyint NOT NULL COMMENT '资源类型（1:URL 2:Base64 3:字体图标）',
   `resource_url` varchar(500) DEFAULT NULL COMMENT '资源URL',
-  `resource_content` text DEFAULT NULL COMMENT '资源内容（Base64或字体图标代码）',
   `width` int DEFAULT NULL COMMENT '宽度（像素）',
   `height` int DEFAULT NULL COMMENT '高度（像素）',
   `version` varchar(20) DEFAULT NULL COMMENT '版本号',
@@ -39,7 +39,7 @@ CREATE TABLE `system_icon_resource` (
   `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
   KEY `idx_icon_id` (`icon_id`),
-  KEY `idx_platform_type` (`platform_type`)
+  KEY `idx_tenant_domain` (`tenant_id`, `domain_id`, `deleted`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='图标资源表';
 
 -- 图标分类表

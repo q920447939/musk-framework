@@ -25,10 +25,10 @@ public class SystemIconResourceUpdateReqVO {
     private Integer iconId;
 
     /**
-     * 平台类型（1:APP 2:WEB 3:通用）
+     * 域ID
      */
-    @NotNull(message = "平台类型不能为空")
-    private Integer platformType;
+    @NotNull(message = "域ID不能为空")
+    private Integer domainId;
 
     /**
      * 资源类型（1:URL 2:Base64 3:字体图标）
@@ -42,10 +42,7 @@ public class SystemIconResourceUpdateReqVO {
     @Size(max = 500, message = "资源URL长度不能超过500")
     private String resourceUrl;
 
-    /**
-     * 资源内容（Base64或字体图标代码）
-     */
-    private String resourceContent;
+
 
     /**
      * 宽度（像素）

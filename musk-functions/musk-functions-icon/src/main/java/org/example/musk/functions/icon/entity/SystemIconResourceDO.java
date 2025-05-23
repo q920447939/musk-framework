@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.example.musk.common.pojo.db.BaseDO;
+import org.example.musk.common.pojo.db.DomainBaseDO;
 
 /**
  * 图标资源表 DO
@@ -22,7 +22,7 @@ import org.example.musk.common.pojo.db.BaseDO;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SystemIconResourceDO extends BaseDO {
+public class SystemIconResourceDO extends DomainBaseDO {
 
     /**
      * 资源ID
@@ -35,10 +35,7 @@ public class SystemIconResourceDO extends BaseDO {
      */
     private Integer iconId;
 
-    /**
-     * 平台类型（1:APP 2:WEB 3:通用）
-     */
-    private Integer platformType;
+
 
     /**
      * 资源类型（1:URL 2:Base64 3:字体图标）
@@ -50,10 +47,6 @@ public class SystemIconResourceDO extends BaseDO {
      */
     private String resourceUrl;
 
-    /**
-     * 资源内容（Base64或字体图标代码）
-     */
-    private String resourceContent;
 
     /**
      * 宽度（像素）

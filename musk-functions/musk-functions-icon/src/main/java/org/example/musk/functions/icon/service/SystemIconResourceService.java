@@ -51,20 +51,10 @@ public interface SystemIconResourceService extends IService<SystemIconResourceDO
     List<SystemIconResourceDO> getResourcesByIconId(Integer iconId);
 
     /**
-     * 获取图标在特定平台的资源
-     *
-     * @param iconId 图标ID
-     * @param platformType 平台类型
-     * @return 图标资源列表
-     */
-    List<SystemIconResourceDO> getResourcesByIconIdAndPlatform(Integer iconId, Integer platformType);
-
-    /**
      * 获取图标的默认资源
      *
      * @param iconId 图标ID
-     * @param platformType 平台类型
      * @return 默认图标资源
      */
-    SystemIconResourceDO getDefaultResource(Integer iconId, Integer platformType);
+    SystemIconResourceDO getDefaultResource(Integer iconId);
 }

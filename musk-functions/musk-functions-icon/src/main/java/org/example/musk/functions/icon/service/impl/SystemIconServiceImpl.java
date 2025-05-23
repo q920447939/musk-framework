@@ -36,16 +36,7 @@ import java.util.List;
 public class SystemIconServiceImpl extends ServiceImpl<SystemIconMapper, SystemIconDO> implements SystemIconService {
 
     @Resource
-    private SystemIconMapper systemIconMapper;
-
-    @Resource
     private SystemIconResourceService systemIconResourceService;
-
-    @Autowired
-    private CacheManager cacheManager;
-
-    @Autowired
-    private CacheKeyBuilder cacheKeyBuilder;
 
     @Override
     @CacheEvict(namespace = "ICON", pattern = "'icon:*'")
@@ -89,26 +80,22 @@ public class SystemIconServiceImpl extends ServiceImpl<SystemIconMapper, SystemI
     }
 
     @Override
-    @Cacheable(namespace = "ICON", key = "'icon:code:' + #tenantId + ':' + #domainId + ':' + #iconCode", expireSeconds = IconConstant.ICON_CACHE_EXPIRE_SECONDS)
-    public SystemIconDO getIconByCode(String iconCode, Integer tenantId, Integer domainId) {
+    @Cacheable(namespace = "ICON", key = "'icon:code:' + ':' + #iconCode", expireSeconds = IconConstant.ICON_CACHE_EXPIRE_SECONDS)
+    public SystemIconDO getIconByCode(String iconCode) {
         return baseMapper.selectOne(new LambdaQueryWrapperX<SystemIconDO>()
-                .eq(SystemIconDO::getIconCode, iconCode)
-                .eq(SystemIconDO::getTenantId, tenantId)
-                .eq(SystemIconDO::getDomainId, domainId));
+                .eq(SystemIconDO::getIconCode, iconCode));
     }
 
     @Override
-    @Cacheable(namespace = "ICON", key = "'icons:category:' + #tenantId + ':' + #domainId + ':' + #categoryId", expireSeconds = IconConstant.ICON_CACHE_EXPIRE_SECONDS)
-    public List<SystemIconDO> getIconsByCategory(Integer categoryId, Integer tenantId, Integer domainId) {
+    @Cacheable(namespace = "ICON", key = "'icons:category:' + ':' + #categoryId", expireSeconds = IconConstant.ICON_CACHE_EXPIRE_SECONDS)
+    public List<SystemIconDO> getIconsByCategory(Integer categoryId) {
         return list(new LambdaQueryWrapperX<SystemIconDO>()
                 .eq(SystemIconDO::getCategoryId, categoryId)
-                .eq(SystemIconDO::getTenantId, tenantId)
-                .eq(SystemIconDO::getDomainId, domainId)
                 .eq(SystemIconDO::getStatus, IconConstant.STATUS_NORMAL));
     }
 
     @Override
-    public List<SystemIconDO> searchIcons(String keyword, Integer tenantId, Integer domainId) {
+    public List<SystemIconDO> searchIcons(String keyword) {
         return list(new LambdaQueryWrapperX<SystemIconDO>()
                 .and(w -> w
                         .like(SystemIconDO::getIconName, keyword)
@@ -116,8 +103,6 @@ public class SystemIconServiceImpl extends ServiceImpl<SystemIconMapper, SystemI
                         .like(SystemIconDO::getIconCode, keyword)
                         .or()
                         .like(SystemIconDO::getDescription, keyword))
-                .eq(SystemIconDO::getTenantId, tenantId)
-                .eq(SystemIconDO::getDomainId, domainId)
                 .eq(SystemIconDO::getStatus, IconConstant.STATUS_NORMAL));
     }
 
@@ -125,7 +110,7 @@ public class SystemIconServiceImpl extends ServiceImpl<SystemIconMapper, SystemI
      * 校验图标编码唯一性
      */
     private void validateIconCodeUnique(SystemIconDO icon) {
-        SystemIconDO existingIcon = getIconByCode(icon.getIconCode(), icon.getTenantId(), icon.getDomainId());
+        SystemIconDO existingIcon = getIconByCode(icon.getIconCode());
         if (existingIcon != null && !existingIcon.getId().equals(icon.getId())) {
             throw new IconException(IconException.ICON_CODE_DUPLICATE);
         }

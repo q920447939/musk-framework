@@ -33,21 +33,12 @@ import java.util.List;
 @DS(DBConstant.SYSTEM)
 public class SystemIconResourceServiceImpl extends ServiceImpl<SystemIconResourceMapper, SystemIconResourceDO> implements SystemIconResourceService {
 
-    @Resource
-    private SystemIconResourceMapper systemIconResourceMapper;
-
-    @Autowired
-    private CacheManager cacheManager;
-
-    @Autowired
-    private CacheKeyBuilder cacheKeyBuilder;
-
     @Override
     @CacheEvict(namespace = "ICON", pattern = "'resource:*'")
     public Integer createIconResource(SystemIconResourceDO resource) {
-        // 如果设置为默认资源，则将同一图标同一平台的其他资源设为非默认
+        // 如果设置为默认资源，则将同一图标同一域的其他资源设为非默认
         if (Boolean.TRUE.equals(resource.getIsDefault())) {
-            updateDefaultResource(resource.getIconId(), resource.getPlatformType());
+            updateDefaultResource(resource.getIconId());
         }
         // 保存资源
         save(resource);
@@ -59,9 +50,9 @@ public class SystemIconResourceServiceImpl extends ServiceImpl<SystemIconResourc
     public void updateIconResource(SystemIconResourceDO resource) {
         // 校验资源存在
         validateResourceExists(resource.getId());
-        // 如果设置为默认资源，则将同一图标同一平台的其他资源设为非默认
+        // 如果设置为默认资源，则将同一图标同一域的其他资源设为非默认
         if (Boolean.TRUE.equals(resource.getIsDefault())) {
-            updateDefaultResource(resource.getIconId(), resource.getPlatformType());
+            updateDefaultResource(resource.getIconId());
         }
         // 更新资源
         updateById(resource);
@@ -93,30 +84,21 @@ public class SystemIconResourceServiceImpl extends ServiceImpl<SystemIconResourc
                 .eq(SystemIconResourceDO::getIconId, iconId));
     }
 
-    @Override
-    @Cacheable(namespace = "ICON", key = "'resources:icon:platform:' + #iconId + ':' + #platformType", expireSeconds = IconConstant.RESOURCE_CACHE_EXPIRE_SECONDS)
-    public List<SystemIconResourceDO> getResourcesByIconIdAndPlatform(Integer iconId, Integer platformType) {
-        return list(new LambdaQueryWrapperX<SystemIconResourceDO>()
-                .eq(SystemIconResourceDO::getIconId, iconId)
-                .eq(SystemIconResourceDO::getPlatformType, platformType));
-    }
 
     @Override
-    @Cacheable(namespace = "ICON", key = "'resource:default:' + #iconId + ':' + #platformType", expireSeconds = IconConstant.RESOURCE_CACHE_EXPIRE_SECONDS)
-    public SystemIconResourceDO getDefaultResource(Integer iconId, Integer platformType) {
+    @Cacheable(namespace = "ICON", key = "'resource:default:' + #iconId + ':' ", expireSeconds = IconConstant.RESOURCE_CACHE_EXPIRE_SECONDS)
+    public SystemIconResourceDO getDefaultResource(Integer iconId) {
         return getOne(new LambdaQueryWrapperX<SystemIconResourceDO>()
                 .eq(SystemIconResourceDO::getIconId, iconId)
-                .eq(SystemIconResourceDO::getPlatformType, platformType)
                 .eq(SystemIconResourceDO::getIsDefault, true));
     }
 
     /**
      * 更新默认资源
      */
-    private void updateDefaultResource(Integer iconId, Integer platformType) {
+    private void updateDefaultResource(Integer iconId) {
         update(new LambdaUpdateWrapper<SystemIconResourceDO>()
                 .eq(SystemIconResourceDO::getIconId, iconId)
-                .eq(SystemIconResourceDO::getPlatformType, platformType)
                 .set(SystemIconResourceDO::getIsDefault, false));
     }
 

@@ -23,9 +23,9 @@ public class SystemIconResourceRespVO {
     private Integer iconId;
 
     /**
-     * 平台类型（1:APP 2:WEB 3:通用）
+     * 域ID
      */
-    private Integer platformType;
+    private Integer domainId;
 
     /**
      * 资源类型（1:URL 2:Base64 3:字体图标）
@@ -37,10 +37,7 @@ public class SystemIconResourceRespVO {
      */
     private String resourceUrl;
 
-    /**
-     * 资源内容（Base64或字体图标代码）
-     */
-    private String resourceContent;
+
 
     /**
      * 宽度（像素）

@@ -121,12 +121,13 @@ resource.setIsDefault(true);
 Integer resourceId = systemIconResourceService.createIconResource(resource);
 
 // 获取图标的默认资源
-SystemIconResourceDO defaultResource = systemIconResourceService.getDefaultResource(iconId, 1);
+SystemIconResourceDO defaultResource = systemIconResourceService.getDefaultResource(iconId, domainId);
 ```
 
 ## 注意事项
 
 1. 图标编码在同一租户和域下必须唯一
 2. 删除图标前，需要确保该图标没有被其他模块引用
-3. 图标资源支持多种类型，包括URL、Base64和字体图标
-4. 图标数据会被缓存，以提高查询性能
+3. 图标资源支持多种类型，通过resourceType区分，统一使用resourceUrl存储资源地址
+4. 图标资源通过domainId区分不同域的资源，不再使用platformType
+5. 图标数据会被缓存，以提高查询性能

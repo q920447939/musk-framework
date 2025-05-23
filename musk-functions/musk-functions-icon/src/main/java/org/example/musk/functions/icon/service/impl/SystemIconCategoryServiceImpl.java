@@ -8,8 +8,6 @@ import org.example.musk.common.util.object.BeanUtils;
 import org.example.musk.constant.db.DBConstant;
 import org.example.musk.functions.cache.annotation.CacheEvict;
 import org.example.musk.functions.cache.annotation.Cacheable;
-import org.example.musk.functions.cache.core.CacheKeyBuilder;
-import org.example.musk.functions.cache.core.CacheManager;
 import org.example.musk.functions.icon.constant.IconConstant;
 import org.example.musk.functions.icon.controller.vo.SystemIconCategoryTreeVO;
 import org.example.musk.functions.icon.dao.SystemIconCategoryMapper;
@@ -19,7 +17,6 @@ import org.example.musk.functions.icon.exception.IconException;
 import org.example.musk.functions.icon.service.SystemIconCategoryService;
 import org.example.musk.functions.icon.service.SystemIconService;
 import org.example.musk.middleware.mybatisplus.mybatis.core.query.LambdaQueryWrapperX;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -41,16 +38,8 @@ import java.util.stream.Collectors;
 public class SystemIconCategoryServiceImpl extends ServiceImpl<SystemIconCategoryMapper, SystemIconCategoryDO> implements SystemIconCategoryService {
 
     @Resource
-    private SystemIconCategoryMapper systemIconCategoryMapper;
-
-    @Resource
     private SystemIconService systemIconService;
 
-    @Autowired
-    private CacheManager cacheManager;
-
-    @Autowired
-    private CacheKeyBuilder cacheKeyBuilder;
 
     @Override
     @CacheEvict(namespace = "ICON", pattern = "'category:*'")
@@ -76,14 +65,12 @@ public class SystemIconCategoryServiceImpl extends ServiceImpl<SystemIconCategor
     @Override
     @CacheEvict(namespace = "ICON", pattern = "'category:*'")
     public void deleteCategory(Integer id) {
-        // 校验分类存在
-        SystemIconCategoryDO category = validateCategoryExists(id);
         // 检查是否有子分类
         if (hasChildCategory(id)) {
             throw new IconException(IconException.CATEGORY_HAS_CHILDREN);
         }
         // 检查是否有图标引用
-        if (hasIcons(id, category.getTenantId(), category.getDomainId())) {
+        if (hasIcons(id)) {
             throw new IconException(IconException.CATEGORY_HAS_ICONS);
         }
         // 删除分类
@@ -186,8 +173,8 @@ public class SystemIconCategoryServiceImpl extends ServiceImpl<SystemIconCategor
     /**
      * 检查分类下是否有图标
      */
-    private boolean hasIcons(Integer categoryId, Integer tenantId, Integer domainId) {
-        List<SystemIconDO> icons = systemIconService.getIconsByCategory(categoryId, tenantId, domainId);
+    private boolean hasIcons(Integer categoryId) {
+        List<SystemIconDO> icons = systemIconService.getIconsByCategory(categoryId);
         return !icons.isEmpty();
     }
 }

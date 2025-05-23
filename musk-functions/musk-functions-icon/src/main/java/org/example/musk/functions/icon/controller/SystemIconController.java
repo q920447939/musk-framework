@@ -53,9 +53,6 @@ public class SystemIconController {
     public CommonResult<Integer> createIcon(@Valid @RequestBody SystemIconCreateReqVO createReqVO) {
         // 转换请求VO为DO
         SystemIconDO icon = BeanUtils.toBean(createReqVO, SystemIconDO.class);
-        // 设置当前租户和域
-        icon.setTenantId(ThreadLocalTenantContext.getTenantId());
-        icon.setDomainId(ThreadLocalTenantContext.getDomainId());
         // 创建图标
         Integer iconId = systemIconService.createIcon(icon);
         return success(iconId);
@@ -88,27 +85,21 @@ public class SystemIconController {
     @GetMapping("/get-by-code")
     @RequirePermission(resourceType = ResourceTypeEnum.ICON, operationType = OperationTypeEnum.READ)
     public CommonResult<SystemIconRespVO> getIconByCode(@RequestParam("code") String code) {
-        Integer tenantId = ThreadLocalTenantContext.getTenantId();
-        Integer domainId = ThreadLocalTenantContext.getDomainId();
-        SystemIconDO icon = systemIconService.getIconByCode(code, tenantId, domainId);
+        SystemIconDO icon = systemIconService.getIconByCode(code);
         return success(BeanUtils.toBean(icon, SystemIconRespVO.class));
     }
 
     @GetMapping("/list-by-category")
     @RequirePermission(resourceType = ResourceTypeEnum.ICON, operationType = OperationTypeEnum.READ)
     public CommonResult<List<SystemIconRespVO>> getIconsByCategory(@RequestParam("categoryId") Integer categoryId) {
-        Integer tenantId = ThreadLocalTenantContext.getTenantId();
-        Integer domainId = ThreadLocalTenantContext.getDomainId();
-        List<SystemIconDO> icons = systemIconService.getIconsByCategory(categoryId, tenantId, domainId);
+        List<SystemIconDO> icons = systemIconService.getIconsByCategory(categoryId);
         return success(BeanUtils.toBean(icons, SystemIconRespVO.class));
     }
 
     @GetMapping("/search")
     @RequirePermission(resourceType = ResourceTypeEnum.ICON, operationType = OperationTypeEnum.READ)
     public CommonResult<List<SystemIconRespVO>> searchIcons(@RequestParam("keyword") String keyword) {
-        Integer tenantId = ThreadLocalTenantContext.getTenantId();
-        Integer domainId = ThreadLocalTenantContext.getDomainId();
-        List<SystemIconDO> icons = systemIconService.searchIcons(keyword, tenantId, domainId);
+        List<SystemIconDO> icons = systemIconService.searchIcons(keyword);
         return success(BeanUtils.toBean(icons, SystemIconRespVO.class));
     }
 
@@ -119,21 +110,4 @@ public class SystemIconController {
         return success(BeanUtils.toBean(resources, SystemIconResourceRespVO.class));
     }
 
-    @GetMapping("/get-platform-resources")
-    @RequirePermission(resourceType = ResourceTypeEnum.ICON, operationType = OperationTypeEnum.READ)
-    public CommonResult<List<SystemIconResourceRespVO>> getPlatformResources(
-            @RequestParam("iconId") Integer iconId,
-            @RequestParam("platformType") Integer platformType) {
-        List<SystemIconResourceDO> resources = systemIconResourceService.getResourcesByIconIdAndPlatform(iconId, platformType);
-        return success(BeanUtils.toBean(resources, SystemIconResourceRespVO.class));
-    }
-
-    @GetMapping("/get-default-resource")
-    @RequirePermission(resourceType = ResourceTypeEnum.ICON, operationType = OperationTypeEnum.READ)
-    public CommonResult<SystemIconResourceRespVO> getDefaultResource(
-            @RequestParam("iconId") Integer iconId,
-            @RequestParam("platformType") Integer platformType) {
-        SystemIconResourceDO resource = systemIconResourceService.getDefaultResource(iconId, platformType);
-        return success(BeanUtils.toBean(resource, SystemIconResourceRespVO.class));
-    }
 }

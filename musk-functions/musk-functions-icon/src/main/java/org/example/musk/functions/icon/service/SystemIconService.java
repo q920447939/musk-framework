@@ -46,29 +46,23 @@ public interface SystemIconService extends IService<SystemIconDO> {
      * 根据编码获取图标
      *
      * @param iconCode 图标编码
-     * @param tenantId 租户ID
-     * @param domainId 域ID
      * @return 图标信息
      */
-    SystemIconDO getIconByCode(String iconCode, Integer tenantId, Integer domainId);
+    SystemIconDO getIconByCode(String iconCode);
 
     /**
      * 获取分类下的图标列表
      *
      * @param categoryId 分类ID
-     * @param tenantId 租户ID
-     * @param domainId 域ID
      * @return 图标列表
      */
-    List<SystemIconDO> getIconsByCategory(Integer categoryId, Integer tenantId, Integer domainId);
+    List<SystemIconDO> getIconsByCategory(Integer categoryId);
 
     /**
      * 搜索图标
      *
      * @param keyword 关键词
-     * @param tenantId 租户ID
-     * @param domainId 域ID
      * @return 图标列表
      */
-    List<SystemIconDO> searchIcons(String keyword, Integer tenantId, Integer domainId);
+    List<SystemIconDO> searchIcons(String keyword);
 }
