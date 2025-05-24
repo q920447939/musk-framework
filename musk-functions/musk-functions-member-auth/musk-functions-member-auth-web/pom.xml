@@ -3,10 +3,10 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.example</groupId>
-        <artifactId>musk-auth</artifactId>
+        <artifactId>musk-functions-member-auth</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>musk-auth-web</artifactId>
+    <artifactId>musk-functions-member-auth-web</artifactId>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
@@ -18,7 +18,7 @@
 
         <dependency>
             <groupId>org.example</groupId>
-            <artifactId>musk-auth-event</artifactId>
+            <artifactId>musk-functions-member-auth-event</artifactId>
         </dependency>
         <dependency>
             <groupId>org.example</groupId>

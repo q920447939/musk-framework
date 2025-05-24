@@ -25,7 +25,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-@DS(DBConstant.SYSTEM)
+@DS(DBConstant.DEFAULT_LOG)
 public class ResourceLogServiceImpl implements ResourceLogService {
 
     @Resource

@@ -10,7 +10,6 @@
     <description>web-base</description>
 
     <modules>
-        <module>musk-auth</module>
         <module>musk-dependency</module>
         <module>musk-common</module>
         <module>musk-frame-core</module>

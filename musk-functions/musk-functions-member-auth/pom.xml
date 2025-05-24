@@ -1,0 +1,27 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.example</groupId>
+        <artifactId>musk-functions</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>musk-functions-member-auth</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+
+    <modules>
+        <module>musk-functions-member-auth-dao</module>
+        <module>musk-functions-member-auth-service</module>
+        <module>musk-functions-member-auth-web</module>
+        <module>musk-functions-member-auth-entity</module>
+        <module>musk-auth-test</module>
+        <module>musk-functions-member-auth-enums</module>
+        <module>musk-functions-member-auth-event</module>
+        <module>musk-functions-member-auth-constant</module>
+    </modules>
+
+
+
+</project>

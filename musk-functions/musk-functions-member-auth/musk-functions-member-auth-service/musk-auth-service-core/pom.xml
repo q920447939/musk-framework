@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.example</groupId>
-        <artifactId>musk-auth-service</artifactId>
+        <artifactId>musk-functions-member-auth-service</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
@@ -28,15 +28,15 @@
         </dependency>
         <dependency>
             <groupId>org.example</groupId>
-            <artifactId>musk-auth-dao</artifactId>
+            <artifactId>musk-functions-member-auth-dao</artifactId>
         </dependency>
         <dependency>
             <groupId>org.example</groupId>
-            <artifactId>musk-auth-constant</artifactId>
+            <artifactId>musk-functions-member-auth-constant</artifactId>
         </dependency>
         <dependency>
             <groupId>org.example</groupId>
-            <artifactId>musk-auth-enums</artifactId>
+            <artifactId>musk-functions-member-auth-enums</artifactId>
         </dependency>
 
         <dependency>

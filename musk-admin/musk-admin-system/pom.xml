@@ -35,7 +35,7 @@
 
         <dependency>
             <groupId>org.example</groupId>
-            <artifactId>musk-auth-web</artifactId>
+            <artifactId>musk-functions-member-auth-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.example</groupId>

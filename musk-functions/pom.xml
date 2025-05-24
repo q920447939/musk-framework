@@ -18,6 +18,7 @@
         <module>musk-functions-message</module>
         <module>musk-functions-member-level</module>
         <module>musk-functions-resource</module>
+        <module>musk-functions-member-auth</module>
     </modules>
 
     <properties>
