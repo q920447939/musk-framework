@@ -44,13 +44,6 @@ public @interface Cacheable {
      */
     boolean cacheNullValues() default false;
 
-    /**
-     * 条件表达式
-     * <p>
-     * 只有当表达式结果为true时才进行缓存，支持SpEL表达式
-     * 如果为空字符串，则表示无条件缓存
-     */
-    String condition() default "";
 
     /**
      * 是否自动添加租户ID前缀

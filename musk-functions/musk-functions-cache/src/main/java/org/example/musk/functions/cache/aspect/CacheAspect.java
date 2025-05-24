@@ -1,9 +1,12 @@
 package org.example.musk.functions.cache.aspect;
 
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.example.musk.common.context.ThreadLocalTenantContext;
 import org.example.musk.functions.cache.annotation.CacheEvict;
@@ -55,16 +58,6 @@ public class CacheAspect {
         Method method = signature.getMethod();
         Cacheable cacheable = method.getAnnotation(Cacheable.class);
 
-        // 解析条件表达式
-        if (StringUtils.hasText(cacheable.condition())) {
-            EvaluationContext context = createEvaluationContext(joinPoint);
-            Expression conditionExpression = expressionParser.parseExpression(cacheable.condition());
-            Boolean condition = conditionExpression.getValue(context, Boolean.class);
-            if (condition != null && !condition) {
-                // 条件不满足，直接执行方法
-                return joinPoint.proceed();
-            }
-        }
 
         // 解析缓存键，并根据配置自动添加租户ID和域ID前缀
         String cacheKey = parseKeyWithPrefix(cacheable.key(), joinPoint, cacheable.autoTenantPrefix(), cacheable.autoDomainPrefix());
@@ -96,39 +89,15 @@ public class CacheAspect {
         Method method = signature.getMethod();
         CacheEvict cacheEvict = method.getAnnotation(CacheEvict.class);
 
-        // 解析条件表达式
-        if (StringUtils.hasText(cacheEvict.condition())) {
-            EvaluationContext context = createEvaluationContext(joinPoint);
-            Expression conditionExpression = expressionParser.parseExpression(cacheEvict.condition());
-            Boolean condition = conditionExpression.getValue(context, Boolean.class);
-            if (condition != null && !condition) {
-                // 条件不满足，直接执行方法
-                return joinPoint.proceed();
-            }
-        }
-
         // 如果在方法执行前清除缓存
         if (cacheEvict.beforeInvocation()) {
             evictCache(cacheEvict, joinPoint);
         }
-
-        try {
-            // 执行方法
-            Object result = joinPoint.proceed();
-
-            // 如果在方法执行后清除缓存
-            if (!cacheEvict.beforeInvocation()) {
-                evictCache(cacheEvict, joinPoint);
-            }
-
-            return result;
-        } catch (Throwable e) {
-            // 如果方法执行异常，且配置为在方法执行后清除缓存，则不清除缓存
-            if (!cacheEvict.beforeInvocation()) {
-                log.warn("方法执行异常，不清除缓存: {}", signature.getName());
-            }
-            throw e;
+        Object r = joinPoint.proceed();
+        if (cacheEvict.afterInvocation()) {
+            evictCache(cacheEvict, joinPoint);
         }
+        return r;
     }
 
     /**
@@ -136,14 +105,6 @@ public class CacheAspect {
      */
     private void evictCache(CacheEvict cacheEvict, ProceedingJoinPoint joinPoint) {
         CacheNamespace namespace = CacheNamespace.valueOf(cacheEvict.namespace());
-
-        // 清除所有条目
-        if (cacheEvict.allEntries()) {
-            String pattern = cacheKeyBuilder.buildPattern(namespace, "*");
-            cacheManager.removeByPattern(pattern);
-            log.debug("清除命名空间下所有缓存: {}", namespace);
-            return;
-        }
 
         // 按模式清除
         if (StringUtils.hasText(cacheEvict.pattern())) {

@@ -46,6 +46,10 @@ public enum CacheNamespace {
      * 图标
      */
     ICON("ICON"),
+    /**
+     * 资源
+     */
+    RESOURCE("RESOURCE"),
 
     /**
      * 系统参数缓存

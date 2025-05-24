@@ -59,6 +59,7 @@ spring:
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true # 虽然默认为 true ，但是还是显示去指定下。
+    local-cache-scope: statement  # 禁用一级缓存 防止测试类获取缓存数据
   global-config:
     db-config:
       id-type: NONE # “智能”模式，基于 IdTypeEnvironmentPostProcessor + 数据源的类型，自动适配成 AUTO、INPUT 模式。
@@ -101,4 +102,3 @@ sa-token:
   token-style: uuid
   # 是否输出操作日志
   is-log: true
-

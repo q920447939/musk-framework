@@ -17,6 +17,7 @@
         <module>musk-functions-icon</module>
         <module>musk-functions-message</module>
         <module>musk-functions-member-level</module>
+        <module>musk-functions-resource</module>
     </modules>
 
     <properties>

@@ -42,7 +42,7 @@ public class SystemIconCategoryServiceImpl extends ServiceImpl<SystemIconCategor
 
 
     @Override
-    @CacheEvict(namespace = "ICON", pattern = "category:*", beforeInvocation = true)
+    @CacheEvict(namespace = "ICON", pattern = "category:*")
     public Integer createCategory(SystemIconCategoryDO category) {
         // 校验分类编码唯一性
         validateCategoryCodeUnique(category);
@@ -52,7 +52,7 @@ public class SystemIconCategoryServiceImpl extends ServiceImpl<SystemIconCategor
     }
 
     @Override
-    @CacheEvict(namespace = "ICON", pattern = "category:*", beforeInvocation = true)
+    @CacheEvict(namespace = "ICON", pattern = "category:*")
     public void updateCategory(SystemIconCategoryDO category) {
         // 校验分类存在
         validateCategoryExists(category.getId());
@@ -63,7 +63,7 @@ public class SystemIconCategoryServiceImpl extends ServiceImpl<SystemIconCategor
     }
 
     @Override
-    @CacheEvict(namespace = "ICON", pattern = "category:*", beforeInvocation = true)
+    @CacheEvict(namespace = "ICON", pattern = "category:*")
     public void deleteCategory(Integer id) {
         // 检查是否有子分类
         if (hasChildCategory(id)) {

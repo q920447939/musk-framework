@@ -37,27 +37,20 @@ public @interface CacheEvict {
      */
     String pattern() default "";
 
-    /**
-     * 是否清除命名空间下的所有缓存
-     * <p>
-     * 默认为false
-     */
-    boolean allEntries() default false;
-
-    /**
-     * 条件表达式
-     * <p>
-     * 只有当表达式结果为true时才清除缓存，支持SpEL表达式
-     * 如果为空字符串，则表示无条件清除
-     */
-    String condition() default "";
 
     /**
      * 是否在方法执行前清除缓存
      * <p>
      * 默认为false，即在方法执行后清除缓存
      */
-    boolean beforeInvocation() default false;
+    boolean beforeInvocation() default true;
+
+    /**
+     * 是否在方法执行后清除缓存
+     * <p>
+     * 默认为false，即在方法执行后清除缓存
+     */
+    boolean afterInvocation() default true;
 
     /**
      * 是否自动添加租户ID前缀

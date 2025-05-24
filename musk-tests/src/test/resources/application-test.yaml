@@ -88,4 +88,72 @@ musk:
                 member: musk_auth
                 log: musk_log
                 statistics: musk_statistics
+  functions:
+    resource:
+      # 存储配置
+      storage:
+        # 默认存储类型：1-本地存储
+        default-type: 1
+        # 本地存储配置
+        local:
+          # 基础路径
+          base-path: ${java.io.tmpdir}/test-resources
+          # 访问域名
+          domain: http://localhost:8080
+
+      # 安全配置
+      security:
+        # 允许的文件类型（为空表示允许所有非黑名单类型）
+        allowed-types: jpg,jpeg,png,gif,bmp,webp,pdf,doc,docx,xls,xlsx,ppt,pptx,txt,zip,rar,7z,mp3,mp4,avi,tmp
+        # 禁止的文件类型
+        blocked-types: exe,dll,bat,sh,js,php,jsp,asp,aspx
+        # 最大文件大小（字节）
+        max-file-size: 104857600
+        # URL签名
+        signature:
+          # 是否启用URL签名
+          enabled: false
+          # 签名密钥
+          secret: test-signature-secret
+          # 签名过期时间（秒）
+          expire-seconds: 3600
+        # 防盗链配置
+        anti-leech:
+          # 是否启用防盗链
+          enabled: false
+
+      # 处理配置
+      process:
+        # 图片处理
+        image:
+          # 是否启用图片压缩
+          compress-enabled: true
+          # 压缩质量（1-100）
+          compress-quality: 85
+          # 是否生成缩略图
+          thumbnail-enabled: true
+          # 缩略图尺寸
+          thumbnail-size: 200x200
+
+      # 缓存配置
+      cache:
+        # 元数据缓存过期时间（秒）
+        metadata-expire-seconds: 3600
+        # 访问URL缓存过期时间（秒）
+        url-expire-seconds: 86400
+
+      # 限制配置
+      limit:
+        # 租户级别限制
+        tenant:
+          # 最大文件数量
+          max-file-count: 10000
+          # 最大存储空间（字节）
+          max-storage-size: 10737418240
+        # 用户级别限制
+        user:
+          # 最大文件数量
+          max-file-count: 1000
+          # 最大存储空间（字节）
+          max-storage-size: 1073741824
 

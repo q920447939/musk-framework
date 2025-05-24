@@ -39,7 +39,7 @@ public class SystemIconServiceImpl extends ServiceImpl<SystemIconMapper, SystemI
     private SystemIconResourceService systemIconResourceService;
 
     @Override
-    @CacheEvict(namespace = "ICON", pattern = "icon:*",beforeInvocation = true)
+    @CacheEvict(namespace = "ICON", pattern = "icon:*")
     public Integer createIcon(SystemIconDO icon) {
         // 校验图标编码唯一性
         validateIconCodeUnique(icon);
@@ -49,7 +49,7 @@ public class SystemIconServiceImpl extends ServiceImpl<SystemIconMapper, SystemI
     }
 
     @Override
-    @CacheEvict(namespace = "ICON", pattern = "icon:*",beforeInvocation = true)
+    @CacheEvict(namespace = "ICON", pattern = "icon:*")
     public void updateIcon(SystemIconDO icon) {
         // 校验图标存在
         validateIconExists(icon.getId());
@@ -60,7 +60,7 @@ public class SystemIconServiceImpl extends ServiceImpl<SystemIconMapper, SystemI
     }
 
     @Override
-    @CacheEvict(namespace = "ICON", pattern = "icon:*",beforeInvocation = true)
+    @CacheEvict(namespace = "ICON", pattern = "icon:*")
     public void deleteIcon(Integer id) {
         // 校验图标存在
         validateIconExists(id);

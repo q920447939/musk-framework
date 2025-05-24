@@ -34,7 +34,7 @@ import java.util.List;
 public class SystemIconResourceServiceImpl extends ServiceImpl<SystemIconResourceMapper, SystemIconResourceDO> implements SystemIconResourceService {
 
     @Override
-    @CacheEvict(namespace = "ICON", pattern = "resource:*",beforeInvocation = true)
+    @CacheEvict(namespace = "ICON", pattern = "resource:*")
     public Integer createIconResource(SystemIconResourceDO resource) {
         // 如果设置为默认资源，则将同一图标同一域的其他资源设为非默认
         if (Boolean.TRUE.equals(resource.getIsDefault())) {
@@ -46,7 +46,7 @@ public class SystemIconResourceServiceImpl extends ServiceImpl<SystemIconResourc
     }
 
     @Override
-    @CacheEvict(namespace = "ICON", pattern = "resource:*",beforeInvocation = true)
+    @CacheEvict(namespace = "ICON", pattern = "resource:*")
     public void updateIconResource(SystemIconResourceDO resource) {
         // 校验资源存在
         validateResourceExists(resource.getId());
@@ -59,7 +59,7 @@ public class SystemIconResourceServiceImpl extends ServiceImpl<SystemIconResourc
     }
 
     @Override
-    @CacheEvict(namespace = "ICON", pattern = "resource:*",beforeInvocation = true)
+    @CacheEvict(namespace = "ICON", pattern = "resource:*")
     public void deleteIconResource(Integer id) {
         // 校验资源存在
         SystemIconResourceDO resource = validateResourceExists(id);

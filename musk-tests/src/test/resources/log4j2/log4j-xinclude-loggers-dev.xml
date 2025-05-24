@@ -7,8 +7,10 @@
     </Root>
     <logger name="com.alibaba.nacos.shaded.io.grpc.netty.shaded.io.grpc.netty" level="INFO"/>
     <!-- 过滤框架的一大堆debug日志-->
-    <logger name="org" level="INFO"/>
+   <!-- <logger name="org" level="INFO"/>-->
     <logger name="_org" level="INFO"/>
+    <logger name="org.redisson.command.RedisExecutor" level="INFO"/>
+    <logger name="org.springframework.test.context.cache" level="INFO"/>
     <logger name="com.baomidou" level="INFO"/>
     <logger name="io.lettuce" level="INFO"/>
     <logger name="sun.rmi.loader" level="INFO"/>
