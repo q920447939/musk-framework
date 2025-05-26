@@ -51,6 +51,13 @@ public enum BusinessPageExceptionEnum implements IBaseErrorInfo{
     THIRD_PARTY_AUTH_FAILED("41200023", "第三方认证失败"),
     THIRD_PARTY_CONFIG_ERROR("41200024", "第三方配置错误"),
 
+    // 注册相关异常
+    CAPTCHA_VERIFY_FAILED("41200025", "图形验证码验证失败"),
+    PASSWORD_NOT_MATCH("41200026", "两次输入的密码不一致"),
+    USERNAME_FORMAT_ERROR("41200027", "用户名格式不正确"),
+    PASSWORD_WEAK("41200028", "密码强度不够"),
+    REGISTER_FAILED("41200029", "注册失败"),
+
     USER_IS_FORBIDDEN_ERROR("4210100", "用户已被禁用"),
     USER_IS_NOT_EXISTS("4210101", "用户不存在"),
 

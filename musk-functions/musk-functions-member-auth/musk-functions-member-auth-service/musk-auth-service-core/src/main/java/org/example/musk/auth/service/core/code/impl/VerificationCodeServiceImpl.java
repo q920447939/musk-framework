@@ -7,10 +7,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.musk.auth.enums.code.CodeChannelEnum;
 import org.example.musk.auth.enums.code.CodeSceneEnum;
 import org.example.musk.auth.service.core.code.VerificationCodeService;
+import org.example.musk.auth.service.core.config.AuthenticationConfig;
 import org.example.musk.auth.vo.req.code.SendCodeRequest;
 import org.example.musk.auth.vo.req.code.VerifyCodeRequest;
 import org.example.musk.common.context.ThreadLocalTenantContext;
 import org.example.musk.middleware.redis.RedisUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
@@ -26,6 +28,12 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
 
     @Resource
     private RedisUtil redisUtil;
+
+    @Resource
+    private AuthenticationConfig authConfig;
+
+    @Value("${spring.profiles.active:prod}")
+    private String activeProfile;
 
     /**
      * 验证码默认长度
@@ -122,6 +130,14 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
         }
 
         try {
+            // 开发环境特殊处理
+            if (isDevelopmentMode()) {
+                Boolean devResult = handleDevelopmentVerification(request);
+                if (devResult != null) {
+                    return devResult;
+                }
+            }
+
             // 构建缓存键
             String cacheKey = buildCodeCacheKey(request.getTarget(), request.getScene(), request.getChannel());
 
@@ -383,6 +399,85 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
                 return "SMS_CHANGE_PHONE_TEMPLATE";
             default:
                 return "SMS_DEFAULT_TEMPLATE";
+        }
+    }
+
+    /**
+     * 是否为开发模式
+     *
+     * @return true-开发模式，false-非开发模式
+     */
+    private boolean isDevelopmentMode() {
+        return "dev".equals(activeProfile);
+    }
+
+    /**
+     * 处理开发环境验证
+     *
+     * @param request 验证请求
+     * @return 验证结果，null表示降级到正常验证
+     */
+    private Boolean handleDevelopmentVerification(VerifyCodeRequest request) {
+        try {
+            // 根据渠道获取配置
+            if (request.getChannel() == CodeChannelEnum.EMAIL) {
+                AuthenticationConfig.VerificationCodeConfig.EmailCodeConfig emailConfig =
+                        authConfig.getVerificationCode().getEmail();
+
+                // 检查是否跳过验证
+                if (emailConfig.getDevMode() != null && emailConfig.getDevMode().getSkipVerification()) {
+                    log.info("[验证验证码] 开发环境跳过邮箱验证码验证，target={}", request.getTarget());
+                    return true;
+                }
+
+                // 检查固定验证码
+                if (emailConfig.getDevMode() != null &&
+                    StrUtil.isNotBlank(emailConfig.getDevMode().getFixedCode()) &&
+                    StrUtil.equals(request.getCode(), emailConfig.getDevMode().getFixedCode())) {
+                    log.info("[验证验证码] 开发环境使用固定邮箱验证码验证成功，target={}, code={}",
+                            request.getTarget(), request.getCode());
+                    return true;
+                }
+
+                // 检查是否允许任意验证码
+                if (emailConfig.getDevMode() != null && emailConfig.getDevMode().getAllowAnyCode()) {
+                    log.info("[验证验证码] 开发环境允许任意邮箱验证码，target={}, code={}",
+                            request.getTarget(), request.getCode());
+                    return true;
+                }
+            } else if (request.getChannel() == CodeChannelEnum.SMS) {
+                AuthenticationConfig.VerificationCodeConfig.SmsCodeConfig smsConfig =
+                        authConfig.getVerificationCode().getSms();
+
+                // 检查是否跳过验证
+                if (smsConfig.getDevMode() != null && smsConfig.getDevMode().getSkipVerification()) {
+                    log.info("[验证验证码] 开发环境跳过短信验证码验证，target={}", request.getTarget());
+                    return true;
+                }
+
+                // 检查固定验证码
+                if (smsConfig.getDevMode() != null &&
+                    StrUtil.isNotBlank(smsConfig.getDevMode().getFixedCode()) &&
+                    StrUtil.equals(request.getCode(), smsConfig.getDevMode().getFixedCode())) {
+                    log.info("[验证验证码] 开发环境使用固定短信验证码验证成功，target={}, code={}",
+                            request.getTarget(), request.getCode());
+                    return true;
+                }
+
+                // 检查是否允许任意验证码
+                if (smsConfig.getDevMode() != null && smsConfig.getDevMode().getAllowAnyCode()) {
+                    log.info("[验证验证码] 开发环境允许任意短信验证码，target={}, code={}",
+                            request.getTarget(), request.getCode());
+                    return true;
+                }
+            }
+
+            // 降级到正常验证
+            return null;
+
+        } catch (Exception e) {
+            log.warn("[验证验证码] 开发环境处理异常，降级到正常模式", e);
+            return null;
         }
     }
 }

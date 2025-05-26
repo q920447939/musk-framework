@@ -2,6 +2,7 @@ package org.example.musk.common.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.example.musk.common.exception.BusinessPageExceptionEnum;
 import org.example.musk.common.exception.ErrorCode;
 import org.example.musk.common.exception.ServiceException;
 import org.example.musk.common.exception.enums.GlobalErrorCodeConstants;
@@ -49,6 +50,13 @@ public class CommonResult<T> implements Serializable {
         CommonResult<T> result = new CommonResult<>();
         result.code = code;
         result.msg = message;
+        return result;
+    }
+
+    public static <T> CommonResult<T> error(BusinessPageExceptionEnum businessPageExceptionEnum ) {
+        CommonResult<T> result = new CommonResult<>();
+        result.code = Integer.parseInt(businessPageExceptionEnum.getExCode());
+        result.msg = businessPageExceptionEnum.getResultMsg();
         return result;
     }
 

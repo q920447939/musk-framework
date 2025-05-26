@@ -9,7 +9,7 @@ import java.util.Map;
 
 /**
  * 认证配置类
- * 
+ *
  * @author musk
  */
 @Configuration
@@ -84,6 +84,11 @@ public class AuthenticationConfig {
         private SmsCodeConfig sms = new SmsCodeConfig();
 
         /**
+         * 图形验证码配置
+         */
+        private CaptchaConfig captcha = new CaptchaConfig();
+
+        /**
          * 邮箱验证码配置
          */
         @Data
@@ -107,6 +112,11 @@ public class AuthenticationConfig {
              * 发送频率限制（秒）
              */
             private Integer frequencyLimitSeconds = 60;
+
+            /**
+             * 开发环境配置
+             */
+            private DevModeConfig devMode = new DevModeConfig();
         }
 
         /**
@@ -133,6 +143,58 @@ public class AuthenticationConfig {
              * 发送频率限制（秒）
              */
             private Integer frequencyLimitSeconds = 60;
+
+            /**
+             * 开发环境配置
+             */
+            private DevModeConfig devMode = new DevModeConfig();
+        }
+
+        /**
+         * 图形验证码配置
+         */
+        @Data
+        public static class CaptchaConfig {
+            /**
+             * 是否启用
+             */
+            private Boolean enabled = true;
+
+            /**
+             * 过期时间（秒）
+             */
+            private Integer expireSeconds = 300;
+
+            /**
+             * 开发环境配置
+             */
+            private DevModeConfig devMode = new DevModeConfig();
+
+            /**
+             * 开发环境配置
+             */
+            @Data
+            public static class DevModeConfig {
+                /**
+                 * 是否启用开发模式
+                 */
+                private Boolean enabled = false;
+
+                /**
+                 * 固定验证码
+                 */
+                private String fixedCode = "1234";
+
+                /**
+                 * 是否跳过验证码验证
+                 */
+                private Boolean skipVerification = false;
+
+                /**
+                 * 是否允许任意验证码
+                 */
+                private Boolean allowAnyCode = false;
+            }
         }
     }
 
@@ -272,7 +334,7 @@ public class AuthenticationConfig {
         configMap.put("alipay", thirdParty.getAlipay());
         configMap.put("github", thirdParty.getGithub());
         configMap.put("google", thirdParty.getGoogle());
-        
+
         return configMap.get(platform.toLowerCase());
     }
 
@@ -287,7 +349,7 @@ public class AuthenticationConfig {
         if (config == null) {
             return false;
         }
-        
+
         try {
             // 使用反射获取enabled字段
             return (Boolean) config.getClass().getMethod("getEnabled").invoke(config);

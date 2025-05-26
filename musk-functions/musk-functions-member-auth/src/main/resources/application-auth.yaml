@@ -1,6 +1,8 @@
 # 会员认证系统配置示例
 musk:
   auth:
+    # 默认头像URL
+    default-avatar-url: "https://example.com/default-avatar.png"
     # 密码策略配置
     password:
       min-length: 8                    # 最小长度
@@ -8,7 +10,7 @@ musk:
       require-lowercase: false         # 是否要求小写字母
       require-digit: true              # 是否要求数字
       require-special-char: false      # 是否要求特殊字符
-    
+
     # 验证码配置
     verification-code:
       # 邮箱验证码配置
@@ -17,14 +19,34 @@ musk:
         expire-seconds: 300            # 过期时间（秒）
         template-id: "email_login_template"  # 邮件模板ID
         frequency-limit-seconds: 60    # 发送频率限制（秒）
-      
+        dev-mode:
+          enabled: true                # 是否启用开发模式
+          fixed-code: "123456"         # 固定验证码
+          skip-verification: false     # 是否跳过验证码验证
+          allow-any-code: false        # 是否允许任意验证码
+
       # 短信验证码配置
       sms:
         enabled: true                  # 是否启用短信验证码
         expire-seconds: 300            # 过期时间（秒）
         provider: "aliyun"             # 短信服务提供商
         frequency-limit-seconds: 60    # 发送频率限制（秒）
-    
+        dev-mode:
+          enabled: true                # 是否启用开发模式
+          fixed-code: "123456"         # 固定验证码
+          skip-verification: false     # 是否跳过验证码验证
+          allow-any-code: false        # 是否允许任意验证码
+
+      # 图形验证码配置
+      captcha:
+        enabled: true                  # 是否启用图形验证码
+        expire-seconds: 300            # 过期时间（秒）
+        dev-mode:
+          enabled: true                # 是否启用开发模式
+          fixed-code: "1234"          # 固定验证码
+          skip-verification: false     # 是否跳过验证码验证
+          allow-any-code: false        # 是否允许任意验证码
+
     # 第三方登录配置
     third-party:
       # 微信登录配置
@@ -33,14 +55,14 @@ musk:
         app-id: "${WECHAT_APP_ID:}"    # 微信应用ID
         app-secret: "${WECHAT_APP_SECRET:}"  # 微信应用密钥
         redirect-uri: "${WECHAT_REDIRECT_URI:http://localhost:8080/api/auth/callback/wechat}"
-      
+
       # QQ登录配置
       qq:
         enabled: false                 # 是否启用QQ登录
         app-id: "${QQ_APP_ID:}"        # QQ应用ID
         app-key: "${QQ_APP_KEY:}"      # QQ应用密钥
         redirect-uri: "${QQ_REDIRECT_URI:http://localhost:8080/api/auth/callback/qq}"
-      
+
       # 支付宝登录配置
       alipay:
         enabled: false                 # 是否启用支付宝登录
@@ -48,21 +70,21 @@ musk:
         private-key: "${ALIPAY_PRIVATE_KEY:}"  # 支付宝私钥
         public-key: "${ALIPAY_PUBLIC_KEY:}"    # 支付宝公钥
         redirect-uri: "${ALIPAY_REDIRECT_URI:http://localhost:8080/api/auth/callback/alipay}"
-      
+
       # GitHub登录配置
       github:
         enabled: false                 # 是否启用GitHub登录
         client-id: "${GITHUB_CLIENT_ID:}"      # GitHub客户端ID
         client-secret: "${GITHUB_CLIENT_SECRET:}"  # GitHub客户端密钥
         redirect-uri: "${GITHUB_REDIRECT_URI:http://localhost:8080/api/auth/callback/github}"
-      
+
       # Google登录配置
       google:
         enabled: false                 # 是否启用Google登录
         client-id: "${GOOGLE_CLIENT_ID:}"      # Google客户端ID
         client-secret: "${GOOGLE_CLIENT_SECRET:}"  # Google客户端密钥
         redirect-uri: "${GOOGLE_REDIRECT_URI:http://localhost:8080/api/auth/callback/google}"
-    
+
     # 安全策略配置
     security:
       max-login-attempts: 5            # 最大登录尝试次数
@@ -81,19 +103,19 @@ justauth:
       client-id: ${musk.auth.third-party.wechat.app-id}
       client-secret: ${musk.auth.third-party.wechat.app-secret}
       redirect-uri: ${musk.auth.third-party.wechat.redirect-uri}
-    
+
     # QQ配置
     QQ:
       client-id: ${musk.auth.third-party.qq.app-id}
       client-secret: ${musk.auth.third-party.qq.app-key}
       redirect-uri: ${musk.auth.third-party.qq.redirect-uri}
-    
+
     # GitHub配置
     GITHUB:
       client-id: ${musk.auth.third-party.github.client-id}
       client-secret: ${musk.auth.third-party.github.client-secret}
       redirect-uri: ${musk.auth.third-party.github.redirect-uri}
-    
+
     # Google配置
     GOOGLE:
       client-id: ${musk.auth.third-party.google.client-id}
