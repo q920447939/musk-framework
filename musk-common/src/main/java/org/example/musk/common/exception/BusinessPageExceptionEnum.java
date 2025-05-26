@@ -60,6 +60,7 @@ public enum BusinessPageExceptionEnum implements IBaseErrorInfo{
 
     USER_IS_FORBIDDEN_ERROR("4210100", "用户已被禁用"),
     USER_IS_NOT_EXISTS("4210101", "用户不存在"),
+    GENERATOR_CAPTCHA_FAIL("4210102", "生成验证码失败"),
 
 
     /**

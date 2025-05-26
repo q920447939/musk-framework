@@ -44,7 +44,7 @@ public class RegisterChannelValidator {
             return false;
         }
 
-        switch (channel) {
+       /* switch (channel) {
             case APP:
             case WEB:
             case WECHAT_MINI_PROGRAM:
@@ -54,7 +54,8 @@ public class RegisterChannelValidator {
             default:
                 log.warn("[注册渠道校验] 未知的注册渠道: {}", channel);
                 return false;
-        }
+        }*/
+        return true;
     }
 
     /**

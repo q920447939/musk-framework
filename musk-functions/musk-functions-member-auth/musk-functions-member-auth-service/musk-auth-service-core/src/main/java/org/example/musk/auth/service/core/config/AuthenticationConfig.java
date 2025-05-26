@@ -1,4 +1,4 @@
-package org.example.musk.auth.web.config;
+package org.example.musk.auth.service.core.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -116,7 +116,7 @@ public class AuthenticationConfig {
             /**
              * 开发环境配置
              */
-            private DevModeConfig devMode = new DevModeConfig();
+            private CaptchaConfig.DevModeConfig devMode = new CaptchaConfig.DevModeConfig();
         }
 
         /**
@@ -147,7 +147,7 @@ public class AuthenticationConfig {
             /**
              * 开发环境配置
              */
-            private DevModeConfig devMode = new DevModeConfig();
+            private CaptchaConfig.DevModeConfig devMode = new CaptchaConfig.DevModeConfig();
         }
 
         /**

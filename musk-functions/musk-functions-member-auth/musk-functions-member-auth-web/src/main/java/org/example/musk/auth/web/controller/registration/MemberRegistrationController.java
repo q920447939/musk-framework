@@ -1,7 +1,5 @@
 package org.example.musk.auth.web.controller.registration;
 
-import cn.dev33.satoken.stp.SaTokenInfo;
-import cn.dev33.satoken.stp.StpUtil;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -18,9 +16,14 @@ import org.example.musk.auth.vo.req.register.VerificationCodeRegisterRequest;
 import org.example.musk.auth.vo.res.RegisterResponseDTO;
 import org.example.musk.auth.vo.result.RegistrationResult;
 import org.example.musk.auth.web.anno.PassToken;
+import org.example.musk.common.exception.BusinessPageExceptionEnum;
 import org.example.musk.common.pojo.CommonResult;
 import org.example.musk.common.util.servlet.ServletUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -49,14 +52,14 @@ public class MemberRegistrationController {
     /**
      * 用户名密码注册
      *
-     * @param request HTTP请求
+     * @param request         HTTP请求
      * @param registerRequest 注册请求
      * @return 注册结果
      */
     @PostMapping("/username")
     @PassToken
     public CommonResult<RegisterResponseDTO> registerByUsername(HttpServletRequest request,
-                                                               @RequestBody @Valid UsernamePasswordRegisterRequest registerRequest) {
+                                                                @RequestBody @Valid UsernamePasswordRegisterRequest registerRequest) {
         log.info("[用户名密码注册] 开始处理注册请求，username={}", registerRequest.getUsername());
 
         // 设置注册类型
@@ -75,14 +78,14 @@ public class MemberRegistrationController {
     /**
      * 邮箱验证码注册
      *
-     * @param request HTTP请求
+     * @param request         HTTP请求
      * @param registerRequest 注册请求
      * @return 注册结果
      */
     @PostMapping("/email")
     @PassToken
     public CommonResult<RegisterResponseDTO> registerByEmail(HttpServletRequest request,
-                                                            @RequestBody @Valid VerificationCodeRegisterRequest registerRequest) {
+                                                             @RequestBody @Valid VerificationCodeRegisterRequest registerRequest) {
         log.info("[邮箱验证码注册] 开始处理注册请求，email={}", registerRequest.getTarget());
 
         // 设置注册类型
@@ -102,14 +105,14 @@ public class MemberRegistrationController {
     /**
      * 短信验证码注册
      *
-     * @param request HTTP请求
+     * @param request         HTTP请求
      * @param registerRequest 注册请求
      * @return 注册结果
      */
     @PostMapping("/sms")
     @PassToken
     public CommonResult<RegisterResponseDTO> registerBySms(HttpServletRequest request,
-                                                          @RequestBody @Valid VerificationCodeRegisterRequest registerRequest) {
+                                                           @RequestBody @Valid VerificationCodeRegisterRequest registerRequest) {
         log.info("[短信验证码注册] 开始处理注册请求，phone={}", registerRequest.getTarget());
 
         // 设置注册类型
@@ -149,14 +152,14 @@ public class MemberRegistrationController {
 
         } catch (Exception e) {
             log.error("[图形验证码] 生成失败", e);
-            return CommonResult.error("生成验证码失败");
+            return CommonResult.error(BusinessPageExceptionEnum.GENERATOR_CAPTCHA_FAIL);
         }
     }
 
     /**
      * 发送注册验证码
      *
-     * @param request HTTP请求
+     * @param request     HTTP请求
      * @param sendRequest 发送请求
      * @return 发送结果
      */
@@ -164,7 +167,7 @@ public class MemberRegistrationController {
     @PassToken
     public CommonResult<Boolean> sendRegisterCode(HttpServletRequest request,
                                                   @RequestBody @Valid SendCodeRequest sendRequest) {
-        log.info("[发送注册验证码] 开始发送验证码，target={}, channel={}", 
+        log.info("[发送注册验证码] 开始发送验证码，target={}, channel={}",
                 sendRequest.getTarget(), sendRequest.getChannel().getCode());
 
         // 设置注册场景
@@ -181,7 +184,9 @@ public class MemberRegistrationController {
             return CommonResult.success(true);
         } else {
             log.warn("[发送注册验证码] 发送失败，target={}", sendRequest.getTarget());
-            return CommonResult.error("验证码发送失败");
+            //return CommonResult.error("验证码发送失败");
+            return CommonResult.error(BusinessPageExceptionEnum.GENERATOR_CAPTCHA_FAIL);
+
         }
     }
 
@@ -205,9 +210,9 @@ public class MemberRegistrationController {
      */
     private CommonResult<RegisterResponseDTO> handleRegisterResult(RegistrationResult result) {
         if (!result.isSuccess()) {
-            log.warn("[注册处理] 注册失败，errorCode={}, errorMessage={}", 
+            log.warn("[注册处理] 注册失败，errorCode={}, errorMessage={}",
                     result.getErrorCode(), result.getErrorMessage());
-            return CommonResult.error(result.getErrorCode(), result.getErrorMessage());
+            return CommonResult.error(Integer.parseInt(result.getErrorCode()), result.getErrorMessage());
         }
 
         try {
@@ -232,14 +237,14 @@ public class MemberRegistrationController {
                 responseDTO.setAutoLogin(false);
             }
 
-            log.info("[注册处理] 注册成功，memberId={}, memberCode={}", 
+            log.info("[注册处理] 注册成功，memberId={}, memberCode={}",
                     result.getMember().getId(), result.getMember().getMemberCode());
 
             return CommonResult.success(responseDTO);
 
         } catch (Exception e) {
             log.error("[注册处理] 处理注册结果异常", e);
-            return CommonResult.error("注册成功，但响应处理失败");
+            return CommonResult.error(BusinessPageExceptionEnum.COMMON_RESULT_BOOL_IS_FALSE);
         }
     }
 
