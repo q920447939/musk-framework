@@ -33,4 +33,10 @@ public class UsernamePasswordAuthRequest extends BaseAuthRequest {
     @NotBlank(message = "验证码不能为空")
     @Size(min = 4, max = 6, message = "验证码长度必须在4-6位之间")
     private String captcha;
+
+    /**
+     * 验证码会话ID
+     */
+    @NotBlank(message = "验证码会话ID不能为空")
+    private String captchaSessionId;
 }

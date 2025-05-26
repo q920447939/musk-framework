@@ -8,6 +8,7 @@ import org.example.musk.auth.entity.member.MemberDO;
 import org.example.musk.auth.enums.auth.AuthChannelTypeEnum;
 import org.example.musk.auth.enums.auth.AuthTypeEnum;
 import org.example.musk.auth.service.core.channel.MemberAuthChannelService;
+import org.example.musk.auth.service.core.code.CaptchaService;
 import org.example.musk.auth.service.core.strategy.AuthenticationStrategy;
 import org.example.musk.auth.vo.req.auth.UsernamePasswordAuthRequest;
 import org.example.musk.auth.vo.result.AuthenticationResult;
@@ -27,6 +28,9 @@ public class UsernamePasswordAuthStrategy implements AuthenticationStrategy<User
 
     @Resource
     private MemberAuthChannelService memberAuthChannelService;
+
+    @Resource
+    private CaptchaService captchaService;
 
     @Override
     public boolean supports(AuthTypeEnum authType) {
@@ -122,8 +126,14 @@ public class UsernamePasswordAuthStrategy implements AuthenticationStrategy<User
             return false;
         }
 
-        // TODO: 可以在这里添加其他前置处理逻辑
         // 1. 图形验证码校验
+        if (!validateCaptcha(request)) {
+            log.warn("[用户名密码认证] 图形验证码校验失败，username={}, captchaSessionId={}",
+                    request.getUsername(), request.getCaptchaSessionId());
+            return false;
+        }
+
+        // TODO: 可以在这里添加其他前置处理逻辑
         // 2. 登录频率限制检查
         // 3. IP黑名单检查
         // 4. 设备指纹验证
@@ -143,6 +153,41 @@ public class UsernamePasswordAuthStrategy implements AuthenticationStrategy<User
             // 2. 更新会员最后登录时间和IP
             // 3. 发送登录通知
             // 4. 统计登录次数
+        }
+    }
+
+    /**
+     * 验证图形验证码
+     *
+     * @param request 认证请求
+     * @return true-验证成功，false-验证失败
+     */
+    private boolean validateCaptcha(UsernamePasswordAuthRequest request) {
+        try {
+            // 参数校验
+            if (StrUtil.isBlank(request.getCaptcha()) || StrUtil.isBlank(request.getCaptchaSessionId())) {
+                log.debug("[用户名密码认证] 验证码参数为空，captcha={}, captchaSessionId={}",
+                        request.getCaptcha(), request.getCaptchaSessionId());
+                return false;
+            }
+
+            // 调用验证码服务进行验证
+            boolean verified = captchaService.verifyCaptcha(request.getCaptchaSessionId(), request.getCaptcha());
+
+            if (verified) {
+                log.debug("[用户名密码认证] 图形验证码验证成功，username={}, captchaSessionId={}",
+                        request.getUsername(), request.getCaptchaSessionId());
+            } else {
+                log.warn("[用户名密码认证] 图形验证码验证失败，username={}, captcha={}, captchaSessionId={}",
+                        request.getUsername(), request.getCaptcha(), request.getCaptchaSessionId());
+            }
+
+            return verified;
+
+        } catch (Exception e) {
+            log.error("[用户名密码认证] 图形验证码验证异常，username={}, captchaSessionId={}",
+                    request.getUsername(), request.getCaptchaSessionId(), e);
+            return false;
         }
     }
 

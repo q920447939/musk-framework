@@ -110,11 +110,6 @@ public class CaptchaServiceImpl implements CaptchaService {
         }
 
         try {
-            // 开发环境特殊处理
-            if (isDevelopmentMode()) {
-                return handleDevelopmentVerification(code);
-            }
-
             // 构建缓存键
             String cacheKey = buildCacheKey(sessionId);
 

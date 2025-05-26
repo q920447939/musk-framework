@@ -218,13 +218,10 @@ public class MemberRegistrationController {
         try {
             // 构建响应DTO
             RegisterResponseDTO responseDTO = new RegisterResponseDTO();
-            responseDTO.setMemberId(result.getMember().getId());
             responseDTO.setMemberCode(result.getMember().getMemberCode());
             responseDTO.setMemberNickName(result.getMember().getMemberNickName());
             responseDTO.setAvatar(result.getMember().getAvatar());
             responseDTO.setRegisterTime(LocalDateTime.now());
-            responseDTO.setRegisterChannel(result.getRegisterType().getDesc());
-            responseDTO.setMessage("注册成功");
 
             // 处理自动登录
             if (result.isAutoLogin() && result.getToken() != null) {
