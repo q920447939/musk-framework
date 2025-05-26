@@ -1,0 +1,149 @@
+# 会员认证系统配置示例
+musk:
+  auth:
+    # 密码策略配置
+    password:
+      min-length: 8                    # 最小长度
+      require-uppercase: false         # 是否要求大写字母
+      require-lowercase: false         # 是否要求小写字母
+      require-digit: true              # 是否要求数字
+      require-special-char: false      # 是否要求特殊字符
+    
+    # 验证码配置
+    verification-code:
+      # 邮箱验证码配置
+      email:
+        enabled: true                  # 是否启用邮箱验证码
+        expire-seconds: 300            # 过期时间（秒）
+        template-id: "email_login_template"  # 邮件模板ID
+        frequency-limit-seconds: 60    # 发送频率限制（秒）
+      
+      # 短信验证码配置
+      sms:
+        enabled: true                  # 是否启用短信验证码
+        expire-seconds: 300            # 过期时间（秒）
+        provider: "aliyun"             # 短信服务提供商
+        frequency-limit-seconds: 60    # 发送频率限制（秒）
+    
+    # 第三方登录配置
+    third-party:
+      # 微信登录配置
+      wechat:
+        enabled: false                 # 是否启用微信登录
+        app-id: "${WECHAT_APP_ID:}"    # 微信应用ID
+        app-secret: "${WECHAT_APP_SECRET:}"  # 微信应用密钥
+        redirect-uri: "${WECHAT_REDIRECT_URI:http://localhost:8080/api/auth/callback/wechat}"
+      
+      # QQ登录配置
+      qq:
+        enabled: false                 # 是否启用QQ登录
+        app-id: "${QQ_APP_ID:}"        # QQ应用ID
+        app-key: "${QQ_APP_KEY:}"      # QQ应用密钥
+        redirect-uri: "${QQ_REDIRECT_URI:http://localhost:8080/api/auth/callback/qq}"
+      
+      # 支付宝登录配置
+      alipay:
+        enabled: false                 # 是否启用支付宝登录
+        app-id: "${ALIPAY_APP_ID:}"    # 支付宝应用ID
+        private-key: "${ALIPAY_PRIVATE_KEY:}"  # 支付宝私钥
+        public-key: "${ALIPAY_PUBLIC_KEY:}"    # 支付宝公钥
+        redirect-uri: "${ALIPAY_REDIRECT_URI:http://localhost:8080/api/auth/callback/alipay}"
+      
+      # GitHub登录配置
+      github:
+        enabled: false                 # 是否启用GitHub登录
+        client-id: "${GITHUB_CLIENT_ID:}"      # GitHub客户端ID
+        client-secret: "${GITHUB_CLIENT_SECRET:}"  # GitHub客户端密钥
+        redirect-uri: "${GITHUB_REDIRECT_URI:http://localhost:8080/api/auth/callback/github}"
+      
+      # Google登录配置
+      google:
+        enabled: false                 # 是否启用Google登录
+        client-id: "${GOOGLE_CLIENT_ID:}"      # Google客户端ID
+        client-secret: "${GOOGLE_CLIENT_SECRET:}"  # Google客户端密钥
+        redirect-uri: "${GOOGLE_REDIRECT_URI:http://localhost:8080/api/auth/callback/google}"
+    
+    # 安全策略配置
+    security:
+      max-login-attempts: 5            # 最大登录尝试次数
+      account-lock-duration: 1800      # 账户锁定时长（秒）
+      session-timeout: 7200            # 会话超时时间（秒）
+      enable-device-binding: false     # 是否启用设备绑定
+      enable-mfa: false                # 是否启用多因子认证
+      enable-location-check: false     # 是否启用异地登录检测
+
+# JustAuth配置（如果使用第三方登录）
+justauth:
+  enabled: true
+  type:
+    # 微信配置
+    WECHAT_OPEN:
+      client-id: ${musk.auth.third-party.wechat.app-id}
+      client-secret: ${musk.auth.third-party.wechat.app-secret}
+      redirect-uri: ${musk.auth.third-party.wechat.redirect-uri}
+    
+    # QQ配置
+    QQ:
+      client-id: ${musk.auth.third-party.qq.app-id}
+      client-secret: ${musk.auth.third-party.qq.app-key}
+      redirect-uri: ${musk.auth.third-party.qq.redirect-uri}
+    
+    # GitHub配置
+    GITHUB:
+      client-id: ${musk.auth.third-party.github.client-id}
+      client-secret: ${musk.auth.third-party.github.client-secret}
+      redirect-uri: ${musk.auth.third-party.github.redirect-uri}
+    
+    # Google配置
+    GOOGLE:
+      client-id: ${musk.auth.third-party.google.client-id}
+      client-secret: ${musk.auth.third-party.google.client-secret}
+      redirect-uri: ${musk.auth.third-party.google.redirect-uri}
+
+# 邮件服务配置（如果使用邮箱验证码）
+spring:
+  mail:
+    host: ${MAIL_HOST:smtp.qq.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+# 短信服务配置（如果使用短信验证码）
+aliyun:
+  sms:
+    access-key-id: ${ALIYUN_SMS_ACCESS_KEY_ID:}
+    access-key-secret: ${ALIYUN_SMS_ACCESS_KEY_SECRET:}
+    sign-name: ${ALIYUN_SMS_SIGN_NAME:}
+    template-code:
+      login: ${ALIYUN_SMS_LOGIN_TEMPLATE:}
+      register: ${ALIYUN_SMS_REGISTER_TEMPLATE:}
+
+# Redis配置（用于验证码缓存）
+spring:
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      database: ${REDIS_DATABASE:0}
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: -1ms
+
+# 日志配置
+logging:
+  level:
+    org.example.musk.auth: DEBUG
+    org.example.musk.auth.service.core.strategy: DEBUG
+    org.example.musk.auth.service.core.chain: INFO

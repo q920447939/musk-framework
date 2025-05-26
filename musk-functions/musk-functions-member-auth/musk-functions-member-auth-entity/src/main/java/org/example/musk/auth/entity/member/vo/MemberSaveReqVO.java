@@ -5,12 +5,6 @@ import lombok.Data;
 @Data
 public class MemberSaveReqVO {
 
-    /**
-     * 注册渠道
-     *
-     * 枚举 {@link TODO member_register_channel 对应的类}
-     */
-    private Integer registerChannel;
 
     /**
      * 会员账号

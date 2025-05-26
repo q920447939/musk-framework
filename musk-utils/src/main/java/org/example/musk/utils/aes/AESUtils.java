@@ -38,4 +38,8 @@ public class AESUtils {
         return  AES_KEY_ENUM_AES_MAP.get(aesKeyEnum).decryptStr(encryptHex, CharsetUtil.CHARSET_UTF_8);
     }
 
+    public static void main(String[] args) {
+        System.out.println(decryptStr("7e13b0c57cb52c876b04d0056f89ae15017fa41aebf864d79a707dc1a09734c1",AESKeyEnum.PASSWORD_KEY));;
+    }
+
 }

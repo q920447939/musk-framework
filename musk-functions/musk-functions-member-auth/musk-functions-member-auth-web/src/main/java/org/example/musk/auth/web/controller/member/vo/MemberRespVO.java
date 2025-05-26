@@ -11,7 +11,6 @@ public class MemberRespVO {
 
     private Integer id;
 
-    private Integer registerChannel;
 
     private String memberCode;
 

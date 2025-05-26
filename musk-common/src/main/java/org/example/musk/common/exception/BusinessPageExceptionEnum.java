@@ -38,6 +38,19 @@ public enum BusinessPageExceptionEnum implements IBaseErrorInfo{
     GENERATOR_VERIFICATION_CODE_IS_NULL("41200013", "未生成验证码"),
     API_INVALID_USERNAME_CODE("41200014", "登录失败, 用户名或密码错误"),
 
+    // 认证相关异常
+    PARAMS_ERROR ("41200014", "参数错误"),
+    AUTH_PRE_PROCESS_FAILED("41200015", "认证前置处理失败"),
+    AUTH_TYPE_NOT_SUPPORTED("41200016", "不支持的认证类型"),
+    VERIFICATION_CODE_ERROR("41200017", "验证码错误或已过期"),
+    VERIFICATION_CODE_SEND_FAILED("41200018", "验证码发送失败"),
+    MEMBER_NOT_EXISTS("41200019", "会员不存在"),
+    MEMBER_STATUS_ABNORMAL("41200020", "会员状态异常"),
+    AUTH_CHANNEL_ALREADY_EXISTS("41200021", "认证渠道已存在"),
+    CANNOT_UNBIND_LAST_AUTH_CHANNEL("41200022", "不能解绑最后一个认证渠道"),
+    THIRD_PARTY_AUTH_FAILED("41200023", "第三方认证失败"),
+    THIRD_PARTY_CONFIG_ERROR("41200024", "第三方配置错误"),
+
     USER_IS_FORBIDDEN_ERROR("4210100", "用户已被禁用"),
     USER_IS_NOT_EXISTS("4210101", "用户不存在"),
 

@@ -68,18 +68,4 @@ public enum RegisterChannelEnums {
         return null;
     }
 
-    /**
-     * 通过渠道名，获得对应的枚举
-     *
-     * @param name 渠道名
-     * @return 枚举
-     */
-    public static RegisterChannelEnums fromName(String name) {
-        for (RegisterChannelEnums registerChannel : values()) {
-            if (registerChannel.getName().equals(name)) {
-                return registerChannel;
-            }
-        }
-        return null;
-    }
 }

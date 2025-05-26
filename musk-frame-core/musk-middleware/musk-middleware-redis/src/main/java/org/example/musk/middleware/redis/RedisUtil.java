@@ -160,6 +160,18 @@ public class RedisUtil {
     //============================String=============================
 
 
+
+    /**
+     * 普通缓存获取
+     *
+     * @param key 键
+     * @return 值
+     */
+
+    public <T> T get(String key) {
+        return key == null ? null : (T)redisTemplate.opsForValue().get(key);
+    }
+
 /**
      * 普通缓存获取
      *
@@ -167,8 +179,8 @@ public class RedisUtil {
      * @return 值
      */
 
-    public Object get(String key) {
-        return key == null ? null : redisTemplate.opsForValue().get(key);
+    public String getString(String key) {
+        return key == null ? null : (String)redisTemplate.opsForValue().get(key);
     }
 
 
@@ -852,6 +864,18 @@ public class RedisUtil {
         //绑定操作
         BoundListOperations<String, Object> boundValueOperations = redisTemplate.boundListOps(listKey);
         return boundValueOperations.leftPop();
+    }
+
+    public void delete(String cacheKey) {
+        this.del(cacheKey);
+    }
+
+    public void set(String cacheKey, String value, int expireSeconds, TimeUnit timeUnit) {
+        redisTemplate.opsForValue().set(cacheKey, value,expireSeconds,timeUnit);
+    }
+
+    public long getExpire(String cacheKey, TimeUnit timeUnit) {
+        return redisTemplate.getExpire(cacheKey,timeUnit);
     }
 }
 

@@ -16,7 +16,6 @@
         <module>musk-functions-member-auth-service</module>
         <module>musk-functions-member-auth-web</module>
         <module>musk-functions-member-auth-entity</module>
-        <module>musk-auth-test</module>
         <module>musk-functions-member-auth-enums</module>
         <module>musk-functions-member-auth-event</module>
         <module>musk-functions-member-auth-constant</module>

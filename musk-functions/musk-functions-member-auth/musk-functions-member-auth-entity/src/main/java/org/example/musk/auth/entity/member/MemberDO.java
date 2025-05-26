@@ -4,11 +4,11 @@ import com.baomidou.mybatisplus.annotation.KeySequence;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import org.example.musk.common.pojo.db.DomainBaseDO;
 import org.example.musk.common.pojo.db.TenantBaseDO;
 
@@ -22,7 +22,7 @@ import org.example.musk.common.pojo.db.TenantBaseDO;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberDO extends DomainBaseDO {
@@ -33,11 +33,6 @@ public class MemberDO extends DomainBaseDO {
     @TableId
     private Integer id;
 
-    /**
-     * 注册渠道
-     *
-     */
-    private Integer registerChannel;
 
     /**
      * 会员账号
