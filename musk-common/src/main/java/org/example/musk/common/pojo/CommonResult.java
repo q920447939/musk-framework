@@ -53,6 +53,13 @@ public class CommonResult<T> implements Serializable {
         return result;
     }
 
+    public static <T> CommonResult<T> error(String message) {
+        CommonResult<T> result = new CommonResult<>();
+        result.code = GlobalErrorCodeConstants.BAD_REQUEST.getCode();
+        result.msg = message;
+        return result;
+    }
+
     public static <T> CommonResult<T> error(BusinessPageExceptionEnum businessPageExceptionEnum ) {
         CommonResult<T> result = new CommonResult<>();
         result.code = Integer.parseInt(businessPageExceptionEnum.getExCode());

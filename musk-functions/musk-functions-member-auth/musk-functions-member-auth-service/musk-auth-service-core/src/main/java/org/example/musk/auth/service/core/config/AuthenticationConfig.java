@@ -48,6 +48,11 @@ public class AuthenticationConfig {
         private Integer minLength = 8;
 
         /**
+         * 最大长度
+         */
+        private Integer maxLength = 32;
+
+        /**
          * 是否要求大写字母
          */
         private Boolean requireUppercase = false;
@@ -66,6 +71,36 @@ public class AuthenticationConfig {
          * 是否要求特殊字符
          */
         private Boolean requireSpecialChar = false;
+
+        /**
+         * 密码历史记录数量
+         */
+        private Integer historyCount = 5;
+
+        /**
+         * 密码重置尝试次数限制
+         */
+        private Integer resetAttemptLimit = 3;
+
+        /**
+         * 密码重置尝试时间窗口（小时）
+         */
+        private Integer resetAttemptWindowHours = 1;
+
+        /**
+         * 修改密码是否需要旧密码
+         */
+        private Boolean requireOldPasswordForChange = true;
+
+        /**
+         * 密码过期天数（0表示不过期）
+         */
+        private Integer expireDays = 0;
+
+        /**
+         * 密码过期前提醒天数
+         */
+        private Integer expireWarningDays = 7;
     }
 
     /**
@@ -319,6 +354,41 @@ public class AuthenticationConfig {
          * 是否启用异地登录检测
          */
         private Boolean enableLocationCheck = false;
+
+        /**
+         * 是否启用安全日志
+         */
+        private Boolean enableSecurityLog = true;
+
+        /**
+         * 安全日志保留天数
+         */
+        private Integer securityLogRetentionDays = 90;
+
+        /**
+         * 是否启用操作频率限制
+         */
+        private Boolean enableOperationFrequencyLimit = true;
+
+        /**
+         * 敏感操作频率限制时间窗口（分钟）
+         */
+        private Integer sensitiveOperationWindowMinutes = 60;
+
+        /**
+         * 敏感操作频率限制次数
+         */
+        private Integer sensitiveOperationMaxAttempts = 5;
+
+        /**
+         * 是否启用IP白名单
+         */
+        private Boolean enableIpWhitelist = false;
+
+        /**
+         * 是否启用异常行为检测
+         */
+        private Boolean enableAnomalyDetection = false;
     }
 
     /**

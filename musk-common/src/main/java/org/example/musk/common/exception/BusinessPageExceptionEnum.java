@@ -58,6 +58,18 @@ public enum BusinessPageExceptionEnum implements IBaseErrorInfo{
     PASSWORD_WEAK("41200028", "密码强度不够"),
     REGISTER_FAILED("41200029", "注册失败"),
 
+    // 密码管理相关异常
+    CAPTCHA_CODE_ERROR("41200030", "图形验证码错误"),
+    PASSWORD_CONFIRM_NOT_MATCH("41200031", "新密码和确认密码不一致"),
+    PASSWORD_STRENGTH_NOT_ENOUGH("41200032", "密码强度不够"),
+    OLD_PASSWORD_ERROR("41200033", "旧密码错误"),
+    PASSWORD_IN_HISTORY("41200034", "新密码不能与历史密码相同"),
+    PASSWORD_UPDATE_FAILED("41200035", "密码更新失败"),
+    PASSWORD_CHANGE_FAILED("41200036", "密码修改失败"),
+    PASSWORD_RESET_FAILED("41200037", "密码重置失败"),
+    PASSWORD_RESET_FREQUENCY_LIMIT("41200038", "密码重置过于频繁，请稍后再试"),
+    FORGOT_PASSWORD_FAILED("41200039", "忘记密码处理失败"),
+
     USER_IS_FORBIDDEN_ERROR("4210100", "用户已被禁用"),
     USER_IS_NOT_EXISTS("4210101", "用户不存在"),
     GENERATOR_CAPTCHA_FAIL("4210102", "生成验证码失败"),

@@ -4,7 +4,7 @@ import lombok.Getter;
 
 /**
  * 验证码场景枚举
- * 
+ *
  * @author musk
  */
 @Getter
@@ -38,7 +38,32 @@ public enum CodeSceneEnum {
     /**
      * 更换手机号
      */
-    CHANGE_PHONE("CHANGE_PHONE", "更换手机号", 300);
+    CHANGE_PHONE("CHANGE_PHONE", "更换手机号", 300),
+
+    /**
+     * 修改密码
+     */
+    CHANGE_PASSWORD("CHANGE_PASSWORD", "修改密码", 300),
+
+    /**
+     * 绑定邮箱
+     */
+    BIND_EMAIL("BIND_EMAIL", "绑定邮箱", 300),
+
+    /**
+     * 绑定手机号
+     */
+    BIND_PHONE("BIND_PHONE", "绑定手机号", 300),
+
+    /**
+     * 解绑邮箱
+     */
+    UNBIND_EMAIL("UNBIND_EMAIL", "解绑邮箱", 300),
+
+    /**
+     * 解绑手机号
+     */
+    UNBIND_PHONE("UNBIND_PHONE", "解绑手机号", 300);
 
     /**
      * 场景编码
@@ -103,6 +128,47 @@ public enum CodeSceneEnum {
      * @return true-安全操作，false-非安全操作
      */
     public boolean isSecurityOperation() {
-        return this == RESET_PASSWORD || this == CHANGE_EMAIL || this == CHANGE_PHONE;
+        return this == RESET_PASSWORD || this == CHANGE_PASSWORD ||
+               this == CHANGE_EMAIL || this == CHANGE_PHONE ||
+               this == BIND_EMAIL || this == BIND_PHONE ||
+               this == UNBIND_EMAIL || this == UNBIND_PHONE;
+    }
+
+    /**
+     * 判断是否为密码相关场景
+     *
+     * @return true-密码相关，false-非密码相关
+     */
+    public boolean isPasswordRelated() {
+        return this == RESET_PASSWORD || this == CHANGE_PASSWORD;
+    }
+
+    /**
+     * 判断是否为联系方式管理场景
+     *
+     * @return true-联系方式管理，false-非联系方式管理
+     */
+    public boolean isContactManagement() {
+        return this == CHANGE_EMAIL || this == CHANGE_PHONE ||
+               this == BIND_EMAIL || this == BIND_PHONE ||
+               this == UNBIND_EMAIL || this == UNBIND_PHONE;
+    }
+
+    /**
+     * 判断是否为绑定操作场景
+     *
+     * @return true-绑定操作，false-非绑定操作
+     */
+    public boolean isBindOperation() {
+        return this == BIND_EMAIL || this == BIND_PHONE;
+    }
+
+    /**
+     * 判断是否为解绑操作场景
+     *
+     * @return true-解绑操作，false-非解绑操作
+     */
+    public boolean isUnbindOperation() {
+        return this == UNBIND_EMAIL || this == UNBIND_PHONE;
     }
 }
