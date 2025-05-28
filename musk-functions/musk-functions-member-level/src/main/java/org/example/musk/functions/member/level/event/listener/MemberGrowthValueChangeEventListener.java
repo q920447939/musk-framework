@@ -13,8 +13,6 @@ import org.example.musk.functions.member.level.service.MemberLevelService;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 成长值变更事件监听器
@@ -23,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Component
 @Slf4j
-@DS(DBConstant.MEMBER_LEVEL)
+@DS(DBConstant.MEMBER)
 public class MemberGrowthValueChangeEventListener {
 
     @Resource

@@ -47,8 +47,8 @@ spring:
           driver-class-name: com.mysql.jdbc.Driver
           username: root
           password: blk@2024~NIUBI!mysql%mmm
-        member_level:
-          url: jdbc:mysql://blk-mysql-local.com:63306/member_level?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2b8&allowMultiQueries=true
+        musk_member:
+          url: jdbc:mysql://blk-mysql-local.com:63306/musk_member?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2b8&allowMultiQueries=true
           driver-class-name: com.mysql.jdbc.Driver
           username: root
           password: blk@2024~NIUBI!mysql%mmm

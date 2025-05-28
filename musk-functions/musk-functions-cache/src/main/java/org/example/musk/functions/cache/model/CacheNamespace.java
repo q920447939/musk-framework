@@ -50,6 +50,10 @@ public enum CacheNamespace {
      * 资源
      */
     RESOURCE("RESOURCE"),
+    /**
+     * 邀请
+     */
+    INVITATION("INVITATION"),
 
     /**
      * 系统参数缓存

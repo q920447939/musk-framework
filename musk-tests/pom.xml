@@ -126,7 +126,17 @@
             <artifactId>musk-functions-member-auth-web</artifactId>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>musk-functions-member-invitation</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>musk-functions-member-invitation-web</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

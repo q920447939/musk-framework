@@ -9,45 +9,49 @@ import lombok.Getter;
  */
 @Getter
 public enum GrowthValueSourceTypeEnum {
-    
+
     /**
      * 消费
      */
     CONSUMPTION(1, "消费"),
-    
+
     /**
      * 活动
      */
     ACTIVITY(2, "活动"),
-    
+
     /**
      * 签到
      */
     SIGN_IN(3, "签到"),
-    
+
     /**
      * 任务
      */
     TASK(4, "任务"),
-    
+
     /**
      * 管理员调整
      */
     ADMIN_ADJUST(5, "管理员调整"),
-    
+    /**
+     * 邀请
+     */
+    INVITATION(6, "邀请"),
+
     /**
      * 其他
      */
-    OTHER(6, "其他");
-    
+    OTHER(99, "其他");
+
     private final Integer value;
     private final String name;
-    
+
     GrowthValueSourceTypeEnum(Integer value, String name) {
         this.value = value;
         this.name = name;
     }
-    
+
     /**
      * 通过值获取枚举
      *

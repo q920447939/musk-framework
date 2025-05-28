@@ -1,7 +1,6 @@
 package org.example.musk.functions.member.level.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.dynamic.datasource.annotation.DSTransactional;
 import jakarta.annotation.Resource;
@@ -25,7 +24,6 @@ import org.example.musk.functions.member.level.model.vo.MemberLevelBenefitUpdate
 import org.example.musk.functions.member.level.model.vo.MemberLevelBenefitVO;
 import org.example.musk.functions.member.level.service.MemberLevelBenefitService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +35,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-@DS(DBConstant.MEMBER_LEVEL)
+@DS(DBConstant.MEMBER)
 public class MemberLevelBenefitServiceImpl implements MemberLevelBenefitService {
 
     @Resource

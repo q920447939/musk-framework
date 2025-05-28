@@ -16,7 +16,6 @@ public class TenantPackageRespVO {
 
     private String remark;
 
-    private Set<Long> menuIds;
 
     private LocalDateTime createTime;
 

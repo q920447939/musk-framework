@@ -20,7 +20,5 @@ public class TenantPackageSaveReqVO {
 
     private String remark;
 
-    @NotNull(message = "关联的菜单编号不能为空")
-    private Set<Long> menuIds;
 
 }

@@ -1,7 +1,6 @@
 package org.example.musk.functions.member.level.service.impl;
 
 import cn.hutool.core.date.LocalDateTimeUtil;
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.dynamic.datasource.annotation.DSTransactional;
@@ -21,13 +20,11 @@ import org.example.musk.functions.member.level.service.MemberGrowthValueService;
 import org.example.musk.functions.member.level.service.MemberPointsRuleService;
 import org.example.musk.functions.member.level.service.MemberPointsService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,7 +34,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-@DS(DBConstant.MEMBER_LEVEL)
+@DS(DBConstant.MEMBER)
 public class MemberPointsRuleServiceImpl implements MemberPointsRuleService {
 
     @Resource

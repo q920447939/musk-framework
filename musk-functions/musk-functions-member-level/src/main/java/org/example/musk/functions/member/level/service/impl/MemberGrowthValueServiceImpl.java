@@ -28,7 +28,6 @@ import org.example.musk.functions.member.level.service.MemberGrowthValueService;
 import org.example.musk.functions.member.level.service.MemberLevelService;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +39,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-@DS(DBConstant.MEMBER_LEVEL)
+@DS(DBConstant.MEMBER)
 public class MemberGrowthValueServiceImpl implements MemberGrowthValueService {
 
     @Resource

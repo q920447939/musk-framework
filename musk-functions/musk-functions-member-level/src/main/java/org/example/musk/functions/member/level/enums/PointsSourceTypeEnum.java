@@ -9,55 +9,59 @@ import lombok.Getter;
  */
 @Getter
 public enum PointsSourceTypeEnum {
-    
+
     /**
      * 消费
      */
     CONSUMPTION(1, "消费"),
-    
+
     /**
      * 活动
      */
     ACTIVITY(2, "活动"),
-    
+
     /**
      * 签到
      */
     SIGN_IN(3, "签到"),
-    
+
     /**
      * 任务
      */
     TASK(4, "任务"),
-    
+
     /**
      * 兑换
      */
     EXCHANGE(5, "兑换"),
-    
+
     /**
      * 退款
      */
     REFUND(6, "退款"),
-    
+
     /**
      * 管理员调整
      */
     ADMIN_ADJUST(7, "管理员调整"),
-    
+    /**
+     * 邀请
+     */
+    INVITATION(8, "邀请"),
+
     /**
      * 其他
      */
-    OTHER(8, "其他");
-    
+    OTHER(99, "其他");
+
     private final Integer value;
     private final String name;
-    
+
     PointsSourceTypeEnum(Integer value, String name) {
         this.value = value;
         this.name = name;
     }
-    
+
     /**
      * 通过值获取枚举
      *

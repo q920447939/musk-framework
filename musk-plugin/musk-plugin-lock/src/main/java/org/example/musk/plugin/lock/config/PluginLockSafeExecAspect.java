@@ -6,6 +6,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.example.musk.common.context.ThreadLocalTenantContext;
 import org.example.musk.plugin.lock.config.anno.PluginLockSafeExec;
 import org.example.musk.plugin.lock.core.Lock;
 import org.example.musk.plugin.lock.enums.LockGroupEnums;
@@ -51,18 +52,20 @@ public class PluginLockSafeExecAspect {
 
         String lockKey;
         long ttl;
-        LockGroupEnums group;
+        String prefix = ThreadLocalTenantContext.getTenantId() + ":";
         if (annotation != null) {
             lockKey = annotation.lockKey();
             if ("".equals(lockKey)) {
                 lockKey = getFullMethodName(point);
             }
             ttl = annotation.ttl();
-            group = annotation.group();
+            if (LockGroupEnums.GROUP_MEMBER == annotation.group()){
+                prefix +=  ThreadLocalTenantContext.getMemberId() ;
+            }
         } else {
             throw new RuntimeException(" 未找到 @PluginLockSafeExec 注解");
         }
-        return lock.safeExec("lock_key_auto:" + group.getCode() + ":"+lockKey, ttl, () -> {
+        return lock.safeExec("lock_key_auto:" + prefix + ":"+lockKey, ttl, () -> {
             try {
                 return point.proceed();
             } catch (Throwable e) {

@@ -6,6 +6,7 @@ import org.example.musk.middleware.mq.redis.config.MuskRedisMQProducerAutoConfig
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
@@ -25,12 +26,14 @@ import org.springframework.context.annotation.FilterType;
         }
 )
 @EnableAutoConfiguration(exclude= {MuskRedisMQConsumerAutoConfiguration.class,})
+@AutoConfigureWebMvc
 public class BaseTest {
     @BeforeAll
     static void setUpBeforeClass() {
         // 这里放置一些在所有测试用例执行之前需要运行的代码
         ThreadLocalTenantContext.setTenantId(1);
         ThreadLocalTenantContext.setDomainId(2);
+        ThreadLocalTenantContext.setMember(1001);
     }
 
 }

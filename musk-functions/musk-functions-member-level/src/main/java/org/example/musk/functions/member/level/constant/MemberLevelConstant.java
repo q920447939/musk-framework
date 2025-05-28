@@ -7,10 +7,6 @@ package org.example.musk.functions.member.level.constant;
  */
 public class MemberLevelConstant {
 
-    /**
-     * 数据源名称
-     */
-    public static final String DB_NAME = "member_level";
 
     /**
      * Redis缓存前缀

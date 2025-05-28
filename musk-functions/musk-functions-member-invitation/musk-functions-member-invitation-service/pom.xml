@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.example</groupId>
+        <artifactId>musk-functions-member-invitation</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>musk-functions-member-invitation-service</artifactId>
+    <packaging>jar</packaging>
+    <name>${project.artifactId}</name>
+    <description>会员邀请系统业务逻辑层</description>
+
+    <dependencies>
+        <!-- DAO层依赖 -->
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>musk-functions-member-invitation-dao</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- 分布式锁 -->
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>musk-plugin-lock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>musk-functions-member-invitation-entity</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>musk-functions-member-invitation-event</artifactId>
+        </dependency>
+
+    </dependencies>
+
+</project>

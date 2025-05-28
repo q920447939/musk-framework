@@ -19,6 +19,7 @@
         <module>musk-functions-member-level</module>
         <module>musk-functions-resource</module>
         <module>musk-functions-member-auth</module>
+        <module>musk-functions-member-invitation</module>
     </modules>
 
     <properties>

@@ -1,0 +1,52 @@
+# 多租户通用会员邀请系统配置
+
+musk:
+  invitation:
+    # 是否启用邀请功能
+    enabled: true
+    
+    # Web平台配置
+    web:
+      base-url: ${INVITATION_WEB_BASE_URL:http://localhost:8080}
+    
+    # APP平台配置
+    app:
+      base-url: ${INVITATION_APP_BASE_URL:app://invitation}
+    
+    # H5平台配置
+    h5:
+      base-url: ${INVITATION_H5_BASE_URL:http://localhost:8080/h5}
+    
+    # 二维码配置
+    qrcode:
+      # 存储路径
+      storage-path: ${INVITATION_QRCODE_STORAGE_PATH:/tmp/qrcode}
+      # 访问基础URL
+      base-url: ${INVITATION_QRCODE_BASE_URL:http://localhost:8080/qrcode}
+      # 默认尺寸
+      default-size: ${INVITATION_QRCODE_DEFAULT_SIZE:300}
+    
+    # 安全配置
+    security:
+      # 是否启用IP限制
+      enable-ip-limit: ${INVITATION_ENABLE_IP_LIMIT:true}
+      # 每日每IP最大注册次数
+      max-registrations-per-ip-per-day: ${INVITATION_MAX_REGISTRATIONS_PER_IP_PER_DAY:10}
+      # 是否启用设备指纹检测
+      enable-device-fingerprint: ${INVITATION_ENABLE_DEVICE_FINGERPRINT:false}
+
+# MyBatis Plus配置
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*.xml
+  type-aliases-package: org.example.musk.functions.invitation.dao.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    call-setters-on-nulls: true
+    jdbc-type-for-null: 'null'
+
+# 日志配置
+logging:
+  level:
+    org.example.musk.functions.invitation: DEBUG
+    org.springframework.cache: DEBUG

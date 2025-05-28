@@ -13,6 +13,6 @@ package org.example.musk.constant.db;
  */
 public class DBConstant {
     public static final String SYSTEM = "musk_system";
-    public static final String MEMBER_LEVEL = "member_level";
+    public static final String MEMBER = "musk_member";
     public static final String DEFAULT_LOG = "member_log";
 }
